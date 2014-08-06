@@ -1,0 +1,20 @@
+[user]
+    email = sh.siddhartha@gmail.com
+    name = Siddhartha Sahu
+[help]
+    autocorrect = 1
+[alias]
+    lg = log --color --graph --pretty=format:'%C(auto)%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    ls = log --color --graph --pretty=format:'%C(auto)%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
+    ll = log --color --graph --pretty=format:'%C(auto)%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all --numstat
+    cm = commit
+    cma = commit --amend -a
+    cmm = commit -m
+    cmam = commit -am
+    cmau = !git log -n 1 --pretty=tformat:%s%n%n%b | git commit -F - --amend
+    dm = diff master
+    co = checkout
+    s = status
+    b = branch -a
+    bd = branch -d
+    bdf = branch -D
