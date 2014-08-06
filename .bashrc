@@ -15,6 +15,17 @@ alias ls='ls -h --color=auto'
 alias ll='ls -lh --color=auto'
 alias grep="grep --color=auto"
 
+alias yumu='sudo yum update'
+alias yumi='sudo yum install'
+alias yums='sudo yum search'
+
+alias pcmu='sudo pacman -Syu'
+alias pcmi='sudo pacman -S'
+alias pcms='sudo pacman -Ss'
+alias pcmsl='sudo pacman -Qs'
+alias pcmr='sudo pacman -Rc'
+alias pcmc='sudo pacman -Sc --noconfirm'
+
 sstart() { sudo systemctl start $1.service ; sudo systemctl status -l $1.service; }
 srestart() { sudo systemctl restart $1.service ; sudo systemctl status -l $1.service; }
 sstop() { sudo systemctl stop $1.service ; sudo systemctl status -l $1.service; }
@@ -23,11 +34,11 @@ sreload() { sudo systemctl reload $1.service; }
 senable() { sudo systemctl enable $1.service ; ls -l /etc/systemd/system/multi-user.target.wants; }
 sdisable() { sudo systemctl disable $1.service ; ls -l /etc/systemd/system/multi-user.target.wants; }
 
-# start() { sudo service $1 start ; }
-# restart() { sudo service $1 restart ; }
-# stop() { sudo service $1 stop ; }
-# status() { sudo service $1 status ; }
-# reload() { sudo service $1 reload ; }
+#sstart() { sudo service $1 start ; }
+#srestart() { sudo service $1 restart ; }
+#sstop() { sudo service $1 stop ; }
+#sstatus() { sudo service $1 status ; }
+#sreload() { sudo service $1 reload ; }
 
 mkcd() {
     mkdir -p $1 && cd $1
