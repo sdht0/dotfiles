@@ -53,6 +53,8 @@ sdisable() { sudo systemctl disable $1.service ; ls -l /etc/systemd/system/multi
 #sstatus() { sudo service $1 status ; }
 #sreload() { sudo service $1 reload ; }
 
+h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
+
 mkcd() {
     mkdir -p $1 && cd $1
 }
