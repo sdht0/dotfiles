@@ -15,7 +15,6 @@ prompt walters
 PROMPT="%{$fg_no_bold[$color]%}[%n] %1~ %{$reset_color%}%# "
 RPROMPT="[%{$fg_no_bold[yellow]%}%?%{$reset_color%}]"
 
-bindkey -v
 typeset -g -A key
 #bindkey '\e[3~' delete-char
 bindkey '\e[1~' beginning-of-line
