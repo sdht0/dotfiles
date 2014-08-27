@@ -1,4 +1,4 @@
-HISTFILE=/home/sdh/.bash_history
+HISTFILE=~/.bash_history
 HISTSIZE=10000
 SAVEHIST=$HISTSIZE
 
