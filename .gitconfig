@@ -28,7 +28,7 @@
     smtpserverport = 587
     smtpencryption = tls
     smtpuser = sh.siddhartha@gmail.com
-    smtppass = 
+    smtppass =
     chainreplyto = false
 [core]
-    excludesfile = /home/lfiles/config/gitexcludes
+    excludesfile = ~/dotfiles/gitexcludes
