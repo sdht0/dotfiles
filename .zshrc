@@ -13,7 +13,7 @@ prompt walters
 MYSHELL=$(ps -hp $$ | awk '{print $5}' | sed 's/.*[^a-z]\([a-z]*\)/\1/')
 [[ $UID -eq 0 ]] && color=red || color=green
 NEWLINE=$'\n'
-PROMPT="${NEWLINE}%{$fg_bold[blue]%}[${MYSHELL}]%{$reset_color%} [%{$fg_bold[${color}]%}%n%{$reset_color%}@%{$fg_bold[magenta]%}%M%{$reset_color%}] %{$fg_bold[yellow]%}(%D{%a, %b %d, %I:%M:%S %P}): %{$fg_bold[magenta]%}%~${NEWLINE}%(?.%{$fg[green]%}✔.%{$fg[red]%}✘)%{$reset_color%} %# "
+PROMPT="${NEWLINE}[%{$fg_bold[blue]%}${MYSHELL}%{$reset_color%} : %{$fg_bold[${color}]%}%n@%M%{$reset_color%}] %{$fg_bold[magenta]%}%~ %{$fg_bold[yellow]%}[%D{%a, %b %d, %I:%M:%S %P}]${NEWLINE}%(?.%{$fg[green]%}✔.%{$fg[red]%}✘)%{$reset_color%} %# "
 RPROMPT=""
 
 typeset -g -A key

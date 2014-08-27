@@ -38,7 +38,9 @@ BPurple="\[\033[1;35m\]"      # Purple
 BCyan="\[\033[1;36m\]"        # Cyan
 BWhite="\[\033[1;37m\]"       # White
 
-export PS1="\n${BBlue}[${MYSHELL}]${Color_Off} [${BGreen}\u${Color_Off}@${BPurple}\h${Color_Off}] ${BYellow}(\D{%a, %b %d, %I:%M:%S %P}): ${BPurple}\w\n`if [ $? = 0 ]; then echo "${BGreen}✔"; else echo "${BRed}✘"; fi`${Color_Off} \$ "
+[[ $UID -eq 0 ]] && color=${BRed} || color=${BGreen}
+[[ $UID -eq 0 ]] && prompt='#' || prompt='$'
+export PS1="\n[${BBlue}${MYSHELL}${Color_Off} : ${color}\u@\h${Color_Off}] ${BPurple}\w ${BYellow}[\D{%a, %b %d, %I:%M:%S %P}]\n`if [ $? = 0 ]; then echo "${BGreen}✔"; else echo "${BRed}✘"; fi`${Color_Off} ${prompt} "
 
 alias ls='ls -h --color=auto'
 alias ll='ls -lh --color=auto'
