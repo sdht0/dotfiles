@@ -1,4 +1,4 @@
-HISTFILE=/home/lfiles/config/.bash_history
+HISTFILE=/home/sdh/.bash_history
 HISTSIZE=10000
 SAVEHIST=$HISTSIZE
 
@@ -10,10 +10,11 @@ autoload -U promptinit
 promptinit
 prompt walters
 
+MYSHELL=$(ps -hp $$ | awk '{print $5}' | sed 's/.*[^a-z]\([a-z]*\)/\1/')
 [[ $UID -eq 0 ]] && color=red || color=green
-
-PROMPT="%{$fg_no_bold[$color]%}[%n] %1~ %{$reset_color%}%# "
-RPROMPT="[%{$fg_no_bold[yellow]%}%?%{$reset_color%}]"
+NEWLINE=$'\n'
+PROMPT="${NEWLINE}%{$fg_bold[blue]%}[${MYSHELL}] %{$fg_bold[${color}]%}[%n@%M] %{$fg_bold[yellow]%}(%D{%a, %b %d, %I:%M:%S %P}): %{$fg_bold[magenta]%}%~${NEWLINE}%(?.%{$fg[green]%}✔.%{$fg[red]%}✘)%{$reset_color%} %# "
+RPROMPT=""
 
 typeset -g -A key
 #bindkey '\e[3~' delete-char
