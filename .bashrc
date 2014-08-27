@@ -9,7 +9,7 @@ if which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] ;then
 fi
 
 
-MYSHELL=$(ps -hp $$ | awk '{print $5}' | sed 's/.*[^a-z]\([a-z]*\)/\1/')
+MYSHELL=$(ps hp $$ | awk '{print $5}' | sed 's/.*[^a-z]\([a-z]*\)/\1/')
 if [[ "$MYSHELL" = 'bash' ]];then
     bind '"\e[A": history-search-backward'
     bind '"\e[B": history-search-forward'
