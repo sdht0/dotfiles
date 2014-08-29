@@ -9,6 +9,8 @@ if which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] ;then
 fi
 
 
+export LANG='en_US.UTF-8'
+
 MYSHELL=$(ps hp $$ | awk '{print $5}' | sed 's/.*[^a-z]\([a-z]*\)/\1/')
 if [[ "$MYSHELL" = 'bash' ]];then
     bind '"\e[A": history-search-backward'
@@ -40,7 +42,7 @@ BWhite="\[\033[1;37m\]"       # White
 
 [[ $UID -eq 0 ]] && color=${BRed} || color=${BGreen}
 [[ $UID -eq 0 ]] && prompt='#' || prompt='$'
-export PS1="\n[${BBlue}${MYSHELL}${Color_Off} : ${color}\u@\h${Color_Off}] ${BPurple}\w ${BYellow}[\D{%a, %b %d, %I:%M:%S %P}]\n`if [ $? = 0 ]; then echo "${BGreen}✔"; else echo "${BRed}✘"; fi`${Color_Off} ${prompt} "
+export PS1="\n[${BBlue}${MYSHELL}${Color_Off}:${color}\u@\h${Color_Off}] ${BPurple}\w ${BYellow}[\D{%a, %b %d, %I:%M:%S %P}]\n`if [ $? = 0 ]; then echo "${BGreen}✔"; else echo "${BRed}✘"; fi`${Color_Off} ${prompt} "
 
 alias ls='ls -h --color=auto'
 alias ll='ls -lh --color=auto'
@@ -67,7 +69,7 @@ alias xcdwebfol='cd /home/lfiles/www'
 alias xcddev='cd /home/lfiles/dev'
 alias xcdactive='cd /home/lfiles/dev/sources/telepathy-kde-active/ktp-active/application/package'
 alias xchromestart="chromium --proxy-server='socks://127.0.0.1:9999' --incognito"
-alias xstartproxy="ssh -TNfD 9999 -p 9999 dcadmin@172.16.32.222"
+alias xstartproxy="ssh -TNfD 9999 root@5.175.167.132"
 alias xstartproxy2="ssh -TNfD '*:9999' -p 9999 dcadmin@172.16.32.222"
 
 sstart() { sudo systemctl start $1.service ; sudo systemctl status -l $1.service; }
