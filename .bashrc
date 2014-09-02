@@ -11,7 +11,7 @@ fi
 
 export LANG='en_US.UTF-8'
 
-MYSHELL=$(ps hp $$ | awk '{print $5}' | sed 's/.*[^a-z]\([a-z]*\)/\1/')
+MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 if [[ "$MYSHELL" = 'bash' ]];then
     bind '"\e[A": history-search-backward'
     bind '"\e[B": history-search-forward'
