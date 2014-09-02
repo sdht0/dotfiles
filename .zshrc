@@ -10,7 +10,7 @@ autoload -U promptinit
 promptinit
 prompt walters
 
-MYSHELL=$(ps -hp $$ | awk '{print $5}' | sed 's/.*[^a-z]\([a-z]*\)/\1/')
+MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 [[ $UID -eq 0 ]] && color=red || color=green
 NEWLINE=$'\n'
 PROMPT="${NEWLINE}[%{$fg_bold[blue]%}${MYSHELL}%{$reset_color%}:%{$fg_bold[${color}]%}%n@%M%{$reset_color%}] %{$fg_bold[magenta]%}%~ %{$fg_bold[yellow]%}[%D{%a, %b %d, %I:%M:%S %P}]${NEWLINE}%(?.%{$fg[green]%}✔.%{$fg[red]%}✘)%{$reset_color%} %# "
