@@ -64,6 +64,16 @@ alias pcmsl='sudo pacman -Qs'
 alias pcmr='sudo pacman -Rc'
 alias pcmc='sudo pacman -Sc --noconfirm'
 
+alias agu='sudo apt-get update && sudo apt-get upgrade'
+alias agi='sudo apt-get install'
+alias ags='sudo apt-cache search'
+alias agr='sudo apt-get remove'
+
+alias yumu='sudo yum update'
+alias yumi='sudo yum install'
+alias yums='sudo yum search'
+alias yumr='sudo yum remove'
+
 alias ccm='sudo ccm64'
 alias xcdwebfol='cd /home/lfiles/www'
 alias xcddev='cd /home/lfiles/dev'
