@@ -1,13 +1,13 @@
 
-if which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] ;then
+# Replace with a tmux session if it is an interactive session and tmux is installed and is not already running
+if [[ $- =~ i ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] ;then
     ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
     if [[ -z "$ID" ]] ;then # if not available create a new one
-        tmux new-session
+        exec tmux new-session
     else
-        tmux attach-session -t "$ID" # if available attach to it
+        exec tmux attach-session -t "$ID" # if available attach to it
     fi
 fi
-
 
 export LANG='en_US.UTF-8'
 
@@ -57,6 +57,7 @@ alias jlog='sudo journalctl -n500 -f'
 alias gitka="gitk --all"
 alias grep="grep --color=auto"
 
+# Pacman package management
 alias pcmu='sudo pacman -Syu'
 alias pcmi='sudo pacman -S'
 alias pcms='sudo pacman -Ss'
@@ -64,11 +65,13 @@ alias pcmsl='sudo pacman -Qs'
 alias pcmr='sudo pacman -Rc'
 alias pcmc='sudo pacman -Sc --noconfirm'
 
+# Apt-get package management
 alias agu='sudo apt-get update && sudo apt-get upgrade'
 alias agi='sudo apt-get install'
 alias ags='sudo apt-cache search'
 alias agr='sudo apt-get remove'
 
+# Yum package management
 alias yumu='sudo yum update'
 alias yumi='sudo yum install'
 alias yums='sudo yum search'
@@ -82,6 +85,7 @@ alias xchromestart="chromium --proxy-server='socks://127.0.0.1:9999' --incognito
 alias xstartproxy="ssh -TNfD 9999 root@5.175.167.132"
 alias xstartproxy2="ssh -TNfD '*:9999' -p 9999 dcadmin@172.16.32.222"
 
+# Systemd service management
 sstart() { sudo systemctl start $1.service ; sudo systemctl status -l $1.service; }
 srestart() { sudo systemctl restart $1.service ; sudo systemctl status -l $1.service; }
 sstop() { sudo systemctl stop $1.service ; sudo systemctl status -l $1.service; }
@@ -90,6 +94,7 @@ sreload() { sudo systemctl reload $1.service; }
 senable() { sudo systemctl enable $1.service ; ls -l /etc/systemd/system/multi-user.target.wants; }
 sdisable() { sudo systemctl disable $1.service ; ls -l /etc/systemd/system/multi-user.target.wants; }
 
+# Init scripts service management
 ustart() { sudo service $1 start ; }
 urestart() { sudo service $1 restart ; }
 ustop() { sudo service $1 stop ; }
