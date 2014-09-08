@@ -12,9 +12,14 @@ fi
 export LANG='en_US.UTF-8'
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
+
 if [[ "$MYSHELL" = 'bash' ]];then
     bind '"\e[A": history-search-backward'
     bind '"\e[B": history-search-forward'
+
+    shopt -s nocaseglob;                    # Case-insensitive globbing (used in pathname expansion)
+    shopt -s histappend;                    # Append to the Bash history file, rather than overwriting it
+    shopt -s cdspell;                       # Autocorrect typos in path names when using `cd`
 fi
 
 # Reset
@@ -56,6 +61,7 @@ alias dmesg='dmesg --human -T'
 alias jlog='sudo journalctl -n500 -f'
 alias gitka="gitk --all"
 alias grep="grep --color=auto"
+alias vi='vim'
 
 # Pacman package management
 alias pcmu='sudo pacman -Syu'
