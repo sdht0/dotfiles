@@ -10,11 +10,10 @@ autoload -U promptinit
 promptinit
 prompt walters
 
-source ~/dotfiles/git_prompt/zshrc.sh
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 [[ $UID -eq 0 ]] && color=red || color=green
 NEWLINE=$'\n'
-PROMPT="${NEWLINE}[%{$fg_bold[blue]%}${MYSHELL}%{$reset_color%}:%{$fg_bold[${color}]%}%n@%M%{$reset_color%}] %{$fg_bold[magenta]%}%~ $(git_super_status)${NEWLINE}%(?.%{$fg[green]%}✔.%{$fg[red]%}✘)%{$reset_color%} %# "
+PROMPT="${NEWLINE}[%{$fg_bold[blue]%}${MYSHELL}%{$reset_color%}:%{$fg_bold[${color}]%}%n@%M%{$reset_color%}] %{$fg_bold[magenta]%}%~${NEWLINE}%(?.%{$fg[green]%}✔.%{$fg[red]%}✘)%{$reset_color%} %# "
 RPROMPT=""
 
 typeset -g -A key
