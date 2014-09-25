@@ -30,5 +30,3 @@
     smtpuser = sh.siddhartha@gmail.com
     smtppass =
     chainreplyto = false
-[core]
-    excludesfile = ~/dotfiles/gitexcludes
