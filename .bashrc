@@ -60,7 +60,7 @@ alias pu='pushd'
 alias po='popd'
 alias dmesg='dmesg --human -T'
 alias jlog='sudo journalctl -n500 -f'
-alias gitka="gitk --all"
+alias gitk="gitk --all"
 alias grep="grep --color=auto"
 alias vi='vim'
 
