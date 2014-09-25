@@ -10,6 +10,7 @@ if [[ $- =~ i ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] ;then
 fi
 
 export LANG='en_US.UTF-8'
+export EDITOR='vim'
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 
