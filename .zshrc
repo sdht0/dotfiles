@@ -16,26 +16,11 @@ NEWLINE=$'\n'
 PROMPT="${NEWLINE}[%{$fg_bold[blue]%}${MYSHELL}%{$reset_color%}:%{$fg_bold[${color}]%}%n@%M%{$reset_color%}] %{$fg_bold[magenta]%}%~${NEWLINE}%(?.%{$fg[green]%}✔.%{$fg[red]%}✘)%{$reset_color%} %# "
 RPROMPT=""
 
-typeset -g -A key
-#bindkey '\e[3~' delete-char
-bindkey '\e[1~' beginning-of-line
-bindkey '\e[4~' end-of-line
-#bindkey '\e[2~' overwrite-mode
-bindkey '^?' backward-delete-char
-bindkey '^[[1~' beginning-of-line
-bindkey '^[[3~' delete-char
-bindkey '^[[4~' end-of-line
-bindkey '^[[A' up-line-or-search
-bindkey '^[[D' backward-char
-bindkey '^[[B' down-line-or-search
-bindkey '^[[C' forward-char
-# for rxvt
-bindkey "\e[8~" end-of-line
-bindkey "\e[7~" beginning-of-line
-bindkey "^[[H" beginning-of-line
-bindkey "^[[F" end-of-line
-bindkey '^U' backward-kill-line
-bindkey '^Y' yank
+bindkey -e
+bindkey \^U backward-kill-line
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[4~" end-of-line
+bindkey "^[[3~" delete-char
 
 autoload -U up-line-or-beginning-search
 autoload -U down-line-or-beginning-search
