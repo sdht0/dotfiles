@@ -64,6 +64,9 @@ alias gitk="gitk --all"
 alias grep="grep --color=auto"
 alias vi='vim'
 
+alias rzsh='. ~/.zshrc'
+alias rbash='. ~/.bashrc'
+
 # Pacman package management
 alias pcmu='sudo pacman -Syu'
 alias pcmi='sudo pacman -S'
@@ -91,6 +94,16 @@ alias xcdactive='cd /home/lfiles/dev/sources/telepathy-kde-active/ktp-active/app
 alias xchromestart="chromium --proxy-server='socks://127.0.0.1:9999' --incognito"
 alias xstartproxy="ssh -TNfD 9999 root@5.175.167.132"
 alias xstartproxy2="ssh -TNfD '*:9999' -p 9999 dcadmin@172.16.32.222"
+
+gitkf() {
+  gitk_follow () {
+    while (( "$#" )); do
+      git log -p --oneline --name-status --follow $1;
+      shift;
+    done | perl -ne 'if( s{^(?:[ACDMRTUXB]|R\d+)\s+}{} ) { s{\s+}{\n}g; print; }' | sort -u
+  }
+  gitk $(gitk_follow $*)
+}
 
 # Systemd service management
 sstart() { sudo systemctl start $1.service ; sudo systemctl status -l $1.service; }
