@@ -69,6 +69,7 @@ alias gtc='git commit -m'
 alias gtca='git commit -am'
 alias gts='git status'
 alias gtl='git ls'
+alias gtp='git pull --rebase && git push'
 
 alias rzsh='. ~/.bashrc && . ~/.zshrc'
 alias rbash='. ~/.bashrc'
