@@ -10,13 +10,9 @@
 [alias]
     ls = log --color --graph --pretty=format:'%C(auto)%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
     ll = log --color --graph --pretty=format:'%C(auto)%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all --numstat
-    cm = commit -m
-    cma = commit -am
     cmau = !git log -n 1 --pretty=tformat:%s%n%n%b | git commit -F - --amend
     dm = diff master
     co = checkout
-    s = status
-    b = branch -a
     bd = branch -d
     bdf = branch -D
 [sendemail]
