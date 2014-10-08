@@ -61,10 +61,10 @@ alias po='popd'
 alias dmesg='dmesg --human -T'
 alias jlog='sudo journalctl -n500 -f'
 alias gitk="gitk --all"
-alias grep="grep --color=auto"
+alias grep="grep -i --color=auto"
 alias vi='vim'
 
-alias rzsh='. ~/.zshrc'
+alias rzsh='. ~/.bashrc && . ~/.zshrc'
 alias rbash='. ~/.bashrc'
 
 # Pacman package management
@@ -88,9 +88,9 @@ alias yums='sudo yum search'
 alias yumr='sudo yum remove'
 
 alias ccm='sudo ccm64'
-alias xcdwebfol='cd /home/lfiles/www'
-alias xcddev='cd /home/lfiles/dev'
-alias xcdactive='cd /home/lfiles/dev/sources/telepathy-kde-active/ktp-active/application/package'
+alias xcdwebfol='cd /srv/www'
+alias xcddev='cd /home/sdh/dev'
+alias xcdactive='cd /home/sdh/dev/sources/telepathy-kde-active/ktp-active/application/package'
 alias xchromestart="chromium --proxy-server='socks://127.0.0.1:9999' --incognito"
 alias xstartproxy="ssh -TNfD 9999 root@5.175.167.132"
 alias xstartproxy2="ssh -TNfD '*:9999' -p 9999 dcadmin@172.16.32.222"
