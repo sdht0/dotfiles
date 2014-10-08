@@ -64,6 +64,12 @@ alias gitk="gitk --all"
 alias grep="grep -i --color=auto"
 alias vi='vim'
 
+alias gta='git add'
+alias gtc='git commit -m'
+alias gtca='git commit -am'
+alias gts='git status'
+alias gtl='git ls'
+
 alias rzsh='. ~/.bashrc && . ~/.zshrc'
 alias rbash='. ~/.bashrc'
 
