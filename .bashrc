@@ -144,6 +144,28 @@ man() {
     man "$@"
 }
 
+changehostname() {
+    if [ $# -lt 2 ]; then
+        echo "Usage: changehostname centos|ubuntu hostname"
+        return 1
+    fi
+    os="$1"
+    nhostname="$2"
+
+    case "$os" in
+    centos)
+        [[ -r '/etc/sysconfig/network' ]] && sed -i "/HOSTNAME/ s/^.*$/HOSTNAME=${nhostname}" /etc/sysconfig/network || { echo "File not found"; return -1; }
+        ;;
+    ubuntu)
+        [[ -r '/etc/hostname' ]] && echo $nhostname > /etc/hostname
+        ;;
+    *) echo "No match!"
+        ;;
+    esac
+    hostname "$nhostname"
+    [[ -r '/etc/hosts' ]] && grep -v "$nhostname" /etc/hosts > /dev/null || sed -i "/127.0.0.1/ s/$/ $nhostname/" /etc/hosts
+}
+
 mkcd() {
     mkdir -p $1 && cd $1
 }
