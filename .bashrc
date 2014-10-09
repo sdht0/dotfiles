@@ -130,6 +130,8 @@ urestart() { sudo service $1 restart ; }
 ustop() { sudo service $1 stop ; }
 ustatus() { sudo service $1 status ; }
 ureload() { sudo service $1 reload ; }
+uenable() { sudo chkconfig --add $1 && sudo chkconfig $1 on && sudo chkconfig --list $1 ; }
+ureload() { sudo sudo chkconfig $1 off && sudo chkconfig --list $1 ; }
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
 
@@ -154,7 +156,7 @@ changehostname() {
 
     case "$os" in
     centos)
-        [[ -r '/etc/sysconfig/network' ]] && sed -i "/HOSTNAME/ s/^.*$/HOSTNAME=${nhostname}" /etc/sysconfig/network || { echo "File not found"; return -1; }
+        [[ -r '/etc/sysconfig/network' ]] && sed -i "/HOSTNAME/ s/^.*$/HOSTNAME=${nhostname}/" /etc/sysconfig/network || { echo "File not found"; return -1; }
         ;;
     ubuntu)
         [[ -r '/etc/hostname' ]] && echo $nhostname > /etc/hostname
