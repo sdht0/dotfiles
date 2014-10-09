@@ -1,5 +1,3 @@
-. ~/.bashrc
-
 HISTFILE=~/.bash_history
 HISTSIZE=10000
 SAVEHIST=$HISTSIZE
