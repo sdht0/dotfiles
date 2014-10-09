@@ -14,7 +14,7 @@ export EDITOR='vim'
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 
-if [[ "$MYSHELL" = 'bash' ]];then
+if [[ $- =~ i ]] && [[ "$MYSHELL" = 'bash' ]];then
     bind '"\e[A": history-search-backward'
     bind '"\e[B": history-search-forward'
 
