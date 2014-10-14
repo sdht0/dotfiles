@@ -97,6 +97,8 @@ alias yumi='sudo yum install'
 alias yums='sudo yum search'
 alias yumr='sudo yum remove'
 
+alias bang='sudo puppet agent -tv'
+
 alias ccm='sudo ccm64'
 alias xcdwebfol='cd /srv/www'
 alias xcddev='cd /home/sdh/dev'
