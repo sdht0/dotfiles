@@ -131,7 +131,7 @@ ustop() { sudo service $1 stop ; }
 ustatus() { sudo service $1 status ; }
 ureload() { sudo service $1 reload ; }
 uenable() { sudo chkconfig --add $1 && sudo chkconfig $1 on && sudo chkconfig --list $1 ; }
-udisable() { sudo sudo chkconfig $1 off && sudo chkconfig --list $1 ; }
+udisable() { sudo chkconfig $1 off && sudo chkconfig --list $1 ; }
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
 
