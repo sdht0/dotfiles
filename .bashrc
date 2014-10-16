@@ -63,7 +63,7 @@ alias jlog='sudo journalctl -n500 -f'
 alias gitk="gitk --all"
 alias grep="grep -i --color=auto"
 alias vi='vim'
-alias myips='for i in $(ip addr | grep "^[0-9]*:" | cut -d: -f2 | grep -v lo | sed "s/ //");do x=$(ip addr show $i | grep "inet " | grep -v "127.0.0.1" | cut -d/ -f1 | awk "{ print \$2}");echo "$i: $x";done'
+alias myips='ip addr | grep -B2 "inet " | grep -v link | grep -v "\-\-" | grep -v "lo:" | grep -v "127.0.0.1" | awk "{key=\$0; getline; print key \$0;}" | sed "s/[0-9]\: \(.*\)\:.*inet \(.*\)\/.*/\1: \2/"'
 
 alias gita='git add'
 alias gitc='git commit -m'
@@ -99,6 +99,7 @@ alias yums='sudo yum search'
 alias yumr='sudo yum remove'
 
 alias bang='sudo puppet agent -tv'
+alias magic='sudo openvpn --config ~/directi/client.ovpn'
 
 alias ccm='sudo ccm64'
 alias xcdwebfol='cd /srv/www'
