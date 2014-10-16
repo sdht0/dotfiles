@@ -63,6 +63,7 @@ alias jlog='sudo journalctl -n500 -f'
 alias gitk="gitk --all"
 alias grep="grep -i --color=auto"
 alias vi='vim'
+alias myips='for i in $(ip addr | grep "^[0-9]*:" | cut -d: -f2 | grep -v lo | sed "s/ //");do x=$(ip addr show $i | grep "inet " | grep -v "127.0.0.1" | cut -d/ -f1 | awk "{ print \$2}");echo "$i: $x";done'
 
 alias gita='git add'
 alias gitc='git commit -m'
