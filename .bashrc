@@ -1,6 +1,6 @@
 
 # Replace with a tmux session if it is an interactive session and tmux is installed and is not already running
-if [[ $- =~ i ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] ;then
+if [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] ;then
     ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
     if [[ -z "$ID" ]] ;then # if not available create a new one
         exec tmux new-session
@@ -14,7 +14,7 @@ export EDITOR='vim'
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 
-if [[ $- =~ i ]] && [[ "$MYSHELL" = 'bash' ]];then
+if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
     bind '"\e[A": history-search-backward'
     bind '"\e[B": history-search-forward'
 
