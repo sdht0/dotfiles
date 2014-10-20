@@ -23,3 +23,5 @@
     smtpuser = sh.siddhartha@gmail.com
     smtppass =
     chainreplyto = false
+[push]
+	default = simple
