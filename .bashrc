@@ -50,6 +50,8 @@ BWhite="\[\033[1;37m\]"       # White
 [[ $UID -eq 0 ]] && prompt='#' || prompt='$'
 export PS1="\n[${BBlue}${MYSHELL}${Color_Off}:${color}\u@\h${Color_Off}] ${BGreen}\w\n`if [ $? = 0 ]; then echo "${BGreen}✔"; else echo "${BRed}✘"; fi`${Color_Off} ${prompt} "
 
+alias ..='cd ..'
+alias ...='cd ../..'
 alias ls='ls -h --color=auto'
 alias ll='ls -lh --color=auto'
 alias rr='rm -rf'
@@ -63,7 +65,7 @@ alias jlog='sudo journalctl -n500 -f'
 alias gitk="gitk --all"
 alias grep="grep -i --color=auto"
 alias vi='vim'
-alias myips='ip addr | grep -B2 "inet " | grep -v link | grep -v "\-\-" | grep -v "lo:" | grep -v "127.0.0.1" | awk "{key=\$0; getline; print key \$0;}" | sed "s/[0-9]\: \(.*\)\:.*inet \(.*\)\/.*/\1: \2/"'
+alias myips='ip addr | grep -B2 "inet " | grep -v link | grep -v "\-\-" | grep -v "lo:" | grep -v "127.0.0.1" | awk "{key=\$0; getline; print key \$0;}" | sed "s/[0-9]\: \(.*\)\:.*inet \(.*\)\/.*/\1:\t\2/" | sort'
 
 alias gita='git add'
 alias gitc='git commit -m'
@@ -73,7 +75,9 @@ alias gitt='git stash'
 alias gittp='git stash pop'
 alias gitl='git ls'
 alias gitb='git branch -a'
-alias gitp='git pull --rebase && git push'
+alias gitpu='git push'
+alias gitp='git pull'
+alias gpgp='git pull --rebase && git push'
 
 alias rzsh='. ~/.bashrc && . ~/.zshrc'
 alias rbash='. ~/.bashrc'
@@ -183,6 +187,15 @@ xs() {
     fi
 
     grep --color=auto -Rn $* *
+}
+
+xf() {
+    if [ $# -lt 1 ]; then
+        echo "No input!"
+        return 1
+    fi
+
+    find -name "*$**"
 }
 
 xdeletefromgit() {
