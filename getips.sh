@@ -2,8 +2,5 @@
 
 PATH="/sbin:/usr/sbin::$PATH"
 
-printf "|";
-
-for i in $(ip addr | grep "^[0-9]*:" | cut -d: -f2 | grep -v lo | sed "s/ //" | sort);do
-    x=$(ip addr show $i | grep "inet " | grep -v "127.0.0.1" | cut -d/ -f1 | awk "{ print \$2}");[[ -n "$x" ]] && printf " $x ($i) |" ;
-done
+ip -o -f inet addr | grep -v '127.0.0.1' | cut -d'/' -f1 | awk '{print "| "$4" ("$2")"}' | sort | uniq | tr '\n' ' '
+printf "|"
