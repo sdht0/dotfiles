@@ -1,0 +1,22 @@
+ACTION!="add|change", GOTO="modeswitch_rules_end"
+
+# Adds a symlink "gsmmodem[n]" to the lowest ttyUSB port with interrupt
+# transfer; checked against a list of known modems, or else no action
+KERNEL=="ttyUSB*", ATTRS{bNumConfigurations}=="*", PROGRAM="usb_modeswitch --symlink-name %p %s{idVendor} %s{idProduct} %E{PRODUCT}", SYMLINK+="%c"
+
+SUBSYSTEM!="usb", GOTO="modeswitch_rules_end"
+
+# Adds the device ID to the "option" driver after a warm boot
+# in cases when the device is yet unknown to the driver; checked
+# against a list of known modems, or else no action
+ATTR{bInterfaceClass}=="ff", ATTR{bInterfaceNumber}=="00", ATTRS{bNumConfigurations}=="*", RUN+="usb_modeswitch --driver-bind %p %s{idVendor} %s{idProduct} %E{PRODUCT}"
+
+
+# Don't continue on "change" event, prevent trigger by changed configuration
+ACTION!="add", GOTO="modeswitch_rules_end"
+
+
+ATTRS{idVendor}=="12d1", ATTR{idProduct}=="1446", RUN+="/usr/bin/usb_modeswitch -c /home/sdh/dotfiles/airtel_3gdongle/usb_modeswitch.conf"
+
+
+LABEL="modeswitch_rules_end"
