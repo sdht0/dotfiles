@@ -52,8 +52,16 @@ export PS1="\n[${BBlue}${MYSHELL}${Color_Off}:${color}\u@\h${Color_Off}] ${BPurp
 
 alias ..='cd ..'
 alias ...='cd ../..'
-alias ls='ls -h --color=auto'
-alias ll='ls -lh --color=auto'
+alias b='cd -'
+alias ls='ls -CFh --color=auto'
+alias lsa='ls -ACFh --color=auto'
+alias lst='ls -ACFhrt --color=auto'
+alias ll='ls -CFlh --color=auto'
+alias lla='ls -ACFlh --color=auto'
+alias llt='ls -ACFlhrt --color=auto'
+alias lsg='ls -ACFlh --color=auto | grep --color=auto -i'
+alias psg='ps aux | grep -v grep | grep -i -e VSZ -e '
+alias mkdir="mkdir -p"
 alias rr='rm -rf'
 alias mount='mount -v'
 alias umount='umount -v'
@@ -61,13 +69,19 @@ alias rmdir='rmdir -v'
 alias pu='pushd'
 alias po='popd'
 alias dmesg='dmesg --human -T'
-alias jlog='sudo journalctl -n500 -f'
-alias gitk="gitk --all"
-alias grep="grep -i --color=auto"
+alias gitk='gitk --all'
+alias grep='grep -i --color=auto'
 alias vi='vim'
-alias s="ssh"
-alias e="sudoedit"
+alias s='ssh'
+alias e='sudoedit'
+alias tarc="tar czvf"
+alias tarx="tar xzvf"
 alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d"/" -f1 | awk "{print \$2\": \"\$4}" | sort | uniq'
+alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
+alias jlog='sudo journalctl -n500 -f'
+
+alias rzsh='. ~/.bashrc && . ~/.zshrc'
+alias rbash='. ~/.bashrc'
 
 alias gita='git add'
 alias gitc='git commit -m'
@@ -80,9 +94,6 @@ alias gitb='git branch -a'
 alias gitpu='git push'
 alias gitp='git pull'
 alias gpgp='git pull --rebase && git push'
-
-alias rzsh='. ~/.bashrc && . ~/.zshrc'
-alias rbash='. ~/.bashrc'
 
 # Pacman package management
 alias pcmu='sudo pacman -Syu'
@@ -115,16 +126,6 @@ alias xchromestart="chromium --proxy-server='socks://127.0.0.1:9999' --incognito
 alias xstartproxy="ssh -TNfD 9999 root@5.175.167.132"
 alias xstartproxy2="ssh -TNfD '*:9999' -p 9999 dcadmin@172.16.32.222"
 
-gitkf() {
-  gitk_follow () {
-    while (( "$#" )); do
-      git log -p --oneline --name-status --follow $1;
-      shift;
-    done | perl -ne 'if( s{^(?:[ACDMRTUXB]|R\d+)\s+}{} ) { s{\s+}{\n}g; print; }' | sort -u
-  }
-  gitk $(gitk_follow $*)
-}
-
 # Systemd service management
 sstart() { sudo systemctl start $1.service ; sudo systemctl status -l $1.service; }
 srestart() { sudo systemctl restart $1.service ; sudo systemctl status -l $1.service; }
@@ -143,7 +144,52 @@ ureload() { sudo service $1 reload ; }
 uenable() { sudo chkconfig --add $1 && sudo chkconfig $1 on && sudo chkconfig --list $1 ; }
 udisable() { sudo chkconfig $1 off && sudo chkconfig --list $1 ; }
 
+mkcd() {
+    mkdir -p $1 && cd $1
+}
+
+xs() {
+    if [ $# -lt 1 ]; then
+        echo "No input!"
+        return 1
+    fi
+
+    grep --color=auto -Rn $* *
+}
+
+xf() {
+    if [ $# -lt 1 ]; then
+        echo "No input!"
+        return 1
+    fi
+
+    find -name "*$**"
+}
+
 h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
+
+up() {
+    if [ -z "$*" ]; then 1='1';fi
+    pd=`pwd`
+    cd $(eval printf '../'%.0s {1..$1}) && echo "${pd} -> $(pwd)";
+}
+
+fawk() {
+    first="awk '{print "
+    last="}'"
+    cmd="${first}\$${1}${last}"
+    eval $cmd
+}
+
+gitkf() {
+  gitk_follow () {
+    while (( "$#" )); do
+      git log -p --oneline --name-status --follow $1;
+      shift;
+    done | perl -ne 'if( s{^(?:[ACDMRTUXB]|R\d+)\s+}{} ) { s{\s+}{\n}g; print; }' | sort -u
+  }
+  gitk $(gitk_follow $*)
+}
 
 man() {
     env LESS_TERMCAP_mb=$'\E[01;31m' \
@@ -176,28 +222,6 @@ changehostname() {
     esac
     hostname "$nhostname"
     [[ -r '/etc/hosts' ]] && grep -v "$nhostname" /etc/hosts > /dev/null || sed -i "/127.0.0.1/ s/$/ $nhostname/" /etc/hosts
-}
-
-mkcd() {
-    mkdir -p $1 && cd $1
-}
-
-xs() {
-    if [ $# -lt 1 ]; then
-        echo "No input!"
-        return 1
-    fi
-
-    grep --color=auto -Rn $* *
-}
-
-xf() {
-    if [ $# -lt 1 ]; then
-        echo "No input!"
-        return 1
-    fi
-
-    find -name "*$**"
 }
 
 xdeletefromgit() {
