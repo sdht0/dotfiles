@@ -65,6 +65,8 @@ alias jlog='sudo journalctl -n500 -f'
 alias gitk="gitk --all"
 alias grep="grep -i --color=auto"
 alias vi='vim'
+alias s="ssh"
+alias e="sudoedit"
 alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d"/" -f1 | awk "{print \$2\": \"\$4}" | sort | uniq'
 
 alias gita='git add'
