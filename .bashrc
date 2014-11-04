@@ -73,7 +73,8 @@ alias gitk='gitk --all'
 alias grep='grep -i --color=auto'
 alias vi='vim'
 alias s='ssh'
-alias e='sudoedit'
+alias se='sudoedit'
+alias e='vim'
 alias tarc="tar czvf"
 alias tarx="tar xzvf"
 alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d"/" -f1 | awk "{print \$2\": \"\$4}" | sort | uniq'
@@ -127,22 +128,22 @@ alias xstartproxy="ssh -TNfD 9999 root@5.175.167.132"
 alias xstartproxy2="ssh -TNfD '*:9999' -p 9999 dcadmin@172.16.32.222"
 
 # Systemd service management
-sstart() { sudo systemctl start $1.service ; sudo systemctl status -l $1.service; }
-srestart() { sudo systemctl restart $1.service ; sudo systemctl status -l $1.service; }
-sstop() { sudo systemctl stop $1.service ; sudo systemctl status -l $1.service; }
-sstatus() { sudo systemctl status -l $1.service; }
-sreload() { sudo systemctl reload $1.service; }
-senable() { sudo systemctl enable $1.service ; ls -l /etc/systemd/system/multi-user.target.wants; }
-sdisable() { sudo systemctl disable $1.service ; ls -l /etc/systemd/system/multi-user.target.wants; }
+sds() { sudo systemctl status -l $1.service; }
+sdst() { sudo systemctl start $1.service ; sudo systemctl status -l $1.service; }
+sdsp() { sudo systemctl stop $1.service ; sudo systemctl status -l $1.service; }
+sdr() { sudo systemctl restart $1.service ; sudo systemctl status -l $1.service; }
+sdrl() { sudo systemctl reload $1.service; }
+sde() { sudo systemctl enable $1.service ; ls -l /etc/systemd/system/multi-user.target.wants; }
+sdd() { sudo systemctl disable $1.service ; ls -l /etc/systemd/system/multi-user.target.wants; }
 
 # Init scripts service management
-ustart() { sudo service $1 start ; }
-urestart() { sudo service $1 restart ; }
-ustop() { sudo service $1 stop ; }
-ustatus() { sudo service $1 status ; }
-ureload() { sudo service $1 reload ; }
-uenable() { sudo chkconfig --add $1 && sudo chkconfig $1 on && sudo chkconfig --list $1 ; }
-udisable() { sudo chkconfig $1 off && sudo chkconfig --list $1 ; }
+ups() { sudo service $1 status ; }
+upst() { sudo service $1 start ; }
+upsp() { sudo service $1 stop ; }
+upr() { sudo service $1 restart ; }
+uprl() { sudo service $1 reload ; }
+upe() { sudo chkconfig --add $1 && sudo chkconfig $1 on && sudo chkconfig --list $1 ; }
+upd() { sudo chkconfig $1 off && sudo chkconfig --list $1 ; }
 
 mkcd() {
     mkdir -p $1 && cd $1
