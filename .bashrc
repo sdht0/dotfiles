@@ -77,7 +77,7 @@ alias se='sudoedit'
 alias e='vim'
 alias tarc="tar czvf"
 alias tarx="tar xzvf"
-alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d"/" -f1 | awk "{print \$2\": \"\$4}" | sort | uniq'
+alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d"/" -f1 | cut -d" " -f2- | sort | awk "{print \$1\": \"\$3}" | sort | uniq'
 alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
 alias jlog='sudo journalctl -n500 -f'
 
