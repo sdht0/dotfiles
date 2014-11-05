@@ -96,6 +96,14 @@ alias gitpu='git push'
 alias gitp='git pull'
 alias gpgp='git pull --rebase && git push'
 
+alias dk='sudo docker'
+alias dkr='sudo docker run'
+alias dki='sudo docker images'
+alias dkia='sudo docker images -a'
+alias dkc='sudo docker ps'
+alias dkca='sudo docker ps -a'
+dkrc() { sudo docker start $1 && sudo docker attach $1;}
+
 # Pacman package management
 alias pcmu='sudo pacman -Syu'
 alias pcmi='sudo pacman -S'
