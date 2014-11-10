@@ -91,6 +91,7 @@ alias gits='git status'
 alias gitt='git stash'
 alias gittp='git stash pop'
 alias gitl='git ls'
+alias gitcl='git clone'
 alias gitb='git branch -a'
 alias gitpu='git push'
 alias gitp='git pull'
@@ -250,6 +251,30 @@ xdeletefromgit() {
 
     # remove the temporary history git-filter-branch otherwise leaves behind for a long time
     rm -rf .git/refs/original/ && git reflog expire --all &&  git gc --aggressive --prune
+}
+
+xreauthorgit() {
+    if [ $# -lt 3 ]; then
+        return 0
+    fi
+
+git filter-branch --env-filter '
+ 
+OLD_EMAIL="'"$1"'"
+CORRECT_NAME="'"$2"'"
+CORRECT_EMAIL="'"$3"'"
+ 
+if [ "$GIT_COMMITTER_EMAIL" = "$OLD_EMAIL" ]
+then
+export GIT_COMMITTER_NAME="$CORRECT_NAME"
+export GIT_COMMITTER_EMAIL="$CORRECT_EMAIL"
+fi
+if [ "$GIT_AUTHOR_EMAIL" = "$OLD_EMAIL" ]
+then
+export GIT_AUTHOR_NAME="$CORRECT_NAME"
+export GIT_AUTHOR_EMAIL="$CORRECT_EMAIL"
+fi
+' --tag-name-filter cat -- --branches --tags
 }
 
 xextract() {
