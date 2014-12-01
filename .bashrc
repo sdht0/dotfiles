@@ -1,6 +1,6 @@
 
 # Replace with a tmux session if it is an interactive session and tmux is installed and is not already running
-if [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] ;then
+if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] ;then
     ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
     if [[ -z "$ID" ]] ;then # if not available create a new one
         exec tmux new-session
@@ -442,10 +442,10 @@ xmakecustomarchiso() {
 
 xlistfiles() {
     case "$1" in
-        hdd1) 1='/home/lfiles/sdh-hdd'
+        hdd1) 1='/run/media/sdh/sdh-hdd1'
             flname=files-hdd1
             ;;
-        hdd2) 1='/home/lfiles/sdh-hdd2'
+        hdd2) 1='/run/media/sdh/sdh-hdd2'
             flname=files-hdd2
             ;;
         *) 1='/xfiles'
@@ -453,7 +453,7 @@ xlistfiles() {
             ;;
     esac
 
-    find "$1" -type d \( -name ".git" -o -name ".hg" -o -name "\$RECYCLE.BIN" -o -name "System Volume Information" -o -name "version-controlled-soft" -o -name "manuals" -o -name "eclipse" \) -prune -o -print | sort > /xfiles/my-downloads/${flname}.txt
+    find "$1" -type d \( -name ".git" -o -name ".hg" -o -name "Dev" -o -name "\$RECYCLE.BIN" -o -name "System Volume Information" -o -name "version-controlled-soft" -o -name "manuals" -o -name "eclipse" \) -prune -o -print | sort > ~/Downloads/${flname}.txt
 }
 
 xxown() {
@@ -554,6 +554,16 @@ int main() {
 
     return 0;
 }' > $1/$1.cpp ; touch $1/in$1.txt )
+}
+
+xregexrename() {
+  if [ $# -lt 1 ]; then
+    echo "Wrong input!"
+    return 1
+  fi
+  for i in *;do
+    x=$(echo $i | sed "$1"); [[ ! -r "$x" ]] && echo "$i -> $x" && [[ "$2" = "m" ]] && mv "$i" "$x"
+  done
 }
 
 xrenametotitlecase() {
