@@ -61,6 +61,8 @@ alias lla='ls -ACFlh --color=auto'
 alias llt='ls -ACFlhrt --color=auto'
 alias lsg='ls -ACFlh --color=auto | grep --color=auto -i'
 alias psg='ps aux | grep -v grep | grep -i -e VSZ -e '
+alias psgc='ps aux | grep -v grep | grep -i -e '
+alias ports='sudo netstat -tulanp'
 alias mkdir="mkdir -p"
 alias rr='rm -rf'
 alias mount='mount -v'
