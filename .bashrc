@@ -48,7 +48,7 @@ BWhite="\[\033[1;37m\]"       # White
 
 [[ $UID -eq 0 ]] && color=${BRed} || color=${BPurple}
 [[ $UID -eq 0 ]] && prompt='#' || prompt='$'
-export PS1="\n[${BBlue}${MYSHELL}${Color_Off}:${color}\u@\h${Color_Off}] ${BGreen}\w\n`if [ $? = 0 ]; then echo "${BGreen}✔"; else echo "${BRed}✘"; fi`${Color_Off} ${prompt} "
+export PS1="\n[${BBlue}${MYSHELL}${Color_Off}:${color}\u@\H${Color_Off}] ${BGreen}\w\n`if [ $? = 0 ]; then echo "${BGreen}✔"; else echo "${BRed}✘"; fi`${Color_Off} ${prompt} "
 
 alias ..='cd ..'
 alias ...='cd ../..'
