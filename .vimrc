@@ -71,7 +71,6 @@ set background=dark " When set to "dark", Vim will try to use colors that look
                     " good on a dark background. When set to "light", Vim will
                     " try to use colors that look good on a light background.
                     " Any other value is illegal.
-colorscheme solarized
 
 filetype plugin indent on
 
