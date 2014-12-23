@@ -80,6 +80,7 @@ alias tf='sudo tail -f'
 alias vi='vim'
 alias s='ssh'
 alias se='sudoedit'
+alias sv='sudo vim -u ~/.vimrc'
 alias e='vim'
 alias tarc="tar czvf"
 alias tarx="tar xzvf"
