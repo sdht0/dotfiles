@@ -228,16 +228,16 @@ changehostname() {
 
     case "$os" in
     centos)
-        [[ -r '/etc/sysconfig/network' ]] && sed -i "/HOSTNAME/ s/^.*$/HOSTNAME=${nhostname}/" /etc/sysconfig/network || { echo "File not found"; return -1; }
+        [[ -r '/etc/sysconfig/network' ]] && sudo sed -i "/HOSTNAME/ s/^.*$/HOSTNAME=${nhostname}/" /etc/sysconfig/network || { echo "File not found"; return -1; }
         ;;
     ubuntu)
-        [[ -r '/etc/hostname' ]] && echo $nhostname > /etc/hostname
+        [[ -r '/etc/hostname' ]] && echo $nhostname | sudo tee /etc/hostname > /dev/null
         ;;
     *) echo "No match!"
         ;;
     esac
-    hostname "$nhostname"
-    [[ -r '/etc/hosts' ]] && grep -v "$nhostname" /etc/hosts > /dev/null || sed -i "/127.0.0.1/ s/$/ $nhostname/" /etc/hosts
+    sudo hostname "$nhostname"
+    [[ -r '/etc/hosts' ]] && grep -v "$nhostname" /etc/hosts > /dev/null || sudo sed -i "/127.0.0.1/ s/$/ $nhostname/" /etc/hosts
 }
 
 xdeletefromgit() {
