@@ -132,7 +132,7 @@ alias yumi='sudo yum install'
 alias yums='sudo yum search'
 alias yumr='sudo yum remove'
 
-alias bang='sudo puppet agent -tv'
+alias jetpistol='sudo puppet agent -tv'
 alias magic='sudo openvpn --config ~/directi/client.ovpn'
 
 alias ccm='sudo ccm64'
