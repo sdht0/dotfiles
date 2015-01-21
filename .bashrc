@@ -49,7 +49,7 @@ BWhite="\[\033[1;37m\]"       # White
 
 [[ $UID -eq 0 ]] && color=${BRed} || color=${BPurple}
 [[ $UID -eq 0 ]] && prompt='#' || prompt='$'
-export PS1="\n[${BBlue}${MYSHELL}${Color_Off}:${color}\u@\H${Color_Off}] ${BGreen}\w\n`if [ $? = 0 ]; then echo "${BGreen}✔"; else echo "${BRed}✘"; fi`${Color_Off} ${prompt} "
+export PS1="\n[${BBlue}${MYSHELL}${Color_Off}:${color}\u@\H${Color_Off}] ${BGreen}\w\n`if [ $? = 0 ]; then echo "${BGreen}"; else echo "${BRed}"; fi`${prompt}${Color_Off} "
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -63,7 +63,8 @@ alias llt='ls -aCFlhrt --color=auto'
 alias lsg='ls -aCFlh --color=auto | grep --color=auto -i'
 alias psg='ps aux | grep -v grep | grep -i -e VSZ -e '
 alias psgc='ps aux | grep -v grep | grep -i -e '
-alias ports='sudo netstat -tulanp'
+alias ports='sudo netstat -tulanp | grep LISTEN'
+alias portsa='sudo netstat -tulanp'
 alias mkdir="mkdir -p"
 alias rr='rm -rf'
 alias mount='mount -v'
@@ -82,8 +83,8 @@ alias s='ssh'
 alias se='sudoedit'
 alias sv='sudo vim -u ~/.vimrc'
 alias e='vim'
-alias tarc="tar czvf"
-alias tarx="tar xzvf"
+alias tarc="sudo tar czvf"
+alias tarx="sudo tar xzvf"
 alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d"/" -f1 | cut -d" " -f2- | sort | uniq | awk "{print \$1\": \"\$3}"'
 alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
 alias jlog='sudo journalctl -n500 -f'
