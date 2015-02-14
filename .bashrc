@@ -1,6 +1,6 @@
 
 # Replace with a tmux session if it is an interactive session and tmux is installed and is not already running
-if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] ;then
+if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ ! $TTY = *tty* ]] ;then
     ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
     if [[ -z "$ID" ]] ;then # if not available create a new one
         exec tmux new-session
@@ -63,9 +63,12 @@ alias llt='sudo ls -aCFlhrt --color=auto'
 alias lsg='sudo ls -aCFlh --color=auto | grep --color=auto -i'
 alias psg='sudo ps aux | grep -v grep | grep -i -e VSZ -e '
 alias psgc='sudo ps aux | grep -v grep | grep -i -e '
+alias pkl='sudo kill -9'
+alias lsofs='sudo lsof | grep'
 alias ports='sudo netstat -tulanp | grep LISTEN'
 alias portsa='sudo netstat -tulanp'
-alias mkdir="sudo mkdir -p"
+alias mkdir="mkdir -p"
+alias smkdir="sudo mkdir -p"
 alias rr='sudo rm -rf'
 alias mount='sudo mount -v'
 alias umount='sudo umount -v'
@@ -83,10 +86,10 @@ alias s='ssh'
 alias se='sudoedit'
 alias sv='sudo vim -u ~/.vimrc'
 alias e='vim'
-alias tarc="tar czvf"
-alias tarx="tar xzvf"
-alias tarsc="sudo tar czvf"
-alias tarsx="sudo tar xzvf"
+alias tarc="tar czf"
+alias tarx="tar xzf"
+alias tarsc="sudo tar czf"
+alias tarsx="sudo tar xzf"
 alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d"/" -f1 | cut -d" " -f2- | sort | uniq | awk "{print \$1\": \"\$3}"'
 alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
 alias jlog='sudo journalctl -n500 -f'
