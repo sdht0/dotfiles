@@ -73,10 +73,11 @@ alias rr='sudo rm -rf'
 alias mount='sudo mount -v'
 alias umount='sudo umount -v'
 alias pu='pushd'
+alias cat='sudo cat'
 alias po='popd'
 alias dmesg='sudo dmesg --human -T'
 alias gitk='gitk --all'
-alias grep='grep -i --color=auto'
+alias grep='sudo grep -i --color=auto'
 alias crns='sudo crontab -l'
 alias crne='sudo crontab -e'
 alias crnsu='sudo crontab -l -u'
@@ -88,8 +89,8 @@ alias sv='sudo vim -u ~/.vimrc'
 alias e='vim'
 alias tarc="tar czf"
 alias tarx="tar xzf"
-alias tarsc="sudo tar czf"
-alias tarsx="sudo tar xzf"
+alias starc="sudo tar czf"
+alias starx="sudo tar xzf"
 alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d"/" -f1 | cut -d" " -f2- | sort | uniq | awk "{print \$1\": \"\$3}"'
 alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
 alias jlog='sudo journalctl -n500 -f'
@@ -179,7 +180,7 @@ xs() {
         return 1
     fi
 
-    grep --color=auto -Rn $* *
+    sudo grep --color=auto -Rn $* *
 }
 
 xf() {
@@ -188,7 +189,7 @@ xf() {
         return 1
     fi
 
-    find -name "*$**"
+    sudo find -name "*$**"
 }
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
