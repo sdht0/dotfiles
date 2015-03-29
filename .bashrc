@@ -333,43 +333,49 @@ xgitc() {
     fi
 }
 
-xgipull() {
+xgiaction() {
+    if [ $# -lt 1 ];then
+        echo "Usage: xgiaction pull|status|stash [arguments]"
+        return
+    fi
     case "$1" in
-        xvcs) 1='/xfiles/source-code-repository/'
-            ;;
-        *) 1=$(pwd)
-            ;;
+        pull|status|stash)
+           ;;
+        *) echo "Only pull|status|stash please"
+           return 1
+           ;;
     esac
 
-    walkfolderandpull() {
+    walkfolderandexecute() {
         pushd "$1" > /dev/null || return -1
+        shift
         if [ -d ".git" ];then
-            printf "\n********Updating git repo $1********\n"
-            git pull --all
-        elif [ -d ".bzr" ];then
-            printf "\n********Updating bzr repo $1********\n"
+            printf "\n********git $1 in $(pwd)********\n"
+            git $*
+        elif [ -d ".bzr" -a "$1" = "pull" ];then
+            printf "\n********Updating bzr repo $(pwd)********\n"
             bzr update
-        elif [ -d ".svn" ];then
-            printf "\n********Updating svn repo $1********\n"
+        elif [ -d ".svn" -a "$1" = "pull" ];then
+            printf "\n********Updating svn repo $(pwd)********\n"
             svn fetch
         else
-            printf "\n********Entering $1********\n"
+            printf "\n********Entering $(pwd)********\n"
             for i in *;do
             if [ -d "$i" ];then
-                walkfolderandpull "$i"
+                walkfolderandexecute "$i" $*
             fi
             done
         fi
         popd > /dev/null || return -1
     }
 
-    walkfolderandpull "$1"
+    walkfolderandexecute "." $*
 }
 
 xuploadpicasa() {
     if [ $# -lt 1 ];then
         echo "Usage: xuploadpicasa albumname [nocreate]"
-        return
+        return 1
     fi
     f="resized"
     n=$1
@@ -387,7 +393,7 @@ xuploadpicasa() {
 xuploadskydrive() {
     if [ $# -lt 2 ];then
         echo "Usage: xuploadskydrive local_file|local_folder remotefolder"
-        return
+        return 1
     fi
 
     pd=$(pwd)
@@ -514,6 +520,18 @@ xplaylist() {
             done
         fi
     done
+}
+
+xkdechanges() {
+    for i in *;do if [ -d "$i" -a -r "$i"/git-checkout-update.log ];then echo $i;cat "$i"/git-checkout-update.log; fi;done | grep -B4 commit | grep -e commit -e directory | while IFS= read -r line;do read -r line2; dr=$(echo $line | awk '{print $4}'); echo $dr; echo $line2 | grep commit; echo; cd "$dr"; gitk; cd - > /dev/null ;done
+}
+
+xpatternrename() {
+    if [ $# -lt 2 ]; then
+        echo "Please give two patterns!"
+        return 1
+    fi
+    for i in *;do x=$(echo $i | sed "s|$1|$2|"); if [ ! -r "$x" ];then echo "$i->$x"; mv "$i" "$x";fi;done
 }
 
 xgpp() {
