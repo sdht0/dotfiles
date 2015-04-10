@@ -336,16 +336,9 @@ xgitc() {
 
 xgiaction() {
     if [ $# -lt 1 ];then
-        echo "Usage: xgiaction pull|status|stash [arguments]"
+        echo "Usage: xgiaction action [arguments]"
         return
     fi
-    case "$1" in
-        pull|status|stash)
-           ;;
-        *) echo "Only pull|status|stash please"
-           return 1
-           ;;
-    esac
 
     walkfolderandexecute() {
         pushd "$1" > /dev/null || return -1
@@ -353,12 +346,16 @@ xgiaction() {
         if [ -d ".git" ];then
             printf "\n********git $1 in $(pwd)********\n"
             git $*
-        elif [ -d ".bzr" -a "$1" = "pull" ];then
-            printf "\n********Updating bzr repo $(pwd)********\n"
-            bzr update
-        elif [ -d ".svn" -a "$1" = "pull" ];then
-            printf "\n********Updating svn repo $(pwd)********\n"
-            svn fetch
+        elif [ -d ".bzr" ];then
+            if [ "$1" = "pull" ];then
+                printf "\n********Updating bzr repo $(pwd)********\n"
+                bzr update
+            fi
+        elif [ -d ".svn" ];then
+            if [ "$1" = "pull" ];then
+                printf "\n********Updating svn repo $(pwd)********\n"
+                svn fetch
+            fi
         else
             printf "\n********Entering $(pwd)********\n"
             for i in *;do
