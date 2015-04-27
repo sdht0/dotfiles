@@ -64,7 +64,7 @@ alias psg='sudo ps aux | grep -v grep | grep -i -e VSZ -e '
 alias psgc='sudo ps aux | grep -v grep | grep -i -e '
 alias pkl='sudo kill -9'
 alias lsofs='sudo lsof | grep'
-alias ports='sudo netstat -tulanp | grep LISTEN'
+alias ports='sudo netstat -tulnp | grep LISTEN'
 alias portsa='sudo netstat -tulanp'
 alias mkdir="mkdir -p"
 alias smkdir="sudo mkdir -p"
@@ -94,7 +94,8 @@ alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d"/" -f1 | cut -d" 
 alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
 alias jlog='sudo journalctl -n500 -f'
 
-alias please="sudo \$(history | tail -1 | awk '{\$1=\"\";print}' | xargs)"
+alias please='sudo $(fc -ln -1)'
+alias xplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
 
 alias rzsh='. ~/.bashrc && . ~/.zshrc'
 alias rbash='. ~/.bashrc'
