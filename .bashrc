@@ -53,6 +53,7 @@ export PS1="\n[${BBlue}${MYSHELL}${Color_Off}:${color}\u@\H${Color_Off}] ${BPurp
 alias ..='cd ..'
 alias ...='cd ../..'
 alias b='cd -'
+alias sudo='sudo '
 alias ls='sudo ls -CFh --color=auto'
 alias lsa='sudo ls -aCFh --color=auto'
 alias lst='sudo ls -aCFhrt --color=auto'
