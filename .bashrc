@@ -468,8 +468,14 @@ xlistfiles() {
         hdd2) 1='/run/media/sdh/sdh-hdd2'
             flname=files-hdd2
             ;;
-        *) 1='/xfiles'
-            flname=files
+        hdd3) 1='/run/media/sdh/sdh-hdd3'
+            flname=files-hdd2
+            ;;
+        hdd4) 1='/run/media/sdh/sdh-hdd4'
+            flname=files-hdd2
+            ;;
+        *)  echo "Wrong input"
+            return -1
             ;;
     esac
 
