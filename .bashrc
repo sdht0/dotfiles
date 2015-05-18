@@ -475,10 +475,11 @@ xmakecustomarchiso() {
 
 xget() {
     if [ $# -lt 1 ]; then
-        echo "No input!"
+        echo "No input! [gl|ak]"
         return 1
     fi
-    ~/sshhhh "$1" | base64 --decode | python ~/dotfiles/scripts/gauthenticator.py | xclip -selection clipboard
+    ~/sshhhh "$1" | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py | xclip -selection clipboard
+    echo "Copied to clipboard"
 }
 
 xlistfiles() {
