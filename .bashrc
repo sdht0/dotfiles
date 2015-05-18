@@ -93,6 +93,7 @@ alias starx="sudo tar xzf"
 alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d"/" -f1 | cut -d" " -f2- | sort | uniq | awk "{print \$1\": \"\$3}"'
 alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
 alias jlog='sudo journalctl -n500 -f'
+alias xcp='xclip -selection clipboard'
 
 alias please='sudo $(fc -ln -1)'
 alias xplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
@@ -140,6 +141,8 @@ alias yumu='sudo yum update'
 alias yumi='sudo yum install'
 alias yums='sudo yum search'
 alias yumr='sudo yum remove'
+alias yuml='sudo yum --showduplicates list'
+alias yumf='sudo yum --showduplicates info'
 
 alias jetpistol='sudo puppet agent -tv'
 alias magic='sudo openvpn --config ~/directi/client.ovpn'
@@ -208,6 +211,14 @@ fawk() {
     last="}'"
     cmd="${first}\$${1}${last}"
     eval $cmd
+}
+
+apkl() {
+    if [ $# -lt 1 ]; then
+        echo "No input!"
+        return 1
+    fi
+    sudo ps aux | grep -v grep | grep -i -e $1 | awk '{print $2}' | xargs sudo kill -9
 }
 
 gitkf() {
@@ -460,6 +471,14 @@ xmakecustomarchiso() {
     #rm -rf /tmp/sdh-customiso
     cd $outputdir
     echo "Done."
+}
+
+xget() {
+    if [ $# -lt 1 ]; then
+        echo "No input!"
+        return 1
+    fi
+    ~/sshhhh "$1" | base64 --decode | python ~/dotfiles/scripts/gauthenticator.py | xclip -selection clipboard
 }
 
 xlistfiles() {
