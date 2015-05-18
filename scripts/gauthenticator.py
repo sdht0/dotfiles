@@ -263,7 +263,7 @@ __all__ = [
     'valid_totp'
 ]
 
-my_secret = input()
+my_secret = raw_input()
 my_token = get_totp(my_secret)
 
 print(my_token)
