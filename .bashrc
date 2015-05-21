@@ -81,6 +81,8 @@ alias grep='sudo grep -i --color=auto'
 alias crns='sudo crontab -l'
 alias crne='sudo crontab -e'
 alias crnsu='sudo crontab -l -u'
+alias tl='sudo tail'
+alias tln='sudo tail -n'
 alias tf='sudo tail -f'
 alias vi='vim'
 alias s='ssh'
@@ -476,10 +478,11 @@ xmakecustomarchiso() {
 
 xget() {
     if [ $# -lt 1 ]; then
-        echo "No input!"
+        echo "No input! [gl|ak]"
         return 1
     fi
-    ~/sshhhh "$1" | base64 --decode | python ~/dotfiles/scripts/gauthenticator.py | xclip -selection clipboard
+    ~/sshhhh "$1" | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py | xclip -selection clipboard
+    echo "Copied to clipboard"
 }
 
 xlistfiles() {
