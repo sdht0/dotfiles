@@ -47,7 +47,7 @@ BCyan="\[\033[1;36m\]"        # Cyan
 BWhite="\[\033[1;37m\]"       # White
 
 [[ $UID -eq 0 ]] && prompt='#' || prompt='$'
-export PS1="\n[${BBlue}${MYSHELL}${Color_Off}] ${BYellow}\w \$([[ \$? == 0 ]] && echo \"${BGreen}\" || echo \"${BRed}\")${prompt}${Color_Off} "
+export PS1="\n[${BBlue}${MYSHELL}${Color_Off}] ${BYellow}\w\$(git_super_status) \$([[ \$? == 0 ]] && echo \"${BGreen}\" || echo \"${BRed}\")${prompt}${Color_Off} "
 
 alias ..='cd ..'
 alias ...='cd ../..'

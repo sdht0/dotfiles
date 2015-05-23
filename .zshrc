@@ -10,9 +10,10 @@ autoload -U promptinit
 promptinit
 prompt walters
 
+. ~/dotfiles/scripts/zshrc.sh
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 NEWLINE=$'\n'
-PROMPT="${NEWLINE}%{$fg_bold[yellow]%}%~ %(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
+PROMPT="${NEWLINE}%{$fg_bold[yellow]%}%~\$(git_super_status) %(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
 RPROMPT=""
 
 bindkey -e
