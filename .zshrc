@@ -10,10 +10,12 @@ autoload -U promptinit
 promptinit
 prompt walters
 
-. ~/dotfiles/scripts/zshrc.sh
+. ~/zsh-git-prompt/zshrc.sh 2>/dev/null
+GIT_PROMPT_EXECUTABLE="haskell"
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
+[[ $UID -eq 0 ]] && color=red || color=green
 NEWLINE=$'\n'
-PROMPT="${NEWLINE}%{$fg_bold[yellow]%}%~\$(git_super_status)${NEWLINE}%(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
+PROMPT="${NEWLINE}[%{$fg_bold[blue]%}${MYSHELL}%{$reset_color%}:%{$fg_bold[${color}]%}%n@%M%{$reset_color%}] %{$fg_bold[yellow]%}%~ \$(git_super_status 2>/dev/null)${NEWLINE}%(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
 RPROMPT=""
 
 bindkey -e
