@@ -12,6 +12,10 @@ fi
 export LANG='en_US.UTF-8'
 export EDITOR='vim'
 export PATH="/sbin:/usr/sbin::$PATH"
+export HISTFILESIZE=100000
+export HISTSIZE=${HISTFILESIZE}
+export HISTFILE=~/.bash_history
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 
@@ -22,6 +26,10 @@ if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
     shopt -s nocaseglob;                    # Case-insensitive globbing (used in pathname expansion)
     shopt -s histappend;                    # Append to the Bash history file, rather than overwriting it
     shopt -s cdspell;                       # Autocorrect typos in path names when using `cd`
+    shopt -s autocd;
+    shopt -s checkwinsize
+    shopt -s cmdhist
+    shopt -s no_empty_cmd_completion
 fi
 
 # Reset
@@ -54,12 +62,14 @@ export PS1="\n[${BBlue}${MYSHELL}${Color_Off}:${color}\u@\H${Color_Off}] ${BGree
 alias ..='cd ..'
 alias ...='cd ../..'
 alias b='cd -'
+alias ls='ls --color=auto'
 alias lls='sudo ls -CF --color=auto'
 alias lsa='sudo ls -CFah --color=auto'
 alias lst='sudo ls -CFahrt --color=auto'
 alias ll='sudo ls -CFlh --color=auto'
 alias lla='sudo ls -CFalh --color=auto'
 alias llt='sudo ls -CFalhrt --color=auto'
+function cl(){ cd "$@" && lls; }
 alias lsg='sudo ls -CFalh --color=auto | grep --color=auto -i'
 alias psg='sudo ps aux | grep -v grep | grep -i -e VSZ -e '
 alias psgc='sudo ps aux | grep -v grep | grep -i -e '
@@ -97,6 +107,7 @@ alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d"/" -f1 | cut -d" 
 alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
 alias jlog='sudo journalctl -n500 -f'
 alias xcp='xclip -selection clipboard'
+alias httpserver="python2 -m SimpleHTTPServer"
 
 alias please='sudo $(fc -ln -1)'
 alias xplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
@@ -181,6 +192,10 @@ upd() { sudo chkconfig $1 off && sudo chkconfig --list $1 ; }
 
 mkcd() {
     mkdir -p $1 && cd $1
+}
+
+ctg() {
+    cat "$1" | grep "$2"
 }
 
 xs() {
