@@ -1,5 +1,5 @@
 HISTFILE=~/.bash_history
-HISTSIZE=10000
+HISTSIZE=100000
 SAVEHIST=$HISTSIZE
 
 autoload -U colors && colors
