@@ -66,11 +66,24 @@ set formatoptions=c,q,r,t " This is a sequence of letters which describes how
 set ruler           " Show the line and column number of the cursor position,
                     " separated by a comma.
 
-syntax enable
+set autoread        " Reload unchanged files automatically.
+
+set scrolloff=10
+set sidescroll=1
+set sidescrolloff=15
+
+if has('syntax')
+  syntax enable     " Enable syntax highlighting.
+endif
+
 set background=dark " When set to "dark", Vim will try to use colors that look
                     " good on a dark background. When set to "light", Vim will
                     " try to use colors that look good on a light background.
                     " Any other value is illegal.
 
-filetype plugin indent on
+if has('autocmd')
+  filetype plugin indent on
+endif
 
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <ESC>:w<CR>  " Enable saving by Ctrl-s
