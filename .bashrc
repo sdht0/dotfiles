@@ -55,7 +55,7 @@ BCyan="\[\033[1;36m\]"        # Cyan
 BWhite="\[\033[1;37m\]"       # White
 
 [[ $UID -eq 0 ]] && prompt='#' || prompt='$'
-export PS1="\n[${BBlue}${MYSHELL}${Color_Off}] ${BYellow}\w\$(git_super_status) \$([[ \$? == 0 ]] && echo \"${BGreen}\" || echo \"${BRed}\")${prompt}${Color_Off} "
+export PS1="\n[${BBlue}${MYSHELL}${Color_Off}] ${BYellow}\w\n\$([[ \$? == 0 ]] && echo \"${BGreen}\" || echo \"${BRed}\")${prompt}${Color_Off} "
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -73,7 +73,7 @@ alias psg='sudo ps aux | grep -v grep | grep -i -e VSZ -e '
 alias psgc='sudo ps aux | grep -v grep | grep -i -e '
 alias pkl='sudo kill -9'
 alias lsofs='sudo lsof | grep'
-alias ports='sudo netstat -tulnp | grep LISTEN'
+alias ports='sudo netstat -tulnp | grep LISTEN | sort -k6'
 alias portsa='sudo netstat -tulanp'
 alias mkdir="mkdir -p"
 alias smkdir="sudo mkdir -p"
@@ -157,10 +157,10 @@ alias yuml='sudo yum --showduplicates list'
 alias yumf='sudo yum --showduplicates info'
 
 alias jetpistol='sudo puppet agent -tv'
-alias magic='sudo openvpn --config ~/directi/client.ovpn'
-alias magic2='sudo openvpn --config ~/directi/mnet-client.ovpn'
-alias amagic='~/dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
-alias amagic2='~/dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
+alias magicm2='sudo openvpn --config ~/directi/client.ovpn'
+alias magicm='sudo openvpn --config ~/directi/mnet-client.ovpn'
+alias magic2='~/dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
+alias magic='~/dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
 
 alias ccm='sudo ccm64'
 alias xcdwebfol='cd /srv/www'
