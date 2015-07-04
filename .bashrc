@@ -20,44 +20,46 @@ PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
+
     bind '"\e[A": history-search-backward'
     bind '"\e[B": history-search-forward'
 
-    shopt -s nocaseglob;                    # Case-insensitive globbing (used in pathname expansion)
-    shopt -s histappend;                    # Append to the Bash history file, rather than overwriting it
-    shopt -s cdspell;                       # Autocorrect typos in path names when using `cd`
-    shopt -s autocd;
-    shopt -s checkwinsize
-    shopt -s cmdhist
-    shopt -s no_empty_cmd_completion
+    shopt -s nocaseglob 2>/dev/null                    # Case-insensitive globbing (used in pathname expansion)
+    shopt -s histappend 2>/dev/null                    # Append to the Bash history file, rather than overwriting it
+    shopt -s cdspell 2>/dev/null                       # Autocorrect typos in path names when using `cd`
+    shopt -s autocd 2>/dev/null
+    shopt -s checkwinsize 2>/dev/null
+    shopt -s cmdhist 2>/dev/null                       # force multi-line commands to be stored in the history as a single line
+    shopt -s no_empty_cmd_completion 2>/dev/null
+
+    # Reset
+    Color_Off="\[\033[0m\]"       # Text Reset
+
+    # Regular Colors
+    Black="\[\033[0;30m\]"        # Black
+    Red="\[\033[0;31m\]"          # Red
+    Green="\[\033[0;32m\]"        # Green
+    Yellow="\[\033[0;33m\]"       # Yellow
+    Blue="\[\033[0;34m\]"         # Blue
+    Purple="\[\033[0;35m\]"       # Purple
+    Cyan="\[\033[0;36m\]"         # Cyan
+    White="\[\033[0;37m\]"        # White
+
+    # Bold
+    BBlack="\[\033[1;30m\]"       # Black
+    BRed="\[\033[1;31m\]"         # Red
+    BGreen="\[\033[1;32m\]"       # Green
+    BYellow="\[\033[1;33m\]"      # Yellow
+    BBlue="\[\033[1;34m\]"        # Blue
+    BPurple="\[\033[1;35m\]"      # Purple
+    BCyan="\[\033[1;36m\]"        # Cyan
+    BWhite="\[\033[1;37m\]"       # White
+
+    [[ $UID -eq 0 ]] && color=${BRed} || color=${BPurple}
+    [[ $UID -eq 0 ]] && prompt='#' || prompt='$'
+    export PS1="\n[${BBlue}${MYSHELL}${Color_Off}:${color}\u@\H${Color_Off}] ${BGreen}\w\n\$([[ \$? == 0 ]] && echo \"${BGreen}\" || echo \"${BRed}\")${prompt}${Color_Off} "
+
 fi
-
-# Reset
-Color_Off="\[\033[0m\]"       # Text Reset
-
-# Regular Colors
-Black="\[\033[0;30m\]"        # Black
-Red="\[\033[0;31m\]"          # Red
-Green="\[\033[0;32m\]"        # Green
-Yellow="\[\033[0;33m\]"       # Yellow
-Blue="\[\033[0;34m\]"         # Blue
-Purple="\[\033[0;35m\]"       # Purple
-Cyan="\[\033[0;36m\]"         # Cyan
-White="\[\033[0;37m\]"        # White
-
-# Bold
-BBlack="\[\033[1;30m\]"       # Black
-BRed="\[\033[1;31m\]"         # Red
-BGreen="\[\033[1;32m\]"       # Green
-BYellow="\[\033[1;33m\]"      # Yellow
-BBlue="\[\033[1;34m\]"        # Blue
-BPurple="\[\033[1;35m\]"      # Purple
-BCyan="\[\033[1;36m\]"        # Cyan
-BWhite="\[\033[1;37m\]"       # White
-
-[[ $UID -eq 0 ]] && color=${BRed} || color=${BPurple}
-[[ $UID -eq 0 ]] && prompt='#' || prompt='$'
-export PS1="\n[${BBlue}${MYSHELL}${Color_Off}:${color}\u@\H${Color_Off}] ${BGreen}\w\n\$([[ \$? == 0 ]] && echo \"${BGreen}\" || echo \"${BRed}\")${prompt}${Color_Off} "
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -117,7 +119,7 @@ alias xcp='xclip -selection clipboard'
 alias httpserver="python2 -m SimpleHTTPServer"
 
 alias please='sudo $(fc -ln -1)'
-alias xplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
+alias pleaseplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
 
 alias rzsh='. ~/.bashrc && . ~/.zshrc'
 alias rbash='. ~/.bashrc'
@@ -166,6 +168,7 @@ alias yuml='sudo yum --showduplicates list'
 alias yumf='sudo yum --showduplicates info'
 
 alias jetpistol='sudo puppet agent -tv'
+alias osv='cat /etc/*-release | sort | uniq | xargs -L1'
 alias tfp="sudo tail -f /var/log/puppet.log"
 alias magicm2='sudo openvpn --config ~/directi/client.ovpn'
 alias magicm='sudo openvpn --config ~/directi/mnet-client.ovpn'
@@ -224,7 +227,7 @@ xf() {
     sudo find -name "*$**"
 }
 
-h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
+h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
 
 up() {
     if [ -z "$*" ]; then 1='1';fi
@@ -239,7 +242,7 @@ fawk() {
     eval $cmd
 }
 
-apkl() {
+pkla() {
     if [ $# -lt 1 ]; then
         echo "No input!"
         return 1
