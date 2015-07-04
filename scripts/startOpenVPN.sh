@@ -7,8 +7,10 @@ spawn sudo openvpn --config "$config"
 match_max 100000
 expect "*Username:*"
 send -- "$username\r"
+log_user 0
 expect "*Password:*"
 send -- "$password\r"
 expect "*Response:*"
 send -- "$response\r"
+log_user 1
 interact
