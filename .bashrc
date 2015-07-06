@@ -3,9 +3,9 @@
 if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ ! $TTY = *tty* ]] ;then
     ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
     if [[ -z "$ID" ]] ;then # if not available create a new one
-        exec tmux new-session
+        exec tmux new-session 2>/dev/null
     else
-        exec tmux attach-session -t "$ID" # if available attach to it
+        exec tmux attach-session -t "$ID" 2>/dev/null # if available attach to it
     fi
 fi
 
@@ -170,7 +170,7 @@ alias yumf='sudo yum --showduplicates info'
 
 alias jetpistol='sudo puppet agent -tv'
 alias osv='cat /etc/*-release | sort | uniq | xargs -L1'
-alias tfp="sudo tail -f /var/log/puppet.log"
+alias tfp="sudo tail -f /var/log/puppet/puppet.log"
 alias magicm2='sudo openvpn --config ~/directi/client.ovpn'
 alias magicm='sudo openvpn --config ~/directi/mnet-client.ovpn'
 alias magic2='~/dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
