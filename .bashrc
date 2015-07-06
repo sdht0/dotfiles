@@ -169,6 +169,7 @@ alias yuml='sudo yum --showduplicates list'
 alias yumf='sudo yum --showduplicates info'
 
 alias jetpistol='sudo puppet agent -tv'
+alias gomugomuno='echo "Waiting 120s..." && sleep 120; sudo puppet agent -tv'
 alias osv='cat /etc/*-release | sort | uniq | xargs -L1'
 alias tfp="sudo tail -f /var/log/puppet/puppet.log"
 alias magicm2='sudo openvpn --config ~/directi/client.ovpn'
