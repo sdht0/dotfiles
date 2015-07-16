@@ -88,7 +88,6 @@ alias mount='sudo mount -v'
 alias umount='sudo umount -v'
 alias pu='pushd'
 alias cat='sudo cat'
-alias tail='sudo tail'
 alias po='popd'
 alias dmesg='sudo dmesg --human -T'
 alias gitk='gitk --all'
@@ -96,12 +95,10 @@ alias grep='sudo grep -i --color=auto'
 alias crns='sudo crontab -l'
 alias crne='sudo crontab -e'
 alias crnsu='sudo crontab -l -u'
-alias tl='sudo tail'
-alias tln='sudo tail -n'
+alias tail='sudo tail'
+alias tn='sudo tail -n'
 alias tf='sudo tail -f'
 alias vi='vim'
-alias sx="startx"
-alias sd="sudo shutdown now"
 alias s='ssh'
 alias se='sudoedit'
 alias sv='sudo vim -u ~/.vimrc'
@@ -115,6 +112,8 @@ alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; 
 alias jlog='sudo journalctl -n500 -f'
 alias xcp='xclip -selection clipboard'
 alias httpserver="python2 -m SimpleHTTPServer"
+alias sx="startx"
+alias sd="sudo shutdown now"
 
 alias please='sudo $(fc -ln -1)'
 alias pleaseplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
@@ -166,10 +165,11 @@ alias yumr='sudo yum remove'
 alias yuml='sudo yum --showduplicates list'
 alias yumf='sudo yum --showduplicates info'
 
-alias jetpistol='sudo puppet agent -tv'
-alias gomugomuno='echo "Waiting 120s..." && sleep 120; sudo puppet agent -tv'
+alias jetpistol='sudo puppet agent -t --configtimeout=900'
+alias gomugomuno='echo "Waiting 100s..." && sleep 100; echo "Running puppet.." && jetpistol'
 alias osv='cat /etc/*-release | sort | uniq | xargs -L1'
 alias tfp="sudo tail -f /var/log/puppet/puppet.log"
+alias tfa="sudo tail -f /var/log/httpd/access_log"
 alias magicm2='sudo openvpn --config ~/directi/client.ovpn'
 alias magicm='sudo openvpn --config ~/directi/mnet-client.ovpn'
 alias magic2='~/dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
