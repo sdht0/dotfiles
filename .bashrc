@@ -116,6 +116,7 @@ alias xcp='xclip -selection clipboard'
 alias httpserver="python2 -m SimpleHTTPServer"
 alias sx="startx"
 alias sd="sudo shutdown now"
+alias sa="ssh-add"
 
 alias please='sudo $(fc -ln -1)'
 alias pleaseplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
@@ -172,10 +173,10 @@ alias gomugomuno='echo "Waiting 100s..." && sleep 100; echo "Running puppet.." &
 alias osv='cat /etc/*-release | sort | uniq | xargs -L1'
 alias tfp="sudo tail -f /var/log/puppet/puppet.log"
 alias tfa="sudo tail -f /var/log/httpd/access_log"
-alias magicm2='sudo openvpn --config ~/directi/client.ovpn'
-alias magicm='sudo openvpn --config ~/directi/mnet-client.ovpn'
-alias magic2='~/dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
-alias magic='~/dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
+alias magicm2='cd;sudo openvpn --config ~/directi/client.ovpn'
+alias magicm='cd;sudo openvpn --config ~/directi/mnet-client.ovpn'
+alias magic2='cd;~/dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
+alias magic='cd;~/dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
 
 alias ccm='sudo ccm64'
 alias xcdwebfol='cd /srv/www'
