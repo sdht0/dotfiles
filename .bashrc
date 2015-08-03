@@ -114,6 +114,7 @@ alias xcp='xclip -selection clipboard'
 alias httpserver="python2 -m SimpleHTTPServer"
 alias sx="startx"
 alias sd="sudo shutdown now"
+alias sa="ssh-add"
 
 alias please='sudo $(fc -ln -1)'
 alias pleaseplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
