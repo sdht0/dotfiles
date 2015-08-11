@@ -507,11 +507,12 @@ xmakecustomarchiso() {
 
 xget() {
     if [ $# -lt 1 ]; then
-        echo "No input! [gl|ak]"
+        echo "No input! [$(cat sshhhh | grep ')' | grep -v '*' | grep -v 'mnet' | cut -f1 -d')' | xargs | tr ' ' '|')]"
         return 1
     fi
-    ~/sshhhh "$1" | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py | xclip -selection clipboard
-    echo "Copied to clipboard"
+    code=$(~/sshhhh "$1" | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py)
+    printf $code | xclip -selection clipboard
+    echo "Copied $code to clipboard"
 }
 
 xlistfiles() {
