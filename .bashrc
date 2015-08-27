@@ -65,13 +65,13 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias b='cd -'
 alias ls='sudo ls --color=auto'
-alias lls='sudo ls -CF --color=auto'
 alias lsa='sudo ls -CFah --color=auto'
-alias lst='sudo ls -CFahrt --color=auto'
-alias ll='sudo ls -CFlh --color=auto'
+alias ll='sudo ls -CFlh --color=auto'           # Use ll -t, ll -tr, ll -S, ll -Sr for more sorting options. Similarly for lla and lld
 alias lla='sudo ls -CFalh --color=auto'
-alias llt='sudo ls -CFalhrt --color=auto'
-function cl(){ cd "$@" && lls; }
+lld() { sudo ls -CFalh $* --color=force | grep -e "^d" -e total --color=never;sudo ls -CFalh $* --color=force | grep -vE "^d|total" }
+alias lldt='sudo ls -CFalht --color=force | grep -e "^d" -e total --color=never;sudo ls -CFalht --color=force | grep -vE "^d|total"'
+alias llds='sudo ls -CFalhS --color=force | grep -e "^d" -e total --color=never;sudo ls -CFalhS --color=force | grep -vE "^d|total"'
+cl() { cd "$@" && lls; }
 alias lsg='sudo ls -CFalh --color=auto | grep --color=auto -i'
 alias psg='sudo ps aux | grep -v grep | grep -i -e VSZ -e '
 alias psgc='sudo ps aux | grep -v grep | grep -i -e '
