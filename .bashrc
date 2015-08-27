@@ -68,7 +68,7 @@ alias ls='sudo ls --color=auto'
 alias lsa='sudo ls -CFah --color=auto'
 alias ll='sudo ls -CFlh --color=auto'           # Use ll -t, ll -tr, ll -S, ll -Sr for more sorting options. Similarly for lla and lld
 alias lla='sudo ls -CFalh --color=auto'
-lld() { sudo ls -CFalh $* --color=force | grep -e "^d" -e total --color=never;sudo ls -CFalh $* --color=force | grep -vE "^d|total" }
+lld() { sudo ls -CFalh $* --color=force | grep -e "^d" -e total --color=never;sudo ls -CFalh $* --color=force | grep -vE "^d|total"; }
 alias lldt='sudo ls -CFalht --color=force | grep -e "^d" -e total --color=never;sudo ls -CFalht --color=force | grep -vE "^d|total"'
 alias llds='sudo ls -CFalhS --color=force | grep -e "^d" -e total --color=never;sudo ls -CFalhS --color=force | grep -vE "^d|total"'
 cl() { cd "$@" && lls; }
