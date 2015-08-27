@@ -172,6 +172,7 @@ alias jetpistol='sudo puppet agent -t --configtimeout=900'
 alias gomugomuno='echo "Waiting 100s..." && sleep 100; echo "Running puppet.." && jetpistol'
 alias osv='cat /etc/*-release | sort | uniq | xargs -L1'
 alias tfp="sudo tail -f /var/log/puppet/puppet.log"
+alias tnp="sudo tail /var/log/puppet/puppet.log -n"
 alias tfa="sudo tail -f /var/log/httpd/access_log"
 alias magicm2='cd;sudo openvpn --config ~/directi/client.ovpn'
 alias magicm='cd;sudo openvpn --config ~/directi/mnet-client.ovpn'
