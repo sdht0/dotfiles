@@ -101,7 +101,6 @@ alias tail='sudo tail'
 alias tn='sudo tail -n'
 alias tf='sudo tail -f'
 alias vi='vim'
-alias s='ssh'
 alias se='sudoedit'
 alias sv='sudo vim -u ~/.vimrc'
 alias e='vim'
@@ -109,7 +108,7 @@ alias tarc="tar czf"
 alias tarx="tar xzf"
 alias starc="sudo tar czf"
 alias starx="sudo tar xzf"
-alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d"/" -f1 | cut -d" " -f2- | sort | uniq | awk "{print \$1\": \"\$3}"'
+alias myips='ip -o -f inet addr | grep -v '127.0.0.1' | cut -d'/' -f1 | sed -r "s/[ \t]+/ /g" | cut -d" " -f2-4 | awk "{print \$1\": \"\$3}" | sort | uniq'
 alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
 alias jlog='sudo journalctl -n500 -f'
 alias xcp='xclip -selection clipboard'
@@ -178,6 +177,24 @@ alias magicm2='cd;sudo openvpn --config ~/directi/client.ovpn'
 alias magicm='cd;sudo openvpn --config ~/directi/mnet-client.ovpn'
 alias magic2='cd;~/dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
 alias magic='cd;~/dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
+
+s() {
+    [[ $# -lt 1 ]] && echo "No input!" && return 1
+    case "$1" in
+        pr*) ssh c8-proxy-"${1:2}".srv.media.net ${*:2};;
+        lg*) ssh c8-logging-"${1:2}".srv.media.net ${*:2};;
+        ds*) ssh c8-data-store-"${1:2}".srv.media.net ${*:2};;
+        lr*) ssh c8-logging-redis-"${1:2}".srv.media.net ${*:2};;
+        lk*) ssh c8-logging-kafka-"${1:2}".srv.media.net ${*:2};;
+        w8*) ssh c8-web-"${1:2}".srv.media.net ${*:2};;
+        w10*) ssh c10-web-"${1:3}".srv.media.net ${*:2};;
+        w12b*) ssh c12-nc1b-web-"${1:4}".srv.media.net ${*:2};;
+        w12c*) ssh c12-nc1c-web-"${1:4}".srv.media.net ${*:2};;
+        ddrc) ssh c12-nc1c-dadar.srv.media.net ${*:2};;
+        ddrb) ssh c12-nc1b-dadar.srv.media.net ${*:2};;
+        *) ssh ${*};;
+    esac
+}
 
 alias ccm='sudo ccm64'
 alias xcdwebfol='cd /srv/www'
@@ -433,46 +450,6 @@ xuploadpicasa() {
     [[ "$2" != "nocreate" ]] && google -v --access=private picasa create "$n" || echo "Reusing $1" && \
     google -v picasa post "$n" * && \
     cd ..
-}
-
-xuploadskydrive() {
-    if [ $# -lt 2 ];then
-        echo "Usage: xuploadskydrive local_file|local_folder remotefolder"
-        return 1
-    fi
-
-    pd=$(pwd)
-
-    control_c() {
-        cd "$pd"
-        return
-    }
-
-    walkfolderandupload() {
-        trap control_c SIGINT
-
-        if [ -d "$1" ];then
-            printf "Entering directory '$1' using '$2'\n"
-            pushd "$1" > /dev/null || return 1
-            printf "Creating remote folder '$2/$(basename "$1")'\n"
-            onedrive-cli $3 $4 $5 mkdir "$2/$(basename "$1")" &> /dev/null
-            for i in *;do
-                walkfolderandupload "$i" "$2/$(basename "$1")"  $3 $4 $5 || return 3
-            done
-            printf "Exiting directory '$1' using '$2'\n"
-            popd > /dev/null || return 2
-        elif [ -f "$1" ];then
-            printf "Uploading file '$1' to '$2/'\n"
-            onedrive-cli $3 $4 $5 put -n "$1" "$2" || return 0
-        else
-            echo "Unrecognized object '$1' in '$(pwd)'"
-        fi
-    }
-
-    trap control_c SIGINT
-
-    walkfolderandupload "$1" "$2" $3 $4 $5
-    control_c
 }
 
 xmakecustomarchiso() {
