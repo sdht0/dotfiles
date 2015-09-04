@@ -166,7 +166,7 @@ alias yuml='sudo yum --showduplicates list'
 alias yumf='sudo yum --showduplicates info'
 
 alias jetpistol='sudo puppet agent -t --configtimeout=900'
-alias gomugomuno='echo "Waiting 100s..." && sleep 100; echo "Running puppet.." && jetpistol'
+alias gomugomuno='echo "Waiting 5s..." && sleep 5; echo "Running puppet.." && jetpistol'
 alias osv='cat /etc/*-release | sort | uniq | xargs -L1'
 alias tfp="sudo tail -f /var/log/puppet/puppet.log"
 alias tnp="sudo tail /var/log/puppet/puppet.log -n"
