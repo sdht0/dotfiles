@@ -11,7 +11,7 @@ fi
 
 export LANG='en_US.UTF-8'
 export EDITOR='vim'
-export PATH="/sbin:/usr/sbin::$PATH"
+export PATH="/sbin:/usr/sbin::$PATH:/usr/lib64/nagios/plugins:/usr/lib64/nagios/plugins/custom"
 export HISTFILESIZE=100000
 export HISTSIZE=${HISTFILESIZE}
 export HISTFILE=~/.bash_history
