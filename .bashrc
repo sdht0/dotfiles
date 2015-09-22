@@ -248,6 +248,8 @@ xf() {
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
 
+rand() { < /dev/urandom tr -dc A-Za-z0-9$2 | head -c${1:-16};echo;}
+
 up() {
     if [ -z "$*" ]; then 1='1';fi
     pd=`pwd`
