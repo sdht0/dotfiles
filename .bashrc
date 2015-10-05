@@ -146,6 +146,7 @@ alias dkia='sudo docker images -a'
 alias dkc='sudo docker ps'
 alias dkca='sudo docker ps -a'
 dkrc() { sudo docker start $1 && sudo docker attach $1;}
+dkrm() { sudo docker kill $@; sudo docker rm $@; }
 
 # Pacman package management
 alias pcmu='sudo pacman -Syu'
