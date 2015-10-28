@@ -570,7 +570,10 @@ xplaylist() {
 }
 
 xkdechanges() {
-    for i in *;do if [ -d "$i" -a -r "$i"/git-checkout-update.log ];then echo $i;cat "$i"/git-checkout-update.log; fi;done | grep -B4 commit | grep -e commit -e directory | while IFS= read -r line;do read -r line2; dr=$(echo $line | awk '{print $4}'); echo $dr; echo $line2 | grep commit; echo; cd "$dr"; gitk; cd - > /dev/null ;done
+    dayz=${1:-7}
+	for i in *;do 
+		[[ -d "$i/.git" ]] && echo "$i" && { [[ -n "$(git --git-dir="$i/.git" --work-tree="$i" log --since="$dayz day ago" --pretty=oneline)" ]] && cd $i && echo "    $(git log --since="$dayz day ago" --pretty=oneline | wc -l) commits" && { gitk --since="$dayz day ago" || true; } && cd .. || echo "    No new commits"; }
+	done
 }
 
 xpatternrename() {
