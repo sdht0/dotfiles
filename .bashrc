@@ -77,16 +77,19 @@ alias psg='sudo ps aux | grep -v grep | grep -i -e VSZ -e '
 alias psgc='sudo ps aux | grep -v grep | grep -i -e '
 alias pkl='sudo kill -9'
 alias lsofs='sudo lsof | grep'
-alias portstcp='echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(sudo netstat -tlnp | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k7)" | column -t'
-alias portsudp='echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(sudo netstat -ulnp | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k7)" | column -t'
-alias ports='portsudp && echo && portstcp'
-alias portstcpsortport='echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(sudo netstat -tlnp | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k5)" | column -t'
-alias portsudpsortport='echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(sudo netstat -ulnp | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k5)" | column -t'
-alias portss='portsudpsortport && echo && portstcpsortport'
-alias portstogether='echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(sudo netstat -tulnp | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k7)" | column -t'
-alias portstogethersortport='echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(sudo netstat -tulnp | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k7)" | column -t'
 alias portso='sudo netstat -tulnp | grep LISTEN | sort -k6'
 alias portsa='sudo netstat -tulanp'
+ports() {
+    [[ -z "$1" ]] && 1="b"
+    [[ -z "$2" ]] && 2="5"
+    if [[ "$1" == "b" ]];then
+        ports u "$2"
+        echo
+        ports t "$2"
+        return 0
+    fi
+    echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(sudo netstat -lnp${1} | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k${2})" | column -t
+}
 alias mkdir="mkdir -p"
 alias smkdir="sudo mkdir -p"
 alias rr='sudo rm -rf'
