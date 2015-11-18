@@ -177,8 +177,11 @@ alias jetpistol='sudo puppet agent -t --configtimeout=900'
 alias gomugomuno='echo "Waiting 5s..." && sleep 5; echo "Running puppet.." && jetpistol'
 alias osv='cat /etc/*-release | sort | uniq | xargs -L1'
 alias tfp="sudo tail -f /var/log/puppet/puppet.log"
-alias tnp="sudo tail /var/log/puppet/puppet.log -n"
 alias tfa="sudo tail -f /var/log/httpd/access_log"
+alias tfe="sudo tail -f /var/log/httpd/error_log"
+alias tnp="sudo tail /var/log/puppet/puppet.log -n"
+alias tna="sudo tail /var/log/httpd/access_log -n"
+alias tne="sudo tail /var/log/httpd/error_log -n"
 alias magicm2='cd;sudo openvpn --config ~/directi/client.ovpn'
 alias magicm='cd;sudo openvpn --config ~/directi/mnet-client.ovpn'
 alias magic2='cd;~/dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
