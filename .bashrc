@@ -191,19 +191,58 @@ alias magic='cd;~/dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~
 s() {
     [[ $# -lt 1 ]] && echo "No input!" && return 1
     case "$1" in
-        pr*) ssh c8-proxy-"${1:2}".srv.media.net ${*:2};;
-        lg*) ssh c8-logging-"${1:2}".srv.media.net ${*:2};;
-        ds*) ssh c8-data-store-"${1:2}".srv.media.net ${*:2};;
-        lr*) ssh c8-logging-redis-"${1:2}".srv.media.net ${*:2};;
-        lk*) ssh c8-logging-kafka-"${1:2}".srv.media.net ${*:2};;
-        w8*) ssh c8-web-"${1:2}".srv.media.net ${*:2};;
-        w10*) ssh c10-web-"${1:3}".srv.media.net ${*:2};;
-        w12b*) ssh c12-nc1b-web-"${1:4}".srv.media.net ${*:2};;
-        w12c*) ssh c12-nc1c-web-"${1:4}".srv.media.net ${*:2};;
-        ddrc) ssh c12-nc1c-dadar.srv.media.net ${*:2};;
-        ddrb) ssh c12-nc1b-dadar.srv.media.net ${*:2};;
+        rpr*) ssh c8-proxy-"${1:2}".srv.media.net ${*:2};;
+        rlg*) ssh c8-logging-"${1:2}".srv.media.net ${*:2};;
+        rds*) ssh c8-data-store-"${1:2}".srv.media.net ${*:2};;
+        rlr*) ssh c8-logging-redis-"${1:2}".srv.media.net ${*:2};;
+        rlk*) ssh c8-logging-kafka-"${1:2}".srv.media.net ${*:2};;
+        rw8*) ssh c8-web-"${1:2}".srv.media.net ${*:2};;
+        rw10*) ssh c10-web-"${1:3}".srv.media.net ${*:2};;
+        rw12b*) ssh c12-nc1b-web-"${1:4}".srv.media.net ${*:2};;
+        rw12c*) ssh c12-nc1c-web-"${1:4}".srv.media.net ${*:2};;
+        rddrc) ssh c12-nc1c-dadar.srv.media.net ${*:2};;
+        rddrb) ssh c12-nc1b-dadar.srv.media.net ${*:2};;
         *) ssh ${*};;
     esac
+}
+
+xmultispawn() {
+    option=$1; shift
+    max="$1"; shift
+    name="$1"; shift
+    { [[ -z "$name" ]] || tmux list-windows | awk '{print $2}' | tr 'A-Z' 'a-z' | tr -dc 'a-z\n' | grep "^$name$"; } && name=$(< /dev/urandom tr -dc "a-z" | head -c3) || true
+
+    case "$option" in
+        v) layout=even-vertical
+        ;;
+        h) layout=even-horizontal
+        ;;
+        hv) layout=tiled
+        ;;
+        *) echo 'Usage: xmultispawn h/v/hv max_pane_per_window windowname "ssh c8-logging-"{1..3}' && return;;
+    esac
+
+    total=$#
+    [[ $# -eq 0 ]] && return
+
+    totalwindows=$(echo "($total+$max-1)/$max" | bc)
+    adjust=$((total%totalwindows))
+
+    for i in $(eval echo "{1..$totalwindows}");do
+        paneperwindow=$((total/totalwindows)); [[ $adjust -gt 0 ]] && paneperwindow=$((paneperwindow+1)) && adjust=$((adjust-1))
+
+        tmux neww -dn ${name}-${i} "$1"; shift
+
+        paneperwindow=$((paneperwindow-1))
+        [[ $paneperwindow -lt 1 ]] && continue
+        c=h
+        for j in $(eval echo "{1..$paneperwindow}");do
+            tmux splitw -$c -t ${name}-${i}.$j -d "$1"; shift
+            [[ "$c" = "h" ]] && c=v || c=h
+        done
+        tmux select-layout -t ${name}-${i} $layout
+        tmux set-window-option -t ${name}-${i} synchronize-panes on
+    done
 }
 
 alias ccm='sudo ccm64'
@@ -264,7 +303,9 @@ xf() {
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
 
-rand() { < /dev/urandom tr -dc "A-Za-z0-9${2:-@#$%^&*}" | head -c${1:-16};echo;}
+rand() {
+    < /dev/urandom tr -dc "${2:-A-Za-z0-9@#$%^&*}" | head -c${1:-16};echo;
+}
 
 up() {
     if [ -z "$*" ]; then 1='1';fi
