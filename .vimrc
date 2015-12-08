@@ -92,3 +92,7 @@ inoremap <C-s> <ESC>:w<CR>  " Enable saving by Ctrl-s
 nnoremap <F2> :set invpaste paste?<CR>
 set pastetoggle=<F2>
 set showmode
+
+" http://vim.wikia.com/wiki/Display_line_numbers
+noremap <F3> :set invnumber<CR>
+inoremap <F3> <C-O>:set invnumber<CR>
