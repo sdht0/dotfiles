@@ -622,7 +622,7 @@ xplaylist() {
 xkdechanges() {
     dayz=${1:-7}
 	for i in *;do 
-		[[ -d "$i/.git" ]] && echo "$i" && { [[ -n "$(git --git-dir="$i/.git" --work-tree="$i" log --since="$dayz day ago" --pretty=oneline)" ]] && cd $i && echo "    $(git log --since="$dayz day ago" --pretty=oneline | wc -l) commits" && { gitk --since="$dayz day ago" || true; } && cd .. || echo "    No new commits"; }
+		[[ -d "$i/.git" ]] && { [[ -n "$(git --git-dir="$i/.git" --work-tree="$i" log --since="$dayz day ago" --pretty=oneline | grep -v SVN_SILENT)" ]] && cd $i && echo $i && { gitk --since="$dayz day ago" || true; } && cd .. ; }
 	done
 }
 
