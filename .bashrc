@@ -291,7 +291,7 @@ xs() {
         return 1
     fi
 
-    sudo grep --exclude-dir=".git" --color=auto -Rn $* .
+    sudo grep --color=auto -Rn $* .
 }
 
 xf() {
