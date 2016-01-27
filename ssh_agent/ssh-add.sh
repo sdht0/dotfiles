@@ -1,3 +1,3 @@
 #!/bin/sh
-export SSH_ASKPASS=/opt/kde5/bin/ksshaskpass
+export SSH_ASKPASS=ksshaskpass
 ssh-add </dev/null
