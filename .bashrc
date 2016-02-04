@@ -78,15 +78,15 @@ alias lsofs='sudo lsof | grep'
 alias portso='sudo netstat -tulnp | grep LISTEN | sort -k6'
 alias portsa='sudo netstat -tulanp'
 ports() {
-    [[ -z "$1" ]] && 1="b"
-    [[ -z "$2" ]] && 2="5"
-    if [[ "$1" == "b" ]];then
-        ports u "$2"
+    option="${1:-b}"
+    pos="${2:-5}"
+    if [[ "$option" == "b" ]];then
+        ports u "$pos"
         echo
-        ports t "$2"
+        ports t "$pos"
         return 0
     fi
-    echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(sudo netstat -lnp${1} | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k${2})" | column -t
+    echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(sudo netstat -lnp${option} | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k${pos})" | column -t
 }
 alias mkdir="mkdir -p"
 alias smkdir="sudo mkdir -p"
