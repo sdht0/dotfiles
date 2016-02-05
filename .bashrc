@@ -9,8 +9,6 @@ if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$
     fi
 fi
 
-[[ -f /etc/bashrc ]] && . /etc/bashrc
-
 export LANG='en_US.UTF-8'
 export EDITOR='vim'
 export PATH="/sbin:/usr/sbin::$PATH:/usr/lib64/nagios/plugins:/usr/lib64/nagios/plugins/custom"
@@ -22,6 +20,8 @@ PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
+
+    [[ -f /etc/bashrc ]] && . /etc/bashrc
 
     bind '"\e[A": history-search-backward'
     bind '"\e[B": history-search-forward'
