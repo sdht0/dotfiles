@@ -70,6 +70,7 @@ lld() { sudo ls -CFalh $* --color=force | grep -e "^d" -e total --color=never;su
 alias lldt='sudo ls -CFalht --color=force | grep -e "^d" -e total --color=never;sudo ls -CFalht --color=force | grep -vE "^d|total"'
 alias llds='sudo ls -CFalhS --color=force | grep -e "^d" -e total --color=never;sudo ls -CFalhS --color=force | grep -vE "^d|total"'
 cl() { cd "$@" && lls; }
+alias df='df -Th'
 alias lsg='sudo ls -CFalh --color=auto | grep --color=auto -i'
 alias psg='sudo ps aux | grep -v grep | grep -i -e VSZ -e '
 alias psgc='sudo ps aux | grep -v grep | grep -i -e '
