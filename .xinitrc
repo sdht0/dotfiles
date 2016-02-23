@@ -27,7 +27,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/kf5/lib/
 
 export XDG_DATA_HOME=/home/sdh/.kde5/local
 export XDG_CONFIG_HOME=/home/sdh/.kde5/config
-export XDG_CACHE_HOME=/home/sdh/.kde5/cache
+export XDG_CACHE_HOME=/home/sdh/.cache
 
 # Xephyr -ac -br -noreset -screen 1280x720 :1 &
 # DISPLAY=:1
