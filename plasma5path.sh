@@ -14,5 +14,5 @@ export LD_LIBRARY_PATH=/opt/kde5/lib/:$LD_LIBRARY_PATH
 
 export XDG_DATA_HOME=/home/sdh/.kde5/local
 export XDG_CONFIG_HOME=/home/sdh/.kde5/config
-export XDG_CACHE_HOME=/home/sdh/.kde5/cache
+export XDG_CACHE_HOME=/home/sdh/.cache
 
