@@ -22,7 +22,7 @@ MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
 
     [[ -f /etc/bashrc ]] && . /etc/bashrc
-
+    stty -ixon
     bind '"\e[A": history-search-backward'
     bind '"\e[B": history-search-forward'
 
