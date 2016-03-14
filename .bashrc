@@ -18,9 +18,9 @@ PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 
+[[ $- = *i* ]] && stty -ixon
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
 
-    stty -ixon
     bind '"\e[A": history-search-backward'
     bind '"\e[B": history-search-forward'
 
