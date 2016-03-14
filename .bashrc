@@ -19,10 +19,10 @@ PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 
+[[ $- = *i* ]] && stty -ixon
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
 
     [[ -f /etc/bashrc ]] && . /etc/bashrc
-    stty -ixon
     bind '"\e[A": history-search-backward'
     bind '"\e[B": history-search-forward'
 
