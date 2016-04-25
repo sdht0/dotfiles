@@ -189,6 +189,7 @@ alias magicm2='cd;sudo openvpn --config ~/directi/client.ovpn'
 alias magicm='cd;sudo openvpn --config ~/directi/mnet-client.ovpn'
 alias magic2='cd;~/dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
 alias magic='cd;~/dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
+alias pfx='peerflix --vlc --not-on-top'
 
 s() {
     [[ $# -lt 1 ]] && echo "No input!" && return 1
@@ -544,12 +545,17 @@ xmakecustomarchiso() {
 
 xget() {
     if [ $# -lt 1 ]; then
-        echo "No input! [$(cat sshhhh | grep ')' | grep -v '*' | grep -v 'mnet' | cut -f1 -d')' | xargs | tr ' ' '|')]"
-        return 1
+        for i in $(cat ~/sshhhh | grep ')' | grep -v '*' | grep -v 'mnet' | cut -f1 -d')' | xargs);do
+            printf "$i "
+            code=$(~/sshhhh "$i" | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py)
+            printf $code
+            echo
+        done
+    else
+        code=$(~/sshhhh "$1" | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py)
+        printf $code | xclip -selection clipboard
+        echo "Copied $code to clipboard"
     fi
-    code=$(~/sshhhh "$1" | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py)
-    printf $code | xclip -selection clipboard
-    echo "Copied $code to clipboard"
 }
 
 xlistfiles() {
