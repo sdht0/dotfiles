@@ -109,7 +109,8 @@ alias crne='sudo crontab -e'
 alias crnsu='sudo crontab -l -u'
 alias tail='sudo tail'
 alias tn='sudo tail -n'
-alias tf='sudo tail -f'
+alias hn='sudo head -n'
+alias tf='sudo tail -F'
 alias vi='vim'
 alias se='sudoedit'
 alias sv='sudo vim -u ~/.vimrc'
@@ -120,7 +121,6 @@ alias starc="sudo tar czf"
 alias starx="sudo tar xzf"
 alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d'/' -f1 | sed -r "s/[ \t]+/ /g" | cut -d" " -f2-4 | awk "{print \$1\": \"\$3}" | sort | uniq'
 alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
-alias jlog='sudo journalctl -n500 -f'
 alias xcp='xclip -selection clipboard'
 alias httpserver="python2 -m SimpleHTTPServer"
 alias sx="startx"
@@ -182,9 +182,21 @@ alias yumf='sudo yum --showduplicates info'
 alias jetpistol='sudo puppet agent -t --configtimeout=900'
 alias gomugomuno='echo "Waiting 5s..." && sleep 5; echo "Running puppet.." && jetpistol'
 alias osv='cat /etc/*-release | sort | uniq | xargs -L1'
-alias tfp="sudo tail -f /var/log/puppet/puppet.log"
-alias tfa="sudo tail -f /var/log/httpd/access_log"
-alias tfe="sudo tail -f /var/log/httpd/error_log"
+alias tfp="sudo tail -F /var/log/puppet/puppet.log"
+alias tfa="sudo tail -F /var/log/httpd/access_log"
+alias tfe="sudo tail -F /var/log/httpd/error_log"
+tfm() {
+    n=${1:-30}
+    if which journalctl >/dev/null 2>&1;then
+        sudo journalctl -n${n} -f
+    elif [[ -f /var/log/messages ]];then
+        sudo tail -F /var/log/messages
+    elif [[ -f /var/log/syslog ]];then
+        sudo tail -F /var/log/syslog
+    else
+        echo "No system log found"
+    fi
+}
 alias tnp="sudo tail /var/log/puppet/puppet.log -n"
 alias tna="sudo tail /var/log/httpd/access_log -n"
 alias tne="sudo tail /var/log/httpd/error_log -n"
@@ -192,6 +204,7 @@ alias magicm2='cd;sudo openvpn --config ~/directi/client.ovpn'
 alias magicm='cd;sudo openvpn --config ~/directi/mnet-client.ovpn'
 alias magic2='cd;~/dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
 alias magic='cd;~/dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
+alias pfx='peerflix --vlc --not-on-top'
 
 s() {
     [[ $# -lt 1 ]] && echo "No input!" && return 1
@@ -547,12 +560,17 @@ xmakecustomarchiso() {
 
 xget() {
     if [ $# -lt 1 ]; then
-        echo "No input! [$(cat sshhhh | grep ')' | grep -v '*' | grep -v 'mnet' | cut -f1 -d')' | xargs | tr ' ' '|')]"
-        return 1
+        for i in $(cat ~/sshhhh | grep ')' | grep -v '*' | grep -v 'mnet' | cut -f1 -d')' | xargs);do
+            printf "$i "
+            code=$(~/sshhhh "$i" | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py)
+            printf $code
+            echo
+        done
+    else
+        code=$(~/sshhhh "$1" | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py)
+        printf $code | xclip -selection clipboard
+        echo "Copied $code to clipboard"
     fi
-    code=$(~/sshhhh "$1" | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py)
-    printf $code | xclip -selection clipboard
-    echo "Copied $code to clipboard"
 }
 
 xlistfiles() {
