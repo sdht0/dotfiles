@@ -178,7 +178,7 @@ alias yumf='sudo yum --showduplicates info'
 
 alias jetpistol='sudo puppet agent -t --configtimeout=900'
 alias gomugomuno='echo "Waiting 5s..." && sleep 5; echo "Running puppet.." && jetpistol'
-alias osv='cat /etc/*-release | sort | uniq | xargs -L1'
+alias osv='cat /etc/*-release /etc/debian_version 2>/dev/null | sort | uniq | xargs -L1'
 alias tfp="sudo tail -F /var/log/puppet/puppet.log"
 alias tfa="sudo tail -F /var/log/httpd/access_log"
 alias tfe="sudo tail -F /var/log/httpd/error_log"
@@ -225,7 +225,7 @@ xmultispawn() {
     option=$1; shift
     max="$1"; shift
     name="$1"; shift
-    { [[ -z "$name" ]] || tmux list-windows | awk '{print $2}' | tr 'A-Z' 'a-z' | tr -dc 'a-z\n' | grep "^$name$"; } && name=$(< /dev/urandom tr -dc "a-z" | head -c3) || true
+    { [[ -z "$name" ]] || tmux list-windows | awk '{print $2}' | tr 'A-Z' 'a-z' | tr -dc 'a-z\n' | grep "^$name$" >/dev/null 2>&1; } && name=$(< /dev/urandom tr -dc "a-z" | head -c3) || true
 
     case "$option" in
         v) layout=even-vertical
