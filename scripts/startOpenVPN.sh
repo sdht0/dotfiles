@@ -4,13 +4,13 @@ set username [lindex $argv 1]
 set password [lindex $argv 2]
 set response [lindex $argv 3]
 spawn sudo openvpn --config "$config"
-#match_max 100000
-expect "Username:"
+match_max 100000
+expect "*Username*"
 send -- "$username\r"
 log_user 0
-expect "Password:"
+expect "*Password*"
 send -- "$password\r"
-expect "Response:"
+expect "*Google Authenticator Code*"
 send -- "$response\r"
 log_user 1
 interact
