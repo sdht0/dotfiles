@@ -290,6 +290,17 @@ mypublicip() {
     printf "dig +short @resolver1.opendns.com myip.opendns.com\ndig +short -t txt @ns1.google.com o-o.myaddr.l.google.com\ncurl -s ident.me\ncurl -s icanhazip.com" | xargs -L1 -P0 -I{} sh -c 'x=$({} | tr -d "\"";echo " | {}");echo $x'
 }
 
+stayawake() {
+    while true;do
+        date
+        xdotool getmouselocation --shell
+        echo
+        xdotool mousemove_relative -- $(( $RANDOM % 30 - 15)) $(( $RANDOM % 30 - 15));xdotool getmouselocation --shell
+        echo
+        sleep 55
+    done
+}
+
 mkcd() {
     mkdir -p $1 && cd $1
 }
