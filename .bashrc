@@ -10,7 +10,7 @@ if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$
 fi
 
 export JAVA_HOME=/home/s3sahu/jdk1.8.0_112
-export PATH="${JAVA_HOME}:$PATH"
+export PATH="${JAVA_HOME}/bin:$PATH"
 
 export LANG='en_US.UTF-8'
 export EDITOR='vim'
