@@ -66,18 +66,18 @@ fi
 alias ..='cd ..'
 alias ...='cd ../..'
 alias b='cd -'
-alias ls='sudo ls --color=auto'
-alias lsa='sudo ls -CFah --color=auto'
-alias ll='sudo ls -CFlh --color=auto'           # Use ll -t, ll -tr, ll -S, ll -Sr for more sorting options. Similarly for lla and lld
-alias lla='sudo ls -CFalh --color=auto'
-lld() { sudo ls -CFalh $* --color=force | grep -e "^d" -e total --color=never;sudo ls -CFalh $* --color=force | grep -vE "^d|total"; }
-alias lldt='sudo ls -CFalht --color=force | grep -e "^d" -e total --color=never;sudo ls -CFalht --color=force | grep -vE "^d|total"'
-alias llds='sudo ls -CFalhS --color=force | grep -e "^d" -e total --color=never;sudo ls -CFalhS --color=force | grep -vE "^d|total"'
+alias ls='ls --color=auto'
+alias lsa='ls -CFah --color=auto'
+alias ll='ls -CFlh --color=auto'           # Use ll -t, ll -tr, ll -S, ll -Sr for more sorting options. Similarly for lla and lld
+alias lla='ls -CFalh --color=auto'
+lld() { ls -CFalh $* --color=force | grep -e "^d" -e total --color=never; ls -CFalh $* --color=force | grep -vE "^d|total"; }
+alias lldt='ls -CFalht --color=force | grep -e "^d" -e total --color=never; ls -CFalht --color=force | grep -vE "^d|total"'
+alias llds='ls -CFalhS --color=force | grep -e "^d" -e total --color=never; ls -CFalhS --color=force | grep -vE "^d|total"'
 cl() { cd "$@" && lls; }
 alias df='df -Th'
-alias lsg='sudo ls -CFalh --color=auto | grep --color=auto -i'
-alias psg='sudo ps aux | grep -v grep | grep -i -e VSZ -e '
-alias psgc='sudo ps aux | grep -v grep | grep -i -e '
+alias lsg='ls -CFalh --color=auto | grep --color=auto -i'
+alias psg='ps aux | grep -v grep | grep -i -e VSZ -e '
+alias psgc='ps aux | grep -v grep | grep -i -e '
 alias pkl='sudo kill -9'
 alias lsofs='sudo lsof | grep'
 alias portso='sudo netstat -tulnp | grep LISTEN | sort -k6'
@@ -99,18 +99,17 @@ alias rr='sudo rm -rf'
 alias mount='sudo mount -v'
 alias umount='sudo umount -v'
 alias pu='pushd'
-alias cat='sudo cat'
 alias po='popd'
 alias dmesg='sudo dmesg --human -T'
 alias gitk='gitk --all'
-alias grep='sudo grep -i --color=auto'
+alias grep='grep -i --color=auto'
 alias crns='sudo crontab -l'
 alias crne='sudo crontab -e'
 alias crnsu='sudo crontab -l -u'
-alias tail='sudo tail'
-alias tn='sudo tail -n'
-alias hn='sudo head -n'
-alias tf='sudo tail -F'
+alias tail='tail'
+alias tn='tail -n'
+alias hn='head -n'
+alias tf='tail -F'
 alias vi='vim'
 alias se='sudoedit'
 alias sv='sudo vim -u ~/.vimrc'
@@ -361,7 +360,7 @@ xs() {
         return 1
     fi
 
-    sudo grep --color=auto -Rn $* .
+    grep --color=auto -Rn $* .
 }
 
 xf() {
@@ -370,7 +369,7 @@ xf() {
         return 1
     fi
 
-    sudo find -name "*$**"
+    find -name "*$**"
 }
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
@@ -397,7 +396,7 @@ pkla() {
         echo "No input!"
         return 1
     fi
-    sudo ps aux | grep -v grep | grep -i -e $1 | awk '{print $2}' | xargs sudo kill -9
+    ps aux | grep -v grep | grep -i -e $1 | awk '{print $2}' | xargs kill -9
 }
 
 gitkf() {
