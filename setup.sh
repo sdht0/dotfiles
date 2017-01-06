@@ -6,16 +6,16 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 link_file() {
     [[ -z "$1" ]] && return -1
     echo "Setting up $1"
-    [[ -r ~/"$1" ]] && echo "File contents of $1" && cat ~/"$1" && echo
+    [[ -r ~/"$1" ]] && echo "Backing up $1" && mv ~/"$1" ~/"$1".bk && echo
     rm -f ~/"$1" && ln -s "$DIR/$1" ~
 }
 
 echo "Setting up .bashrc"
-[[ -r ~/.bashrc ]] && echo "File contents of .bashrc" && cat ~/.bashrc && echo
+[[ -r ~/.bashrc ]] && echo "Backing up .bashrc" && mv ~/.bashrc ~/.bashrc.bk && echo
 echo -e ". $DIR/.bashrc" > ~/.bashrc
 
 echo "Setting up .zshrc"
-[[ -r ~/.zshrc ]] && echo "File contents of .zshrc" && cat ~/.zshrc && echo
+[[ -r ~/.zshrc ]] && echo "Backing up .zshrc" && mv ~/.zshrc cat ~/.zshrc.bk && echo
 echo -e ". $DIR/.bashrc\n. $DIR/.zshrc" > ~/.zshrc
 
 link_file ".tmux.conf"
