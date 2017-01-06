@@ -9,9 +9,11 @@ if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$
     fi
 fi
 
+export JAVA_HOME=/home/s3sahu/jdk1.8.0_112
+export PATH="${JAVA_HOME}:$PATH"
+
 export LANG='en_US.UTF-8'
 export EDITOR='vim'
-export PATH="/sbin:/usr/sbin::$PATH:/usr/lib64/nagios/plugins:/usr/lib64/nagios/plugins/custom"
 export HISTFILESIZE=100000
 export HISTSIZE=${HISTFILESIZE}
 export HISTFILE=~/.bash_history
