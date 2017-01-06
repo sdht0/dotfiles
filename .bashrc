@@ -224,6 +224,46 @@ s() {
     esac
 }
 
+# Taken from http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
+
+export MARKPATH=$HOME/.marks
+function jump {
+    cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
+}
+function mark {
+    mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$1"
+}
+function unmark {
+    rm -i "$MARKPATH/$1"
+}
+function marks {
+    ls -l "$MARKPATH" | sed 's/  / /g' | cut -d' ' -f9- | sed 's/ -/\t-/g' && echo
+}
+
+if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
+
+    function _completemarkszsh {
+    reply=($(ls $MARKPATH))
+    }
+
+    compctl -K _completemarkszsh jump
+    compctl -K _completemarkszsh unmark
+
+fi
+
+if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
+
+    _completemarksbash() {
+    local curw=${COMP_WORDS[COMP_CWORD]}
+    local wordlist=$(find $MARKPATH -type l -printf "%f\n")
+    COMPREPLY=($(compgen -W '${wordlist[@]}' -- "$curw"))
+    return 0
+    }
+
+    complete -F _completemarksbash jump unmark
+
+fi
+
 xmultispawn() {
     option=$1; shift
     max="$1"; shift
@@ -292,6 +332,20 @@ upd() { sudo chkconfig $1 off && sudo chkconfig --list $1 ; }
 mypublicip() {
     printf "dig +short @resolver1.opendns.com myip.opendns.com\ndig +short -t txt @ns1.google.com o-o.myaddr.l.google.com\ncurl -s ident.me\ncurl -s icanhazip.com" | xargs -L1 -P0 -I{} sh -c 'x=$({} | tr -d "\"";echo " | {}");echo $x'
 }
+
+stayawake() {
+    while true;do
+        date
+        xdotool getmouselocation --shell
+        echo
+        xdotool mousemove_relative -- $(( $RANDOM % 30 - 15)) $(( $RANDOM % 30 - 15));xdotool getmouselocation --shell
+        echo
+        sleep 55
+    done
+}
+
+alias isolate="sudo docker network disconnect bridge"
+alias join="sudo docker network connect bridge"
 
 mkcd() {
     mkdir -p $1 && cd $1
@@ -642,7 +696,7 @@ xplaylist() {
 
 xkdechanges() {
     dayz=${1:-7}
-	for i in *;do 
+	for i in *;do
 		[[ -d "$i/.git" ]] && { [[ -n "$(git --git-dir="$i/.git" --work-tree="$i" log --since="$dayz day ago" --pretty=oneline | grep -v SVN_SILENT)" ]] && cd $i && echo $i && { gitk --since="$dayz day ago" || true; } && cd .. ; }
 	done
 }
