@@ -61,7 +61,7 @@ if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
 
     [[ $UID -eq 0 ]] && color=${BRed} || color=${BPurple}
     [[ $UID -eq 0 ]] && prompt='#' || prompt='$'
-    export PS1="\n[${BBlue}${MYSHELL}${Color_Off}:${color}\u@\H${Color_Off}] ${BGreen}\w\n\$([[ \$? == 0 ]] && echo \"${BGreen}\" || echo \"${BRed}\")${prompt}${Color_Off} "
+    export PS1="\n[${BBlue}${MYSHELL}${Color_Off}:${color}\u@\H${Color_Off}][\t] ${BGreen}\w\n\$([[ \$? == 0 ]] && echo \"${BGreen}\" || echo \"${BRed}\")${prompt}${Color_Off} "
 
 fi
 

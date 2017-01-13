@@ -15,7 +15,7 @@ prompt walters
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 [[ $UID -eq 0 ]] && color=red || color=magenta
 NEWLINE=$'\n'
-PROMPT="${NEWLINE}[%{$fg_bold[blue]%}${MYSHELL}%{$reset_color%}:%{$fg_bold[${color}]%}%n@%M%{$reset_color%}] %{$fg_bold[green]%}%~${NEWLINE}%(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
+PROMPT="${NEWLINE}[%{$fg_bold[blue]%}${MYSHELL}%{$reset_color%}:%{$fg_bold[${color}]%}%n@%M%{$reset_color%}][%D{%H:%M:%S}] %{$fg_bold[green]%}%~${NEWLINE}%(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
 RPROMPT=""
 
 bindkey -e
