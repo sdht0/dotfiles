@@ -162,6 +162,10 @@ alias pcmsl='sudo pacman -Qs'
 alias pcmr='sudo pacman -Rc'
 alias pcmc='sudo pacman -Sc --noconfirm'
 
+alias pru='pacaur -Syu'
+alias pri='pacaur -S'
+alias prs='pacaur -Ss'
+
 # Apt-get package management
 alias agu='sudo apt-get update && sudo apt-get upgrade'
 alias agi='sudo apt-get install'
