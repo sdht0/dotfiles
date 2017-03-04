@@ -166,6 +166,10 @@ alias pcmsl='sudo pacman -Qs'
 alias pcmr='sudo pacman -Rc'
 alias pcmc='sudo pacman -Sc --noconfirm'
 
+alias pru='pacaur -Syu'
+alias pri='pacaur -S'
+alias prs='pacaur -Ss'
+
 # Apt-get package management
 alias agu='sudo apt-get update && sudo apt-get upgrade'
 alias agi='sudo apt-get install'
@@ -225,22 +229,25 @@ s() {
     esac
 }
 
-# Taken from http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
+printColors() {
+    echo $(for code ({0..255}) print -P -- "%F{$code}$code %f")
+    for C in {0..255}; do tput setab $C; echo -n "$C "; done; tput sgr0; echo
+}
 
+# Taken from http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
 export MARKPATH=$HOME/.marks
-function jump {
+function j {
     cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
 }
-function mark {
+function m {
     mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$1"
 }
-function unmark {
+function um {
     rm -i "$MARKPATH/$1"
 }
-function marks {
+function mks {
     ls -l "$MARKPATH" | sed 's/  / /g' | cut -d' ' -f9- | sed 's/ -/\t-/g' && echo
 }
-
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
 
     function _completemarkszsh {
@@ -251,7 +258,6 @@ if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
     compctl -K _completemarkszsh unmark
 
 fi
-
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
 
     _completemarksbash() {
