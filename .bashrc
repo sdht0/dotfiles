@@ -250,8 +250,8 @@ if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
     reply=($(ls $MARKPATH))
     }
 
-    compctl -K _completemarkszsh jump
-    compctl -K _completemarkszsh unmark
+    compctl -K _completemarkszsh j
+    compctl -K _completemarkszsh um
 
 fi
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
@@ -263,7 +263,7 @@ if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
     return 0
     }
 
-    complete -F _completemarksbash jump unmark
+    complete -F _completemarksbash j um
 
 fi
 
