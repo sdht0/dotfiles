@@ -148,7 +148,7 @@ alias gp='git pull'
 alias gpp='git pull --rebase && git push'
 alias gcf='git config --list'
 alias grh='git reset HEAD'
-alias grc'git rebase --continue'
+alias grc='git rebase --continue'
 alias gra='git rebase --abort'
 
 alias dk='sudo docker'
