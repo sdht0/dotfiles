@@ -9,7 +9,6 @@ if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$
     fi
 fi
 
-export LANG='en_US.UTF-8'
 export EDITOR='vim'
 export HISTFILESIZE=100000
 export HISTSIZE=${HISTFILESIZE}
@@ -133,7 +132,8 @@ alias rbash='. ~/.bashrc'
 alias ga='git add'
 alias gc='git commit -m'
 alias gca='git commit -am'
-alias gcm='git commit --amend -a'
+alias gcm='git commit --amend'
+alias gcma='git commit --amend -a'
 alias gs='git status'
 alias gt='git stash'
 alias gtp='git stash pop'
@@ -339,7 +339,7 @@ mypublicip() {
     printf "dig +short @resolver1.opendns.com myip.opendns.com\ndig +short -t txt @ns1.google.com o-o.myaddr.l.google.com\ncurl -s ident.me\ncurl -s icanhazip.com" | xargs -L1 -P0 -I{} sh -c 'x=$({} | tr -d "\"";echo " | {}");echo $x'
 }
 
-stayawake() {
+hold_fort() {
     while true;do
         date
         xdotool getmouselocation --shell
