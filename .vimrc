@@ -1,8 +1,7 @@
-" .vimrc
-" See: http://vimdoc.sourceforge.net/htmldoc/options.html for details
+set nocompatible    " Cancel the compatibility with Vi. Essential if you want
+                    " to enjoy the features of Vim
 
-" For multi-byte character support (CJK support, for example):
-"set fileencodings=ucs-bom,utf-8,cp936,big5,euc-jp,euc-kr,gb18030,latin1
+set title           " Update the title of your window or your terminal
 
 set tabstop=4       " Number of spaces that a <Tab> in the file counts for.
 
@@ -29,12 +28,9 @@ set showmatch       " When a bracket is inserted, briefly jump to the matching
 
 set hlsearch        " When there is a previous search pattern, highlight all
                     " its matches.
-
 set incsearch       " While typing a search command, show immediately where the
                     " so far typed pattern matches.
-
 set ignorecase      " Ignore case in search patterns.
-
 set smartcase       " Override the 'ignorecase' option if the search pattern
                     " contains upper case characters.
 
@@ -59,7 +55,7 @@ set formatoptions=c,q,r,t " This is a sequence of letters which describes how
                     "           the current comment leader automatically.
                     " q         Allow formatting of comments with "gq".
                     " r         Automatically insert the current comment leader
-                    "           after hitting <Enter> in Insert mode. 
+                    "           after hitting <Enter> in Insert mode.
                     " t         Auto-wrap text using textwidth (does not apply
                     "           to comments)
 
@@ -72,14 +68,24 @@ set scrolloff=10
 set sidescroll=1
 set sidescrolloff=15
 
+" For multi-byte character support (CJK support, for example):
+"set fileencodings=ucs-bom,utf-8,cp936,big5,euc-jp,euc-kr,gb18030,latin1
+
 if has('syntax')
-    syntax enable     " Enable syntax highlighting.
+    syntax enable   " Enable syntax highlighting.
 endif
 
 set background=dark " When set to "dark", Vim will try to use colors that look
                     " good on a dark background. When set to "light", Vim will
                     " try to use colors that look good on a light background.
                     " Any other value is illegal.
+set guifont=DejaVu\ Sans\ Mono\ 11
+set antialias
+
+set backspace=indent,eol,start  " Backspace behaves as expected
+
+set hidden          " Hide buffer (file) instead of abandoning when
+                    " switching to another buffer
 
 if has('autocmd')
     filetype plugin indent on
@@ -96,3 +102,8 @@ set showmode
 " http://vim.wikia.com/wiki/Display_line_numbers
 noremap <F3> :set invnumber<CR>
 inoremap <F3> <C-O>:set invnumber<CR>
+
+call plug#begin('~/.vim/plugged')
+    Plug 'rust-lang/rust.vim'
+    Plug 'Chiel92/vim-autoformat'
+call plug#end()
