@@ -9,7 +9,8 @@ if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$
     fi
 fi
 
-export EDITOR='vim'
+export EDITOR='emacsclient -c'
+export VISUAL=$EDITOR
 export HISTFILESIZE=100000
 export HISTSIZE=${HISTFILESIZE}
 export HISTFILE=~/.bash_history
@@ -111,6 +112,7 @@ alias vi='vim'
 alias se='sudoedit'
 alias sv='sudo vim -u ~/.vimrc'
 alias e='vim'
+alias ee='emacsclient -c'
 alias tarc="tar czf"
 alias tarx="tar xzf"
 alias starc="sudo tar czf"

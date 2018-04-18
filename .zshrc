@@ -12,7 +12,7 @@ prompt walters
 
 export TERM=screen-256color
 
-if [[ -r ~/powerlevel9k/powerlevel9k.zsh-theme ]];then
+if [[ -r ~/powerlevel9k/powerlevel9k.zsh-theme.bk ]];then
     source  ~/powerlevel9k/powerlevel9k.zsh-theme
     POWERLEVEL9K_MODE='awesome-patched'
 

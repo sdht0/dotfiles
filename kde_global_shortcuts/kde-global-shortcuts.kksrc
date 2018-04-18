@@ -1,3 +1,7 @@
+[krunner][Global Shortcuts]
+run command=Alt+Space; Alt+F2; Search
+run command on clipboard contents=Alt+Shift+F2
+
 [kwin][Global Shortcuts]
 Activate Window Demanding Attention=Ctrl+Alt+A
 Cube=Ctrl+F11
@@ -45,8 +49,8 @@ Switch to Desktop 2=Ctrl+F2; Meta+2
 Switch to Desktop 20=none
 Switch to Desktop 3=Ctrl+F3; Meta+3
 Switch to Desktop 4=Ctrl+F4; Meta+4
-Switch to Desktop 5=; Meta+5
-Switch to Desktop 6=; Meta+6
+Switch to Desktop 5=none
+Switch to Desktop 6=none
 Switch to Desktop 7=; Meta+7
 Switch to Desktop 8=none
 Switch to Desktop 9=none
@@ -101,12 +105,12 @@ Window Pack Down=none
 Window Pack Left=none
 Window Pack Right=none
 Window Pack Up=none
-Window Quick Tile Bottom=Meta+*
+Window Quick Tile Bottom=Meta+*; Meta+Shift+Down
 Window Quick Tile Bottom Left=Meta+%
 Window Quick Tile Bottom Right=Meta+^
-Window Quick Tile Left=Meta+!
-Window Quick Tile Right=Meta+@
-Window Quick Tile Top=Meta+&
+Window Quick Tile Left=Meta+!; Meta+Shift+Left
+Window Quick Tile Right=Meta+@; Meta+Shift+Right
+Window Quick Tile Top=Meta+&; Meta+Shift+Up
 Window Quick Tile Top Left=Meta+#
 Window Quick Tile Top Right=Meta+$
 Window Raise=none
@@ -162,6 +166,7 @@ activate task manager entry 7=Meta+Alt+7
 activate task manager entry 8=Meta+Alt+8
 activate task manager entry 9=Meta+Alt+9
 activate widget 15=none
+activate widget 3=Alt+F1
 clear-history=none
 clipboard_action=Ctrl+Alt+X
 cycleNextAction=none
