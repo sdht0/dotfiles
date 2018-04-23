@@ -160,16 +160,16 @@ dkrc() { sudo docker start $1 && sudo docker attach $1;}
 dkrm() { sudo docker kill $@; sudo docker rm $@; }
 
 # Pacman package management
-alias pcmu='sudo pacman -Syu'
-alias pcmi='sudo pacman -S'
+alias pcmu='sudo pacman -Syu --needed'
+alias pcmi='sudo pacman -S --needed'
 alias pcms='sudo pacman -Ss'
 alias pcmsl='sudo pacman -Qs'
 alias pcmr='sudo pacman -Rc'
 alias pcmc='sudo pacman -Sc --noconfirm'
 
-alias pru='pacaur -Syu'
-alias pri='pacaur -S'
-alias prs='pacaur -Ss'
+alias pru='aurman -Syu --needed'
+alias pri='aurman -S --needed'
+alias prs='aurman -Ss'
 
 # Apt-get package management
 alias agu='sudo apt-get update && sudo apt-get upgrade'
