@@ -1,62 +1,13 @@
-[kaccess][Global Shortcuts]
-Toggle Screen Reader On and Off=Meta+Alt+S
-
-[kded5][Global Shortcuts]
-Decrease Keyboard Brightness=Keyboard Brightness Down
-Decrease Screen Brightness=Monitor Brightness Down
-Disable Touchpad=Touchpad Off
-Enable Touchpad=Touchpad On
-Hibernate=Hibernate
-Increase Keyboard Brightness=Keyboard Brightness Up
-Increase Screen Brightness=Monitor Brightness Up
-PowerOff=Power Off
-Show System Activity=Ctrl+Esc
-Sleep=Sleep
-Switch to Next Keyboard Layout=Ctrl+Alt+K
-Toggle Keyboard Backlight=Keyboard Light On/Off
-Toggle Touchpad=Touchpad Toggle
-display=Display
-
-[khotkeys][Global Shortcuts]
-{14a4e96a-a7e8-4003-9d36-a3652351f7e2}=Shift+Print
-{49ebcdde-65b4-496e-8701-55a431d5bff4}=Print
-{56a83ceb-41f0-42a5-8239-e7197fdb97f9}=none
-{628d5733-fbe8-4dae-83f5-fa0a7913f337}=Ctrl+Alt+[
-{6a153469-8973-44de-88f7-0958d8561ced}=Ctrl+Alt+'
-{8ae0a121-b5e0-42c4-92ac-a871f721a61f}=Ctrl+Alt+T
-{97c51fa3-eb23-4a13-9bf1-e11b8e9e74f3}=Ctrl+Alt+Y
-{d03619b6-9b3c-48cc-9d9c-a2aadb485550}=none
-{d6c9bed0-3192-447e-a6be-74dc2b9e5f2b}=Ctrl+Print
-{e82d8a1f-2444-49e3-ad6d-aecd0912d537}=Ctrl+Alt+]
-
-[kmix][Global Shortcuts]
-decrease_volume=Volume Down
-increase_volume=Volume Up
-mute=Volume Mute
-
-[konversation][Global Shortcuts]
-next_active_tab=none
-toggle_mainwindow_visibility=none
-
 [krunner][Global Shortcuts]
-run command=Alt+Space; ; Search
-run command on clipboard contents=none
-
-[ksmserver][Global Shortcuts]
-Halt Without Confirmation=Ctrl+Alt+Shift+PgDown
-Lock Session=Ctrl+Alt+L; Screensaver
-Log Out=Ctrl+Alt+Del
-Log Out Without Confirmation=Ctrl+Alt+Shift+Del
-Reboot Without Confirmation=Ctrl+Alt+Shift+PgUp
-
-[ktorrent][Global Shortcuts]
-queue_suspend=Alt+Shift+P
-show_kt=Alt+Shift+T
+run command=Alt+Space; Alt+F2; Search
+run command on clipboard contents=Alt+Shift+F2
 
 [kwin][Global Shortcuts]
 Activate Window Demanding Attention=Ctrl+Alt+A
+Cube=Ctrl+F11
+Cylinder=none
 Decrease Opacity=none
-Expose=Ctrl+F9
+Expose=Meta+A
 ExposeAll=Meta+S; Launch (C)
 ExposeClass=Ctrl+F7
 Increase Opacity=none
@@ -65,24 +16,25 @@ Kill Window=Ctrl+Alt+Esc
 MinimizeAll=Meta+D
 MoveMouseToCenter=Meta+F6
 MoveMouseToFocus=Meta+F5
-MoveZoomDown=Meta+Down
-MoveZoomLeft=Meta+Left
-MoveZoomRight=Meta+Right
-MoveZoomUp=Meta+Up
+MoveZoomDown=none
+MoveZoomLeft=none
+MoveZoomRight=none
+MoveZoomUp=none
 Remove Window From Group=none
 Setup Window Shortcut=none
 Show Desktop=none
-ShowDesktopGrid=Meta+A
+ShowDesktopGrid=Meta+W
+Sphere=none
 Suspend Compositing=Alt+Shift+F12
-Switch One Desktop Down=none
-Switch One Desktop Up=none
-Switch One Desktop to the Left=none
-Switch One Desktop to the Right=none
+Switch One Desktop Down=Meta+Down
+Switch One Desktop Up=Meta+Up
+Switch One Desktop to the Left=Meta+Left
+Switch One Desktop to the Right=Meta+Right
 Switch Window Down=Meta+Alt+Down
 Switch Window Left=Meta+Alt+Left
 Switch Window Right=Meta+Alt+Right
 Switch Window Up=Meta+Alt+Up
-Switch to Desktop 1=Meta+1
+Switch to Desktop 1=Ctrl+F1; Meta+1
 Switch to Desktop 10=none
 Switch to Desktop 11=none
 Switch to Desktop 12=none
@@ -93,13 +45,13 @@ Switch to Desktop 16=none
 Switch to Desktop 17=none
 Switch to Desktop 18=none
 Switch to Desktop 19=none
-Switch to Desktop 2=Meta+2
+Switch to Desktop 2=Ctrl+F2; Meta+2
 Switch to Desktop 20=none
-Switch to Desktop 3=Meta+3
-Switch to Desktop 4=Meta+4
+Switch to Desktop 3=Ctrl+F3; Meta+3
+Switch to Desktop 4=Ctrl+F4; Meta+4
 Switch to Desktop 5=none
 Switch to Desktop 6=none
-Switch to Desktop 7=none
+Switch to Desktop 7=; Meta+7
 Switch to Desktop 8=none
 Switch to Desktop 9=none
 Switch to Next Desktop=Meta+Tab
@@ -115,6 +67,7 @@ Switch to Screen 5=none
 Switch to Screen 6=none
 Switch to Screen 7=none
 Toggle Window Raise/Lower=none
+TrackMouse=none
 Walk Through Desktop List=none
 Walk Through Desktop List (Reverse)=none
 Walk Through Desktops=none
@@ -136,9 +89,9 @@ Window Fullscreen=none
 Window Grow Horizontal=none
 Window Grow Vertical=none
 Window Lower=none
-Window Maximize=none
-Window Maximize Horizontal=none
-Window Maximize Vertical=none
+Window Maximize=Meta+Shift+M
+Window Maximize Horizontal=Meta+Shift+H
+Window Maximize Vertical=Meta+Shift+V
 Window Minimize=none
 Window Move=none
 Window No Border=none
@@ -152,14 +105,14 @@ Window Pack Down=none
 Window Pack Left=none
 Window Pack Right=none
 Window Pack Up=none
-Window Quick Tile Bottom=none
-Window Quick Tile Bottom Left=none
-Window Quick Tile Bottom Right=none
-Window Quick Tile Left=none
-Window Quick Tile Right=none
-Window Quick Tile Top=none
-Window Quick Tile Top Left=none
-Window Quick Tile Top Right=none
+Window Quick Tile Bottom=Meta+*; Meta+Shift+Down
+Window Quick Tile Bottom Left=Meta+%
+Window Quick Tile Bottom Right=Meta+^
+Window Quick Tile Left=Meta+!; Meta+Shift+Left
+Window Quick Tile Right=Meta+@; Meta+Shift+Right
+Window Quick Tile Top=Meta+&; Meta+Shift+Up
+Window Quick Tile Top Left=Meta+#
+Window Quick Tile Top Right=Meta+$
 Window Raise=none
 Window Resize=none
 Window Shade=none
@@ -180,18 +133,18 @@ Window to Desktop 2=Meta+Ctrl+2
 Window to Desktop 20=none
 Window to Desktop 3=Meta+Ctrl+3
 Window to Desktop 4=Meta+Ctrl+4
-Window to Desktop 5=none
-Window to Desktop 6=none
-Window to Desktop 7=none
-Window to Desktop 8=none
+Window to Desktop 5=Meta+Ctrl+5
+Window to Desktop 6=Meta+Ctrl+6
+Window to Desktop 7=Meta+Ctrl+7
+Window to Desktop 8=Meta+Ctrl+8
 Window to Desktop 9=none
 Window to Next Desktop=none
 Window to Next Screen=none
 Window to Previous Desktop=none
 Window to Previous Screen=none
-Window to Screen 0=Meta+Alt+1
-Window to Screen 1=Meta+Alt+2
-Window to Screen 2=Meta+Alt+3
+Window to Screen 0=none
+Window to Screen 1=none
+Window to Screen 2=none
 Window to Screen 3=none
 Window to Screen 4=none
 Window to Screen 5=none
@@ -201,15 +154,19 @@ view_actual_size=Meta+0
 view_zoom_in=Meta+=
 view_zoom_out=Meta+-
 
-[mediacontrol][Global Shortcuts]
-nextmedia=Media Next
-playpausemedia=Media Play
-previousmedia=Media Previous
-stopmedia=Media Stop
-
 [plasmashell][Global Shortcuts]
-activate widget 18=none
-activate widget 2=Alt+F1
+activate task manager entry 1=Meta+Alt+1
+activate task manager entry 10=Meta+Alt+0
+activate task manager entry 2=Meta+Alt+2
+activate task manager entry 3=Meta+Alt+3
+activate task manager entry 4=Meta+Alt+4
+activate task manager entry 5=Meta+Alt+6
+activate task manager entry 6=Meta+Alt+5
+activate task manager entry 7=Meta+Alt+7
+activate task manager entry 8=Meta+Alt+8
+activate task manager entry 9=Meta+Alt+9
+activate widget 15=none
+activate widget 3=Alt+F1
 clear-history=none
 clipboard_action=Ctrl+Alt+X
 cycleNextAction=none

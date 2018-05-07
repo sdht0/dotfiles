@@ -9,10 +9,8 @@ if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$
     fi
 fi
 
-export PATH="${JAVA_HOME}/bin:$PATH"
-
-export LANG='en_US.UTF-8'
 export EDITOR='vim'
+export VISUAL=$EDITOR
 export HISTFILESIZE=100000
 export HISTSIZE=${HISTFILESIZE}
 export HISTFILE=~/.bash_history
@@ -68,21 +66,23 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias b='cd -'
 alias ls='ls --color=auto'
+alias sls='sudo ls --color=auto'
 alias lsa='ls -CFah --color=auto'
 alias ll='ls -CFlh --color=auto'           # Use ll -t, ll -tr, ll -S, ll -Sr for more sorting options. Similarly for lla and lld
 alias lla='ls -CFalh --color=auto'
-lld() { ls -CFalh $* --color=force | grep -e "^d" -e total --color=never; ls -CFalh $* --color=force | grep -vE "^d|total"; }
-alias lldt='ls -CFalht --color=force | grep -e "^d" -e total --color=never; ls -CFalht --color=force | grep -vE "^d|total"'
-alias llds='ls -CFalhS --color=force | grep -e "^d" -e total --color=never; ls -CFalhS --color=force | grep -vE "^d|total"'
+alias slla='sudo ls -CFalh --color=auto'
+lld() { ls -CFalh $* --color=force | grep -e "^d" -e total --color=never;ls -CFalh $* --color=force | grep -vE "^d|total"; }
+alias lldt='ls -CFalht --color=force | grep -e "^d" -e total --color=never;ls -CFalht --color=force | grep -vE "^d|total"'
+alias llds='ls -CFalhS --color=force | grep -e "^d" -e total --color=never;ls -CFalhS --color=force | grep -vE "^d|total"'
 cl() { cd "$@" && lls; }
 alias df='df -Th'
 alias lsg='ls -CFalh --color=auto | grep --color=auto -i'
 alias psg='ps aux | grep -v grep | grep -i -e VSZ -e '
 alias psgc='ps aux | grep -v grep | grep -i -e '
-alias pkl='sudo kill -9'
+alias pkl='kill -9'
 alias lsofs='sudo lsof | grep'
-alias portso='sudo netstat -tulnp | grep LISTEN | sort -k6'
-alias portsa='sudo netstat -tulanp'
+alias portso='netstat -tulnp | grep LISTEN | sort -k6'
+alias portsa='netstat -tulanp'
 ports() {
     option="${1:-b}"
     pos="${2:-5}"
@@ -92,11 +92,12 @@ ports() {
         ports t "$pos"
         return 0
     fi
-    echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(sudo netstat -lnp${option} | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k${pos})" | column -t
+    echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(netstat -lnp${option} | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k${pos})" | column -t
 }
 alias mkdir="mkdir -p"
 alias smkdir="sudo mkdir -p"
-alias rr='sudo rm -rf'
+alias rr='rm -rf'
+alias srr='sudo rm -rf'
 alias mount='sudo mount -v'
 alias umount='sudo umount -v'
 alias pu='pushd'
@@ -104,10 +105,6 @@ alias po='popd'
 alias dmesg='sudo dmesg --human -T'
 alias gitk='gitk --all'
 alias grep='grep -i --color=auto'
-alias crns='sudo crontab -l'
-alias crne='sudo crontab -e'
-alias crnsu='sudo crontab -l -u'
-alias tail='tail'
 alias tn='tail -n'
 alias hn='head -n'
 alias tf='tail -F'
@@ -115,17 +112,12 @@ alias vi='vim'
 alias se='sudoedit'
 alias sv='sudo vim -u ~/.vimrc'
 alias e='vim'
-alias tarc="tar czf"
-alias tarx="tar xzf"
-alias starc="sudo tar czf"
-alias starx="sudo tar xzf"
+alias ee='emacsclient -c'
 alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d'/' -f1 | sed -r "s/[ \t]+/ /g" | cut -d" " -f2-4 | awk "{print \$1\": \"\$3}" | sort | uniq'
 alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
 alias xcp='xclip -selection clipboard'
 alias httpserver="python2 -m SimpleHTTPServer"
 alias sx="startx"
-alias sd="sudo shutdown now"
-alias sa="ssh-add"
 
 alias please='sudo $(fc -ln -1)'
 alias pleaseplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
@@ -136,7 +128,8 @@ alias rbash='. ~/.bashrc'
 alias ga='git add'
 alias gc='git commit -m'
 alias gca='git commit -am'
-alias gcm='git commit --amend -a'
+alias gcm='git commit --amend'
+alias gcma='git commit --amend -a'
 alias gs='git status'
 alias gt='git stash'
 alias gtp='git stash pop'
@@ -161,16 +154,16 @@ dkrc() { sudo docker start $1 && sudo docker attach $1;}
 dkrm() { sudo docker kill $@; sudo docker rm $@; }
 
 # Pacman package management
-alias pcmu='sudo pacman -Syu'
-alias pcmi='sudo pacman -S'
+alias pcmu='sudo pacman -Syu --needed'
+alias pcmi='sudo pacman -S --needed'
 alias pcms='sudo pacman -Ss'
 alias pcmsl='sudo pacman -Qs'
 alias pcmr='sudo pacman -Rc'
 alias pcmc='sudo pacman -Sc --noconfirm'
 
-alias pru='pacaur -Syu'
-alias pri='pacaur -S'
-alias prs='pacaur -Ss'
+alias pru='aurman -Syu --needed --show_changes'
+alias pri='aurman -S --needed --show_changes'
+alias prs='aurman -Ss'
 
 # Apt-get package management
 alias agu='sudo apt-get update && sudo apt-get upgrade'
@@ -186,12 +179,7 @@ alias yumr='sudo yum remove'
 alias yuml='sudo yum --showduplicates list'
 alias yumf='sudo yum --showduplicates info'
 
-alias jetpistol='sudo puppet agent -t --configtimeout=900'
-alias gomugomuno='echo "Waiting 5s..." && sleep 5; echo "Running puppet.." && jetpistol'
 alias osv='cat /etc/*-release /etc/debian_version 2>/dev/null | sort | uniq | xargs -L1'
-alias tfp="sudo tail -F /var/log/puppet/puppet.log"
-alias tfa="sudo tail -F /var/log/httpd/access_log"
-alias tfe="sudo tail -F /var/log/httpd/error_log"
 tfm() {
     n=${1:-30}
     if which journalctl >/dev/null 2>&1;then
@@ -204,14 +192,10 @@ tfm() {
         echo "No system log found"
     fi
 }
-alias tnp="sudo tail /var/log/puppet/puppet.log -n"
-alias tna="sudo tail /var/log/httpd/access_log -n"
-alias tne="sudo tail /var/log/httpd/error_log -n"
 alias magicm2='cd;sudo openvpn --config ~/directi/client.ovpn'
 alias magicm='cd;sudo openvpn --config ~/directi/mnet-client.ovpn'
 alias magic2='cd;~/dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
 alias magic='cd;~/dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
-alias pfx='peerflix --vlc --not-on-top'
 
 s() {
     [[ $# -lt 1 ]] && echo "No input!" && return 1
@@ -342,7 +326,7 @@ mypublicip() {
     printf "dig +short @resolver1.opendns.com myip.opendns.com\ndig +short -t txt @ns1.google.com o-o.myaddr.l.google.com\ncurl -s ident.me\ncurl -s icanhazip.com" | xargs -L1 -P0 -I{} sh -c 'x=$({} | tr -d "\"";echo " | {}");echo $x'
 }
 
-stayawake() {
+hold_fort() {
     while true;do
         date
         xdotool getmouselocation --shell
@@ -370,7 +354,16 @@ xs() {
         return 1
     fi
 
-    grep --color=auto -Rn $* .
+    grep --exclude-dir=".git" --color=auto -Rn $* .
+}
+
+sxs() {
+    if [ $# -lt 1 ]; then
+        echo "No input!"
+        return 1
+    fi
+
+    sudo grep --exclude-dir=".git" --color=auto -Rn $* .
 }
 
 xf() {
@@ -380,6 +373,15 @@ xf() {
     fi
 
     find -name "*$**"
+}
+
+sxf() {
+    if [ $# -lt 1 ]; then
+        echo "No input!"
+        return 1
+    fi
+
+    sudo find -name "*$**"
 }
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
