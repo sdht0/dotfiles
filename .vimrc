@@ -102,8 +102,3 @@ set showmode
 " http://vim.wikia.com/wiki/Display_line_numbers
 noremap <F3> :set invnumber<CR>
 inoremap <F3> <C-O>:set invnumber<CR>
-
-call plug#begin('~/.vim/plugged')
-    Plug 'rust-lang/rust.vim'
-    Plug 'Chiel92/vim-autoformat'
-call plug#end()
