@@ -97,9 +97,9 @@ sports() {
     option="${1:-b}"
     pos="${2:-5}"
     if [[ "$option" == "b" ]];then
-        ports u "$pos"
+        sports u "$pos"
         echo
-        ports t "$pos"
+        sports t "$pos"
         return 0
     fi
     echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(sudo netstat -lnp${option} | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k${pos})" | column -t

@@ -11,8 +11,6 @@
 
 (load-theme 'whiteboard t)
 
-;; enable left-side line numbers
-(global-linum-mode 1)
 ;; Always display line and column numbers
 (setq line-number-mode t)
 (setq column-number-mode t)
