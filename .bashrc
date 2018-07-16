@@ -122,6 +122,7 @@ alias hn='head -n'
 alias tf='tail -F'
 alias df='df -h'
 alias du='du -sh'
+alias rdl="readlink -f"
 alias vi='vim'
 alias se='sudoedit'
 alias sv='sudo vim -u ~/.vimrc'
