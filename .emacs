@@ -2,6 +2,13 @@
 (add-to-list 'package-archives (cons "melpa" "https://melpa.org/packages/") t)
 (package-initialize)
 
+(eval-when-compile
+  (require 'use-package))
+
+(use-package flycheck
+             :ensure t
+             :init (global-flycheck-mode))
+
 ;; utf-8
 (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
@@ -12,7 +19,7 @@
 (load-theme 'whiteboard t)
 
 ;; Always display line and column numbers
-(setq line-number-mode t)
+(global-display-line-numbers-mode)
 (setq column-number-mode t)
 ;; Lines should be 80 characters wide, not 72
 (setq fill-column 80)
@@ -37,7 +44,7 @@
 
 (setq-default indent-tabs-mode nil)
 
-G(setq tramp-default-method "ssh")
+(setq tramp-default-method "ssh")
 
 ;; always maximize the frame
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -83,6 +90,11 @@ G(setq tramp-default-method "ssh")
 ;; rust support
 (add-hook 'rust-mode-hook #'racer-mode)
 (add-hook 'racer-mode-hook #'eldoc-mode)
+(add-hook 'rust-mode-hook 'cargo-minor-mode)
+(add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+(add-hook 'rust-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-c <tab>") #'rust-format-buffer)))
 (require 'rust-mode)
 (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
 
@@ -116,7 +128,7 @@ G(setq tramp-default-method "ssh")
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (github-modern-theme intellij-theme color-theme-sanityinc-tomorrow solarized-theme color-theme-modern company-auctex latex-preview-pane haskell-mode company racer)))
+    (use-package flycheck-rust cargo github-modern-theme intellij-theme color-theme-sanityinc-tomorrow solarized-theme color-theme-modern company-auctex latex-preview-pane haskell-mode company racer)))
  '(show-paren-mode t)
  '(tramp-terminal-type "xterm")
  '(vc-annotate-background nil)
