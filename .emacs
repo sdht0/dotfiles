@@ -128,7 +128,7 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (use-package flycheck-rust cargo github-modern-theme intellij-theme color-theme-sanityinc-tomorrow solarized-theme color-theme-modern company-auctex latex-preview-pane haskell-mode company racer)))
+    (magit use-package flycheck-rust cargo github-modern-theme intellij-theme color-theme-sanityinc-tomorrow solarized-theme color-theme-modern company-auctex latex-preview-pane haskell-mode company racer)))
  '(show-paren-mode t)
  '(tramp-terminal-type "xterm")
  '(vc-annotate-background nil)

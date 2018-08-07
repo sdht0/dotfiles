@@ -1,6 +1,6 @@
 [user]
-    email = sh.siddhartha@gmail.com
-    name = Siddhartha Sahu
+    email = git@siddharthasahu.in
+    name = Siddhartha
 [url "git://anongit.kde.org/"]
     insteadOf = kde:
 [url "git@git.kde.org:"]

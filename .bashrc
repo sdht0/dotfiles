@@ -400,7 +400,7 @@ sxf() {
 h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
 
 rand() {
-    count=${1:-21}
+    count=${1:-23}
     chars='A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|}~'
     [[ -n "$2" ]] && chars="$2"
     < /dev/urandom tr -dc "$chars" | head -c"$count"; echo;
