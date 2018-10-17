@@ -174,9 +174,9 @@ alias pcmsl='sudo pacman -Qs'
 alias pcmr='sudo pacman -Rc'
 alias pcmc='sudo pacman -Sc --noconfirm'
 
-alias pru='aurman -Syu --needed --show_changes'
-alias pri='aurman -S --needed --show_changes'
-alias prs='aurman -Ss'
+alias pru='pakku -Syu --needed'
+alias pri='pakku -S --needed'
+alias prs='pakku -Ss'
 
 # Apt-get package management
 alias agu='sudo apt-get update && sudo apt-get upgrade'
