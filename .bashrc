@@ -176,9 +176,9 @@ alias pcmsl='sudo pacman -Qs'
 alias pcmr='sudo pacman -Rc'
 alias pcmc='sudo pacman -Sc --noconfirm'
 
-alias pru='aurman -Syu --needed --show_changes'
-alias pri='aurman -S --needed --show_changes'
-alias prs='aurman -Ss'
+alias pru='pakku -Syu --needed'
+alias pri='pakku -S --needed'
+alias prs='pakku -Ss'
 
 # Apt-get package management
 alias agu='sudo apt-get update && sudo apt-get upgrade'
@@ -402,7 +402,7 @@ sxf() {
 h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
 
 rand() {
-    count=${1:-21}
+    count=${1:-23}
     chars='A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|}~'
     [[ -n "$2" ]] && chars="$2"
     < /dev/urandom tr -dc "$chars" | head -c"$count"; echo;

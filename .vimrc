@@ -102,3 +102,4 @@ set showmode
 " http://vim.wikia.com/wiki/Display_line_numbers
 noremap <F3> :set invnumber<CR>
 inoremap <F3> <C-O>:set invnumber<CR>
+
