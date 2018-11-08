@@ -1,8 +1,6 @@
 set nocompatible    " Cancel the compatibility with Vi. Essential if you want
                     " to enjoy the features of Vim
 
-set title           " Update the title of your window or your terminal
-
 set tabstop=4       " Number of spaces that a <Tab> in the file counts for.
 
 set shiftwidth=4    " Number of spaces to use for each step of (auto)indent.
@@ -34,17 +32,9 @@ set ignorecase      " Ignore case in search patterns.
 set smartcase       " Override the 'ignorecase' option if the search pattern
                     " contains upper case characters.
 
-set backspace=2     " Influences the working of <BS>, <Del>, CTRL-W
-                    " and CTRL-U in Insert mode. This is a list of items,
-                    " separated by commas. Each item allows a way to backspace
-                    " over something.
-
 set autoindent      " Copy indent from current line when starting a new line
                     " (typing <CR> in Insert mode or when using the "o" or "O"
                     " command).
-
-set textwidth=79    " Maximum width of text that is being inserted. A longer
-                    " line will be broken after white space to get this width.
 
 set formatoptions=c,q,r,t " This is a sequence of letters which describes how
                     " automatic formatting is to be done.
@@ -86,10 +76,6 @@ set backspace=indent,eol,start  " Backspace behaves as expected
 
 set hidden          " Hide buffer (file) instead of abandoning when
                     " switching to another buffer
-
-if has('autocmd')
-    filetype plugin indent on
-endif
 
 nnoremap <C-s> :w<CR>
 inoremap <C-s> <ESC>:w<CR>  " Enable saving by Ctrl-s

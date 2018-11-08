@@ -106,8 +106,8 @@ sports() {
 }
 alias mkdir="mkdir -p"
 alias smkdir="sudo mkdir -p"
-alias rr='rm -rf'
-alias srr='sudo rm -rf'
+alias rmr='rm -rf'
+alias srmr='sudo rm -rf'
 alias mount='sudo mount -v'
 alias umount='sudo umount -v'
 alias pu='pushd'
@@ -242,7 +242,7 @@ function m {
     mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$1"
 }
 function um {
-    rm -i "$MARKPATH/$1"
+    cd $MARKPATH && rm $@
 }
 function mks {
     ls -l "$MARKPATH" | sed 's/  / /g' | cut -d' ' -f9- | sed 's/ -/\t-/g' && echo

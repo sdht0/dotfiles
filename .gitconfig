@@ -1,7 +1,7 @@
 [user]
     email = git@siddharthasahu.in
     name = Siddhartha
-[url "git://anongit.kde.org/"]
+[url "https://anongit.kde.org/"]
     insteadOf = kde:
 [url "git@git.kde.org:"]
     pushInsteadOf = kde:

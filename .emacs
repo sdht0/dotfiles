@@ -24,16 +24,14 @@
 (customize-set-variable 'tool-bar-mode nil) ;; Remove the tool bar
 (add-to-list 'default-frame-alist '(fullscreen . maximized))    ;; always maximize the frame
 
-(ido-mode 1)
-(setq ido-enable-flex-matching t)
-(setq ido-everywhere t)
+;; (ido-mode 1)
+;; (setq ido-enable-flex-matching t)
+;; (setq ido-everywhere t)
 
 (setq tramp-default-method "ssh")
 
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "M-z") 'zap-up-to-char)
-(global-set-key (kbd "C-s") 'isearch-forward-regexp)
-(global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 
@@ -44,8 +42,14 @@
 ;; ************* PACKAGES ************* ;;
 
 (require 'package)
-(add-to-list 'package-archives (cons "melpa" "https://melpa.org/packages/") t)
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
+
+;; Bootstrap `use-package'
+(unless (package-installed-p 'use-package)
+	(package-refresh-contents)
+	(package-install 'use-package))
 
 (eval-when-compile
     (require 'use-package))
@@ -57,11 +61,56 @@
     :config
         (global-set-key [f8] 'neotree-toggle))
 
+;(use-package doom-themes
+;  :ensure t
+;  :init
+;  (load-theme 'doom-molokai t))
+
 (use-package tango-plus-theme
     :ensure t
     :init
         (add-to-list 'default-frame-alist '(background-color . "#fcfcfc"))
         (load-theme 'tango-plus t))
+
+(use-package ivy
+  :ensure t
+  :init
+  (ivy-mode 1)
+  :config
+  (setq ivy-use-virtual-buffers t
+        ivy-count-format "%d/%d ")
+  (global-set-key "\C-s" 'swiper)
+  (global-set-key (kbd "C-c C-r") 'ivy-resume)
+  (global-set-key (kbd "<f6>") 'ivy-resume)
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+  (global-set-key (kbd "<f1> l") 'counsel-find-library)
+  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+  (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+  (global-set-key (kbd "C-c g") 'counsel-git)
+  (global-set-key (kbd "C-c j") 'counsel-git-grep)
+  (global-set-key (kbd "C-c k") 'counsel-ag)
+  (global-set-key (kbd "C-x l") 'counsel-locate)
+  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+  (define-key read-expression-map (kbd "C-r") 'counsel-expression-history))
+
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-search-module 'evil-search)
+  (setq evil-ex-complete-emacs-commands nil)
+  (setq evil-vsplit-window-right t)
+  (setq evil-split-window-below t)
+  (setq evil-shift-round nil)
+  (setq evil-want-C-u-scroll t)
+  :config
+  (evil-mode))
+
+(use-package ace-window
+    :ensure t
+    :init (global-set-key (kbd "M-o") 'ace-window))
 
 (use-package flycheck
     :ensure t
@@ -164,28 +213,3 @@
 
 (autoload 'pkgbuild-mode "pkgbuild-mode.el" "PKGBUILD mode." t)
 (setq auto-mode-alist (append '(("/PKGBUILD$" . pkgbuild-mode)) auto-mode-alist))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(lsp-ui-doc-header nil)
- '(lsp-ui-doc-include-signature nil)
- '(lsp-ui-doc-max-width 100)
- '(lsp-ui-doc-position (quote top))
- '(lsp-ui-doc-use-childframe t)
- '(lsp-ui-sideline-enable nil)
- '(package-selected-packages
-   (quote
-    (tango-plus use-package racer magit flycheck-rust company-racer cargo)))
- '(tool-bar-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(lsp-ui-doc-background ((t (:background "gold"))))
- '(lsp-ui-sideline-code-action ((t (:foreground "white"))))
- '(lsp-ui-sideline-global ((t (:background "gold"))))
- '(lsp-ui-sideline-symbol ((t (:foreground "white" :box (:line-width -1 :color "dim gray") :height 0.99)))))
