@@ -12,7 +12,7 @@
 
 (global-display-line-numbers-mode)          ;; Always display line and column numbers
 (column-number-mode t)
-(setq fill-column 80)                       ;; Lines should be 80 characters wide, not 72
+(setq fill-column 100)                      ;; Lines should be 100 characters wide, not 72
 (fset 'yes-or-no-p 'y-or-n-p)               ;; y/n instead of yes/no
 (show-paren-mode 1)
 (setq-default show-trailing-whitespace t)
@@ -61,11 +61,6 @@
     :config
         (global-set-key [f8] 'neotree-toggle))
 
-;(use-package doom-themes
-;  :ensure t
-;  :init
-;  (load-theme 'doom-molokai t))
-
 (use-package tango-plus-theme
     :ensure t
     :init
@@ -73,44 +68,43 @@
         (load-theme 'tango-plus t))
 
 (use-package ivy
-  :ensure t
-  :init
-  (ivy-mode 1)
-  :config
-  (setq ivy-use-virtual-buffers t
-        ivy-count-format "%d/%d ")
-  (global-set-key "\C-s" 'swiper)
-  (global-set-key (kbd "C-c C-r") 'ivy-resume)
-  (global-set-key (kbd "<f6>") 'ivy-resume)
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-  (global-set-key (kbd "<f1> l") 'counsel-find-library)
-  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-  (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-  (global-set-key (kbd "C-c g") 'counsel-git)
-  (global-set-key (kbd "C-c j") 'counsel-git-grep)
-  (global-set-key (kbd "C-c k") 'counsel-ag)
-  (global-set-key (kbd "C-x l") 'counsel-locate)
-  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-  (define-key read-expression-map (kbd "C-r") 'counsel-expression-history))
+    :ensure t
+    :init
+        (ivy-mode 1)
+    :config
+        (setq ivy-use-virtual-buffers t
+                ivy-count-format "%d/%d ")
+        (global-set-key "\C-s" 'swiper)
+        (global-set-key (kbd "C-c C-r") 'ivy-resume)
+        (global-set-key (kbd "<f6>") 'ivy-resume)
+        (global-set-key (kbd "M-x") 'counsel-M-x)
+        (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+        (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+        (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+        (global-set-key (kbd "<f1> l") 'counsel-find-library)
+        (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+        (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+        (global-set-key (kbd "C-c g") 'counsel-git)
+        (global-set-key (kbd "C-c j") 'counsel-git-grep)
+        (global-set-key (kbd "C-c k") 'counsel-ag)
+        (global-set-key (kbd "C-x l") 'counsel-locate)
+        (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+        (define-key read-expression-map (kbd "C-r") 'counsel-expression-history))
 
 (use-package evil
-  :ensure t
-  :init
-  (setq evil-search-module 'evil-search)
-  (setq evil-ex-complete-emacs-commands nil)
-  (setq evil-vsplit-window-right t)
-  (setq evil-split-window-below t)
-  (setq evil-shift-round nil)
-  (setq evil-want-C-u-scroll t)
-  :config
-  (evil-mode))
+    :ensure t
+    :init
+        (setq evil-search-module 'evil-search)
+        (setq evil-ex-complete-emacs-commands nil)
+        (setq evil-vsplit-window-right t)
+        (setq evil-split-window-below t)
+        (setq evil-shift-round nil)
+        (setq evil-want-C-u-scroll t)
+    :config
+        (evil-mode))
 
 (use-package ace-window
-    :ensure t
-    :init (global-set-key (kbd "M-o") 'ace-window))
+    :ensure t)
 
 (use-package flycheck
     :ensure t
@@ -119,6 +113,35 @@
 (use-package ibuffer
     :ensure t
     :bind ("C-x C-b" . ibuffer))
+
+(use-package hydra
+    :ensure t
+    :config
+        (global-set-key
+            (kbd "C-M-o")
+            (defhydra hydra-window ()
+                "Split: _v_ert _x_:horz
+                Delete: _o_nly  _da_ce  _dw_indow  _db_uffer
+                Move: _s_wap"
+                ("h" windmove-left)
+                ("j" windmove-down)
+                ("k" windmove-up)
+                ("l" windmove-right)
+                ("|" (lambda ()
+                        (interactive)
+                        (split-window-right)
+                        (windmove-right)))
+                ("_" (lambda ()
+                        (interactive)
+                        (split-window-below)
+                        (windmove-down)))
+                ("v" split-window-right)
+                ("x" split-window-below)
+                ("o" delete-other-windows :exit t)
+                ("s" ace-swap-window)
+                ("da" ace-delete-window)
+                ("dw" delete-window)
+                ("db" kill-this-buffer))))
 
 (use-package magit
     :ensure t)
@@ -210,6 +233,3 @@
 ;;                "./"
 ;;                (TeX-current-file-name-master-relative)))
 ;; (setq TeX-view-program-selection '((output-pdf "Okular")))
-
-(autoload 'pkgbuild-mode "pkgbuild-mode.el" "PKGBUILD mode." t)
-(setq auto-mode-alist (append '(("/PKGBUILD$" . pkgbuild-mode)) auto-mode-alist))
