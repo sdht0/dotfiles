@@ -83,10 +83,10 @@
             (with-selected-frame frame
               (set-cursor-color "white"))))
 
-(use-package powerline
+(use-package powerline-evil
   :ensure t
   :config
-  (powerline-center-evil-theme))
+  (powerline-evil-center-color-theme))
 
 ;; (use-package tango-plus-theme
 ;;     :ensure t
@@ -94,23 +94,31 @@
 ;;         (add-to-list 'default-frame-alist '(background-color . "#fcfcfc"))
 ;;         (load-theme 'tango-plus t))
 
+(use-package projectile
+  :ensure t
+  :after ivy
+  :init
+  (projectile-mode 1)
+  :config
+  (define-key projectile-mode-map (kbd "s-/") 'projectile-command-map)
+  (setq projectile-completion-system 'ivy))
+
 (use-package ivy
     :ensure t
     :init
         (ivy-mode 1)
     :config
+        (use-package swiper
+          :ensure t)
+        (use-package counsel
+          :ensure t
+          :init
+          (counsel-mode 1))
         (setq ivy-use-virtual-buffers t
                 ivy-count-format "%d/%d ")
         (global-set-key "\C-s" 'swiper)
         (global-set-key (kbd "C-c C-r") 'ivy-resume)
         (global-set-key (kbd "<f6>") 'ivy-resume)
-        (global-set-key (kbd "M-x") 'counsel-M-x)
-        (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-        (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-        (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-        (global-set-key (kbd "<f1> l") 'counsel-find-library)
-        (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-        (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
         (global-set-key (kbd "C-c g") 'counsel-git)
         (global-set-key (kbd "C-c j") 'counsel-git-grep)
         (define-key read-expression-map (kbd "C-r") 'counsel-expression-history))
@@ -134,6 +142,20 @@
 ;;   (add-hook 'after-change-major-mode-hook 'fci-mode)
 ;;   (setq fci-rule-column 100))
 
+(use-package smartparens-config
+  :ensure smartparens
+  :init
+  (smartparens-global-mode 1))
+
+(use-package yasnippet
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook #'yas-minor-mode)
+  :config
+  (yas-reload-all)
+  (use-package yasnippet-snippets         ; Collection of snippets
+    :ensure t))
+
 (use-package flycheck
     :ensure t
     :init (global-flycheck-mode))
@@ -146,7 +168,9 @@
 ;;   :ensure t)
 
 (use-package magit
-    :ensure t)
+  :ensure t
+  :config
+  (setq magit-completing-read-function 'ivy-completing-read))
 
 (use-package company
     :ensure t
@@ -313,9 +337,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(lsp-ui-doc-header nil)
  '(lsp-ui-doc-include-signature nil)
  '(lsp-ui-doc-max-width 100)
@@ -324,8 +345,7 @@
  '(lsp-ui-sideline-enable nil)
  '(package-selected-packages
    (quote
-    (company-reftex company-bibtex company-auctex pdf-tools powerline klere-theme dracula-theme solarized-theme fill-column-indicator zenburn-theme use-package tango-plus-theme racer neotree magit lsp-ui lsp-rust ivy hydra flycheck-rust evil doom-themes company-racer company-lsp cargo ace-window)))
- '(solarized-distinct-fringe-background t)
+    (yasnippet-snippets smartparens smartparens-config powerline-evil counsel use-package swiper projectile powerline pdf-tools magit lsp-ui lsp-rust evil dracula-theme company-reftex company-math company-lsp company-bibtex company-auctex cargo)))
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
