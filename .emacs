@@ -12,10 +12,11 @@
 
 (global-display-line-numbers-mode)          ;; Always display line and column numbers
 (column-number-mode t)
+(scroll-bar-mode -1)
 (setq fill-column 100)                      ;; Lines should be 100 characters wide, not 72
 (fset 'yes-or-no-p 'y-or-n-p)               ;; y/n instead of yes/no
 (show-paren-mode 1)
-(setq-default show-trailing-whitespace t)
+;; (setq-default show-trailing-whitespace t)
 (setq-default indent-tabs-mode nil)
 (setq sentence-end-double-space nil)
 (autoload 'zap-up-to-char "misc"
@@ -35,6 +36,18 @@
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 
+(global-set-key (kbd "s-[") (lambda ()(interactive)(split-window-below)(windmove-down)))
+(global-set-key (kbd "s-]") (lambda ()(interactive)(split-window-right)(windmove-right)))
+(global-set-key (kbd "s-'") 'delete-other-windows)
+(global-set-key (kbd "s-h") 'windmove-left)
+(global-set-key (kbd "s-j") 'windmove-down)
+(global-set-key (kbd "s-k") 'windmove-up)
+(global-set-key (kbd "s-l") 'windmove-right)
+(global-set-key (kbd "s-J") (lambda ()(interactive)(shrink-window 5)))
+(global-set-key (kbd "s-H") (lambda ()(interactive)(enlarge-window 5)))
+(global-set-key (kbd "s-L") (lambda ()(interactive)(shrink-window-horizontally 5)))
+(global-set-key (kbd "s-K") (lambda ()(interactive)(enlarge-window-horizontally 5)))
+
 ;; do not create backup files
 (setq make-backup-files nil)
 (setq auto-save-default nil)
@@ -51,21 +64,35 @@
 	(package-refresh-contents)
 	(package-install 'use-package))
 
-(eval-when-compile
-    (require 'use-package))
+(require 'use-package)
 
-(use-package neotree
-    :ensure t
-    :init
-        (require 'neotree)
-    :config
-        (global-set-key [f8] 'neotree-toggle))
+;; (use-package neotree
+;;     :ensure t
+;;     :init
+;;         (require 'neotree)
+;;     :config
+;;     (global-set-key [f8] 'neotree-toggle))
 
-(use-package tango-plus-theme
-    :ensure t
-    :init
-        (add-to-list 'default-frame-alist '(background-color . "#fcfcfc"))
-        (load-theme 'tango-plus t))
+(use-package dracula-theme
+  :ensure t
+  :init
+  (load-theme 'dracula t))
+
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (with-selected-frame frame
+              (set-cursor-color "white"))))
+
+(use-package powerline
+  :ensure t
+  :config
+  (powerline-center-evil-theme))
+
+;; (use-package tango-plus-theme
+;;     :ensure t
+;;     :init
+;;         (add-to-list 'default-frame-alist '(background-color . "#fcfcfc"))
+;;         (load-theme 'tango-plus t))
 
 (use-package ivy
     :ensure t
@@ -86,9 +113,6 @@
         (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
         (global-set-key (kbd "C-c g") 'counsel-git)
         (global-set-key (kbd "C-c j") 'counsel-git-grep)
-        (global-set-key (kbd "C-c k") 'counsel-ag)
-        (global-set-key (kbd "C-x l") 'counsel-locate)
-        (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
         (define-key read-expression-map (kbd "C-r") 'counsel-expression-history))
 
 (use-package evil
@@ -100,11 +124,15 @@
         (setq evil-split-window-below t)
         (setq evil-shift-round nil)
         (setq evil-want-C-u-scroll t)
+        (setq evil-default-state 'emacs)
     :config
         (evil-mode))
 
-(use-package ace-window
-    :ensure t)
+;; (use-package fill-column-indicator
+;;   :ensure t
+;;   :config
+;;   (add-hook 'after-change-major-mode-hook 'fci-mode)
+;;   (setq fci-rule-column 100))
 
 (use-package flycheck
     :ensure t
@@ -114,34 +142,8 @@
     :ensure t
     :bind ("C-x C-b" . ibuffer))
 
-(use-package hydra
-    :ensure t
-    :config
-        (global-set-key
-            (kbd "C-M-o")
-            (defhydra hydra-window ()
-                "Split: _v_ert _x_:horz
-                Delete: _o_nly  _da_ce  _dw_indow  _db_uffer
-                Move: _s_wap"
-                ("h" windmove-left)
-                ("j" windmove-down)
-                ("k" windmove-up)
-                ("l" windmove-right)
-                ("|" (lambda ()
-                        (interactive)
-                        (split-window-right)
-                        (windmove-right)))
-                ("_" (lambda ()
-                        (interactive)
-                        (split-window-below)
-                        (windmove-down)))
-                ("v" split-window-right)
-                ("x" split-window-below)
-                ("o" delete-other-windows :exit t)
-                ("s" ace-swap-window)
-                ("da" ace-delete-window)
-                ("dw" delete-window)
-                ("db" kill-this-buffer))))
+;; (use-package hydra
+;;   :ensure t)
 
 (use-package magit
     :ensure t)
@@ -162,29 +164,29 @@
         (use-package lsp-ui
             :ensure t
             :config
-                (setq lsp-ui-sideline-ignore-duplicate t)
-                (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+            (setq lsp-ui-sideline-ignore-duplicate t)
+            (add-hook 'lsp-mode-hook 'lsp-ui-mode))
         (use-package company-lsp
-            :ensure t
-            :config
-                (push 'company-lsp company-backends)))
+          :ensure t
+          :config
+          (push 'company-lsp company-backends)))
 
 (use-package rust-mode
+  :ensure t
+  :init
+  (require 'rust-mode)
+  :config
+  (use-package lsp-rust
     :ensure t
-    :init
-        (require 'rust-mode)
+    :after lsp-mode
     :config
-        (use-package lsp-rust
-            :ensure t
-            :after lsp-mode
-            :config
-                (add-hook 'rust-mode-hook 'lsp-mode)
-                (add-hook 'rust-mode-hook #'lsp-rust-enable)
-                (add-hook 'rust-mode-hook #'flycheck-mode))
-        (use-package cargo
-            :ensure t
-            :config
-                (add-hook 'rust-mode-hook 'cargo-minor-mode)))
+    (add-hook 'rust-mode-hook 'lsp-mode)
+    (add-hook 'rust-mode-hook #'lsp-rust-enable)
+    (add-hook 'rust-mode-hook #'flycheck-mode))
+  (use-package cargo
+    :ensure t
+    :config
+    (add-hook 'rust-mode-hook 'cargo-minor-mode)))
 ;;         (use-package racer
 ;;             :ensure t
 ;;             :config
@@ -199,25 +201,97 @@
 ;;             :config
 ;;                 (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
-;; ;; latex support
-;; (load "auctex.el" nil t t)
-;; (load "preview-latex.el" nil t t)
-;; (require 'reftex)
-;; (setq TeX-auto-save t)
+(use-package tex-site
+  :ensure auctex
+  :after (tex latex)
+  :defer t
+  :mode ("\\.tex\\'" . latex-mode)
+  :config
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
+  (setq-default TeX-master nil)
+  (setq TeX-PDF-mode t)
+  (add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (turn-on-reftex)
+              (setq reftex-plug-into-AUCTeX t)
+              (reftex-isearch-minor-mode)))
+
+  ;; Indentation
+  (setq LaTeX-indent-level 4
+        LaTeX-item-indent 0
+        TeX-brace-indent-level 4
+        TeX-newline-function 'newline-and-indent)
+
+  ;; Some usefull hooks
+  (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+  (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+  (add-hook 'LaTeX-mode-hook 'outline-minor-mode)
+  (add-hook 'LaTeX-mode-hook 'visual-line-mode)
+
+  ;; Update PDF buffers after successful LaTeX runs
+  (add-hook 'TeX-after-compilation-finished-functions
+            #'TeX-revert-document-buffer)
+
+  ;; to use pdfview with auctex
+  (add-hook 'LaTeX-mode-hook 'pdf-tools-install)
+
+  ;; to use pdfview with auctex
+  (setq TeX-view-program-selection '((output-pdf "pdf-tools")))
+  (setq TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")))
+  (setq TeX-source-correlate-mode t)
+  (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode))
+
+(use-package bibtex
+  :ensure t
+  :defer t)
+
+(use-package reftex
+  :ensure t
+  :defer t
+  :config
+  (setq reftex-cite-prompt-optional-args t))
+
+(use-package pdf-tools
+  :ensure t
+  :defer t
+  :mode ("\\.pdf\\'" . pdf-tools-install)
+  :init
+  (global-display-line-numbers-mode 0)
+  :config
+  (setq mouse-wheel-follow-mouse t)
+  (setq-default pdf-view-display-size 'fit-page)
+  (setq pdf-view-resize-factor 1.10))
+
+(use-package company-auctex
+  :ensure t
+  :defer t
+  :hook
+  (latex-mode . (company-auctex-init)))
+
+
+(use-package company-bibtex
+  :ensure t
+  :defer t
+  :hook
+  (latex-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-bibtex))))
+  (org-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-bibtex)))))
+
+(use-package company-reftex
+  :ensure t
+  :defer t
+  :hook
+  (latex-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-reftex-labels company-reftex-citations))))
+  (org-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-reftex-labels company-reftex-citations)))))
+
+(use-package company-math
+  :ensure t
+  :defer t
+  :hook
+  (latex-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-math-symbols-unicode))))
+  (org-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-math-symbols-unicode)))))
+
 ;; (setq TeX-save-query nil)
-;; (setq TeX-parse-self t)
-;; (setq TeX-PDF-mode t)
-;; (setq TeX-source-correlate-mode t)
-;; (setq-default TeX-master nil)
-;; (add-hook 'LaTeX-mode-hook 'visual-line-mode)
-;; (add-hook 'LaTeX-mode-hook 'flyspell-mode)
-;; (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-;; (add-hook 'latex-mode-hook 'turn-on-reftex)   ; with Emacs latex mode
-;; (setq reftex-plug-into-AUCTeX t)
-;; (latex-preview-pane-enable)
-;; (require 'company-auctex)
-;; (company-auctex-init)
 ;; ;; Okular
 ;; (setq TeX-view-program-list '(("Okular" "okular --unique %o#src:%n%b")))
 ;; (add-hook 'LaTeX-mode-hook '(lambda ()
@@ -239,18 +313,23 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(lsp-ui-doc-header nil)
  '(lsp-ui-doc-include-signature nil)
  '(lsp-ui-doc-max-width 100)
  '(lsp-ui-doc-position (quote top))
  '(lsp-ui-doc-use-childframe t)
- '(lsp-ui-sideline-enable nil))
+ '(lsp-ui-sideline-enable nil)
+ '(package-selected-packages
+   (quote
+    (company-reftex company-bibtex company-auctex pdf-tools powerline klere-theme dracula-theme solarized-theme fill-column-indicator zenburn-theme use-package tango-plus-theme racer neotree magit lsp-ui lsp-rust ivy hydra flycheck-rust evil doom-themes company-racer company-lsp cargo ace-window)))
+ '(solarized-distinct-fringe-background t)
+ '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(lsp-ui-doc-background ((t (:background "gold"))))
- '(lsp-ui-sideline-code-action ((t (:foreground "white"))))
- '(lsp-ui-sideline-global ((t (:background "gold"))))
  '(lsp-ui-sideline-symbol ((t (:foreground "white" :box (:line-width -1 :color "dim gray") :height 0.99)))))
