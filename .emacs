@@ -33,8 +33,17 @@
 
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "M-z") 'zap-up-to-char)
-(global-set-key (kbd "C-M-s") 'isearch-forward)
-(global-set-key (kbd "C-M-r") 'isearch-backward)
+
+(global-set-key (kbd "s-,") 'switch-to-buffer)
+(global-set-key (kbd "s-.") 'projectile--find-file)
+(global-set-key (kbd "s-;") 'kill-buffer)
+(global-set-key (kbd "s-'") 'delete-window)
+
+(global-set-key (kbd "C-,") 'eval-buffer)
+(global-set-key (kbd "C-.") 'eval-region)
+(global-set-key (kbd "C-s") 'save-buffer)
+(global-set-key (kbd "C-r") 'query-replace-regexp)
+(global-set-key (kbd "C-R") 'replace-regexp)
 
 (global-set-key (kbd "s-[") (lambda ()(interactive)(split-window-below)(windmove-down)))
 (global-set-key (kbd "s-]") (lambda ()(interactive)(split-window-right)(windmove-right)))
@@ -73,20 +82,82 @@
 ;;     :config
 ;;     (global-set-key [f8] 'neotree-toggle))
 
-(use-package dracula-theme
+(use-package doom-themes
   :ensure t
   :init
-  (load-theme 'dracula t))
-
-(add-hook 'after-make-frame-functions
-          (lambda (frame)
-            (with-selected-frame frame
-              (set-cursor-color "white"))))
-
-(use-package powerline-evil
-  :ensure t
+  (load-theme 'doom-dracula t)
   :config
-  (powerline-evil-center-color-theme))
+   (add-hook 'after-make-frame-functions
+             (lambda (frame)
+               (with-selected-frame frame
+                 (set-cursor-color "white")))))
+
+(use-package powerline
+  :ensure t
+  :requires projectile)
+
+(setq powerline-default-separator 'curve)
+(defface cjp-powerline-yellow '((t (:background "darkorange" :foreground "black" :inherit mode-line)))
+  "Yellow" :group 'powerline)
+(defface cjp-powerline-red '((t (:background "red" :foreground "white" :inherit mode-line)))
+  "Red" :group 'powerline)
+(defface cjp-powerline-green '((t (:background "#afd700" :foreground "#2d2d2d" :inherit mode-line)))
+  "" :group 'powerline)
+(defface cjp-powerline-blue '((t (:background "#0087ff" :foreground "white" :inherit mode-line)))
+  "Blue" :group 'powerline)
+(defun my-powerline-theme ()
+  "Setup the default mode-line."
+  (interactive)
+  (setq-default mode-line-format
+                '("%e"
+	          (:eval
+	           (let* ((active (powerline-selected-window-active))
+                          (mode-line-buffer-id (if active 'mode-line-buffer-id 'mode-line-buffer-id-inactive))
+		          (mode-line (if active 'mode-line 'mode-line-inactive))
+		          (face-blue (if active 'cjp-powerline-blue 'mode-line-inactive))
+		          (face-red 'cjp-powerline-red)
+		          (face-green 'cjp-powerline-green)
+                          (face-yellow 'cjp-powerline-yellow)
+		          (separator-left (intern (format "powerline-%s-%s"
+						          (powerline-current-separator)
+						          (car powerline-default-separator-dir))))
+		          (separator-right (intern (format "powerline-%s-%s"
+						           (powerline-current-separator)
+						           (cdr powerline-default-separator-dir))))
+		          (lhs (list (powerline-raw "%*" face-yellow 'l)
+                                     (powerline-raw (concat "[" (projectile-project-name) "]") face-yellow 'l)
+			             (powerline-buffer-id face-yellow 'l)
+			             (powerline-vc face-yellow)
+			             (powerline-raw " " face-yellow)
+			             (funcall separator-left face-yellow face-red)
+			             (powerline-raw " " face-red)
+                                     (powerline-raw evil-mode-line-tag face-red 'l)
+                                     (powerline-raw " " face-red)
+                                     (funcall separator-right face-red face-green)
+                                     (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
+			               (powerline-raw erc-modified-channels-object face-green 'l))
+                                     (powerline-raw " " face-green)
+			             (powerline-major-mode face-green 'l)
+                                     (powerline-raw " " face-green)
+                                     (funcall separator-left face-green face-blue)
+			             (powerline-process face-blue)
+                                     (powerline-minor-modes face-blue 'l)
+                                     (powerline-raw " " face-blue)))
+		          (rhs (list (funcall separator-left face-blue mode-line)
+			             (powerline-raw " ")
+                                     (powerline-raw global-mode-string mode-line 'r)
+			             (powerline-raw "%4l" mode-line 'r)
+			             (powerline-raw ":" mode-line)
+			             (powerline-raw "%3c" mode-line 'r)
+			             (powerline-raw " ")
+			             (powerline-raw "%4p" mode-line 'r)
+			             (powerline-buffer-size mode-line 'r)
+                                     (powerline-raw mode-line-mule-info mode-line 'r)
+			             (powerline-hud face-red mode-line))))
+	             (concat (powerline-render lhs)
+		             (powerline-fill face-blue (powerline-width rhs))
+                             (powerline-render rhs)))))))
+(my-powerline-theme)
 
 ;; (use-package tango-plus-theme
 ;;     :ensure t
@@ -115,8 +186,10 @@
           :init
           (counsel-mode 1))
         (setq ivy-use-virtual-buffers t
-                ivy-count-format "%d/%d ")
-        (global-set-key "\C-s" 'swiper)
+              ivy-count-format "%d/%d "
+              ivy-wrap t
+              ivy-height 25)
+        (global-set-key (kbd "C-f") 'swiper)
         (global-set-key (kbd "C-c C-r") 'ivy-resume)
         (global-set-key (kbd "<f6>") 'ivy-resume)
         (global-set-key (kbd "C-c g") 'counsel-git)
@@ -169,6 +242,7 @@
 
 (use-package magit
   :ensure t
+  :requires ivy
   :config
   (setq magit-completing-read-function 'ivy-completing-read))
 
@@ -197,8 +271,6 @@
 
 (use-package rust-mode
   :ensure t
-  :init
-  (require 'rust-mode)
   :config
   (use-package lsp-rust
     :ensure t
@@ -280,12 +352,13 @@
   :ensure t
   :defer t
   :mode ("\\.pdf\\'" . pdf-tools-install)
-  :init
-  (global-display-line-numbers-mode 0)
   :config
+  (pdf-tools-install)
   (setq mouse-wheel-follow-mouse t)
-  (setq-default pdf-view-display-size 'fit-page)
-  (setq pdf-view-resize-factor 1.10))
+  (setq-default pdf-view-display-size 'fit-width)
+  (setq pdf-view-resize-factor 1.10)
+  :hook
+  (pdf-tools-install . (lambda ()(display-line-numbers-mode 0)))
 
 (use-package company-auctex
   :ensure t
@@ -345,7 +418,7 @@
  '(lsp-ui-sideline-enable nil)
  '(package-selected-packages
    (quote
-    (yasnippet-snippets smartparens smartparens-config powerline-evil counsel use-package swiper projectile powerline pdf-tools magit lsp-ui lsp-rust evil dracula-theme company-reftex company-math company-lsp company-bibtex company-auctex cargo)))
+    (visual-regexp-steroids spaceline doom-themes doom-theme yasnippet-snippets smartparens smartparens-config powerline-evil counsel use-package swiper projectile powerline pdf-tools magit lsp-ui lsp-rust evil dracula-theme company-reftex company-math company-lsp company-bibtex company-auctex cargo)))
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
