@@ -12,9 +12,10 @@ prompt walters
 
 export TERM=screen-256color
 
-if [[ -r ~/powerlevel9k/powerlevel9k.zsh-theme ]];then
+powerline="/home/sdh/dotfiles/powerlevel9k/powerlevel9k.zsh-theme"
+if [[ -r "$powerline" ]];then
     #POWERLEVEL9K_MODE='awesome-fontconfig'
-    source  ~/powerlevel9k/powerlevel9k.zsh-theme
+    source "$powerline"
 
     POWERLEVEL9K_PROMPT_ON_NEWLINE=true
     POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
