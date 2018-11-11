@@ -38,6 +38,7 @@
 (global-set-key (kbd "s-.") 'projectile--find-file)
 (global-set-key (kbd "s-;") 'kill-buffer)
 (global-set-key (kbd "s-'") 'delete-window)
+(global-set-key (kbd "s-\\") 'delete-other-windows)
 
 (global-set-key (kbd "C-,") 'eval-buffer)
 (global-set-key (kbd "C-.") 'eval-region)
@@ -47,7 +48,6 @@
 
 (global-set-key (kbd "s-[") (lambda ()(interactive)(split-window-below)(windmove-down)))
 (global-set-key (kbd "s-]") (lambda ()(interactive)(split-window-right)(windmove-right)))
-(global-set-key (kbd "s-'") 'delete-other-windows)
 (global-set-key (kbd "s-h") 'windmove-left)
 (global-set-key (kbd "s-j") 'windmove-down)
 (global-set-key (kbd "s-k") 'windmove-up)
