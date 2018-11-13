@@ -12,10 +12,11 @@ prompt walters
 
 export TERM=screen-256color
 
+if [[ $- = *i* ]];then
+
 powerline="/home/sdh/dotfiles/powerlevel9k/powerlevel9k.zsh-theme"
 if [[ -r "$powerline" ]];then
     #POWERLEVEL9K_MODE='awesome-fontconfig'
-    source "$powerline"
 
     POWERLEVEL9K_PROMPT_ON_NEWLINE=true
     POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
@@ -40,6 +41,9 @@ if [[ -r "$powerline" ]];then
     #POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="" #"╰╭"
     #POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="❱❱❱ "
     #POWERLEVEL9K_MULTILINE_SECOD_PROMPT_PREFIX="%(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
+    
+    source "$powerline"
+    unset LC_CTYPE
 else
     source ~/zsh-git-prompt/zshrc.sh 2>/dev/null
     GIT_PROMPT_EXECUTABLE="haskell"
@@ -48,6 +52,8 @@ else
     NEWLINE=$'\n'
     PROMPT="${NEWLINE}[%{$fg_bold[blue]%}${MYSHELL}%{$reset_color%}:%{$fg_bold[${color}]%}%n@%M%{$reset_color%}][%D{%H:%M:%S}] %{$fg_bold[yellow]%}%~ \$(git_super_status 2>/dev/null)${NEWLINE}%(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
     RPROMPT=""
+fi
+
 fi
 
 bindkey -e

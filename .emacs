@@ -1,3 +1,6 @@
+;;; .emacs --- Emacs init file
+;;; Code:
+
 ;; utf-8
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
@@ -29,7 +32,7 @@
 ;; (setq ido-enable-flex-matching t)
 ;; (setq ido-everywhere t)
 
-(setq tramp-default-method "ssh")
+(setq-default tramp-default-method "ssh")
 
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "M-z") 'zap-up-to-char)
@@ -62,6 +65,10 @@
 (setq auto-save-default nil)
 
 ;; ************* PACKAGES ************* ;;
+
+
+;;; Commentary:
+;; 
 
 (require 'package)
 (add-to-list 'package-archives
@@ -277,8 +284,7 @@
     :after lsp-mode
     :config
     (add-hook 'rust-mode-hook 'lsp-mode)
-    (add-hook 'rust-mode-hook #'lsp-rust-enable)
-    (add-hook 'rust-mode-hook #'flycheck-mode))
+    (add-hook 'rust-mode-hook #'lsp-rust-enable))
   (use-package cargo
     :ensure t
     :config
@@ -303,21 +309,21 @@
   :defer t
   :mode ("\\.tex\\'" . latex-mode)
   :config
-  (setq TeX-auto-save t)
-  (setq TeX-parse-self t)
-  (setq-default TeX-master nil)
-  (setq TeX-PDF-mode t)
+  (setq-default TeX-auto-save t
+                TeX-parse-self t
+                TeX-master nil
+                TeX-PDF-mode t)
   (add-hook 'LaTeX-mode-hook
             (lambda ()
               (turn-on-reftex)
-              (setq reftex-plug-into-AUCTeX t)
+              (setq-default reftex-plug-into-AUCTeX t)
               (reftex-isearch-minor-mode)))
 
   ;; Indentation
-  (setq LaTeX-indent-level 4
-        LaTeX-item-indent 0
-        TeX-brace-indent-level 4
-        TeX-newline-function 'newline-and-indent)
+  (setq-default LaTeX-indent-level 4
+                LaTeX-item-indent 0
+                TeX-brace-indent-level 4
+                TeX-newline-function 'newline-and-indent)
 
   ;; Some usefull hooks
   (add-hook 'LaTeX-mode-hook 'flyspell-mode)
@@ -325,17 +331,13 @@
   (add-hook 'LaTeX-mode-hook 'outline-minor-mode)
   (add-hook 'LaTeX-mode-hook 'visual-line-mode)
 
-  ;; Update PDF buffers after successful LaTeX runs
-  (add-hook 'TeX-after-compilation-finished-functions
-            #'TeX-revert-document-buffer)
-
   ;; to use pdfview with auctex
   (add-hook 'LaTeX-mode-hook 'pdf-tools-install)
 
   ;; to use pdfview with auctex
-  (setq TeX-view-program-selection '((output-pdf "pdf-tools")))
-  (setq TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")))
-  (setq TeX-source-correlate-mode t)
+  (setq-default TeX-view-program-selection '((output-pdf "pdf-tools"))
+                TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view"))
+                TeX-source-correlate-mode t)
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode))
 
 (use-package bibtex
@@ -357,8 +359,11 @@
   (setq mouse-wheel-follow-mouse t)
   (setq-default pdf-view-display-size 'fit-width)
   (setq pdf-view-resize-factor 1.10)
+  ;; Update PDF buffers after successful LaTeX runs
+  (add-hook 'TeX-after-compilation-finished-functions
+            #'TeX-revert-document-buffer)
   :hook
-  (pdf-tools-install . (lambda ()(display-line-numbers-mode 0)))
+  (pdf-tools-install . (lambda ()(display-line-numbers-mode 0))))
 
 (use-package company-auctex
   :ensure t
@@ -426,3 +431,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(lsp-ui-sideline-symbol ((t (:foreground "white" :box (:line-width -1 :color "dim gray") :height 0.99)))))
+
+(provide '.emacs)
+
+;;; .emacs ends here
