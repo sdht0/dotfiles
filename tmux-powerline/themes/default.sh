@@ -45,16 +45,17 @@ if [ -z $TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS ]; then
 		#"mailcount 9 255" \
 		#"now_playing 234 37" \
 		#"cpu 240 136" \
-                "getips 33 0" \
-                "getusers 9 255" \
+        "tmux_session_info 148 234" \
+		"weather 9 255" \
+        "getips 33 255" \
+        "getusers 9 255" \
 		#"tmux_mem_cpu_load 234 136" \
 		"getuptime 148 234" \
-		"weather 37 255" \
 		#"rainbarf 0 ${TMUX_POWERLINE_DEFAULT_FOREGROUND_COLOR}" \
 		#"xkb_layout 125 117" \
-		"date_day 89 211" \
-		"date 89 211 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}" \
-		"time 89 211 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}" \
+		"get_full_date 89 211" \
+		#"date 89 211 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}" \
+		#"time 89 211 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}" \
 		#"utc_time 235 136 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}" \
 	)
 fi
