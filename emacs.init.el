@@ -16,7 +16,7 @@
 (global-display-line-numbers-mode)          ;; Always display line and column numbers
 (column-number-mode t)
 (scroll-bar-mode -1)
-(setq fill-column 100)                      ;; Lines should be 100 characters wide, not 72
+(setq-default fill-column 100)              ;; Lines should be 100 characters wide, not 72
 (fset 'yes-or-no-p 'y-or-n-p)               ;; y/n instead of yes/no
 (show-paren-mode 1)
 ;; (setq-default show-trailing-whitespace t)
@@ -37,10 +37,10 @@
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 
-(global-set-key (kbd "s-,") 'switch-to-buffer)
+;(global-set-key (kbd "s-,") 'switch-to-buffer)
 (global-set-key (kbd "s-.") 'projectile--find-file)
-(global-set-key (kbd "s-;") 'kill-buffer)
-(global-set-key (kbd "s-'") 'delete-window)
+;(global-set-key (kbd "s-;") 'kill-buffer)
+;(global-set-key (kbd "s-'") 'delete-window)
 (global-set-key (kbd "s-\\") 'delete-other-windows)
 
 (global-set-key (kbd "C-,") 'eval-buffer)
@@ -50,8 +50,8 @@
 (global-set-key (kbd "C-R") 'replace-regexp)
 
 (global-set-key (kbd "s-[") (lambda ()(interactive)(split-window-below)(windmove-down)))
-(global-set-key (kbd "s-]") (lambda ()(interactive)(split-window-right)(windmove-right)))
-(global-set-key (kbd "s-h") 'windmove-left)
+;(global-set-key (kbd "s-]") (lambda ()(interactive)(split-window-right)(windmove-right)))
+;(global-set-key (kbd "s-h") 'windmove-left)
 (global-set-key (kbd "s-j") 'windmove-down)
 (global-set-key (kbd "s-k") 'windmove-up)
 (global-set-key (kbd "s-l") 'windmove-right)
@@ -182,26 +182,26 @@
   (setq projectile-completion-system 'ivy))
 
 (use-package ivy
+  :ensure t
+  :init
+  (ivy-mode 1)
+  :config
+  (use-package swiper
+    :ensure t)
+  (use-package counsel
     :ensure t
     :init
-        (ivy-mode 1)
-    :config
-        (use-package swiper
-          :ensure t)
-        (use-package counsel
-          :ensure t
-          :init
-          (counsel-mode 1))
-        (setq ivy-use-virtual-buffers t
-              ivy-count-format "%d/%d "
-              ivy-wrap t
-              ivy-height 25)
-        (global-set-key (kbd "C-f") 'swiper)
-        (global-set-key (kbd "C-c C-r") 'ivy-resume)
-        (global-set-key (kbd "<f6>") 'ivy-resume)
-        (global-set-key (kbd "C-c g") 'counsel-git)
-        (global-set-key (kbd "C-c j") 'counsel-git-grep)
-        (define-key read-expression-map (kbd "C-r") 'counsel-expression-history))
+    (counsel-mode 1))
+  (setq ivy-use-virtual-buffers t
+        ivy-count-format "%d/%d "
+        ivy-wrap t
+        ivy-height 25)
+  (global-set-key (kbd "C-f") 'swiper)
+  (global-set-key (kbd "C-c C-r") 'ivy-resume)
+  (global-set-key (kbd "<f6>") 'ivy-resume)
+  (global-set-key (kbd "C-c g") 'counsel-git)
+  (global-set-key (kbd "C-c j") 'counsel-git-grep)
+  (define-key read-expression-map (kbd "C-r") 'counsel-expression-history))
 
 (use-package evil
     :ensure t
