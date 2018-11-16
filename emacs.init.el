@@ -23,24 +23,20 @@
 (setq-default indent-tabs-mode nil)
 (setq sentence-end-double-space nil)
 (autoload 'zap-up-to-char "misc"
-    "Kill up to, but not including ARGth occurrence of CHAR." t)
+  "Kill up to, but not including ARGth occurrence of CHAR." t)
 
 (customize-set-variable 'tool-bar-mode nil) ;; Remove the tool bar
 (add-to-list 'default-frame-alist '(fullscreen . maximized))    ;; always maximize the frame
-
-;; (ido-mode 1)
-;; (setq ido-enable-flex-matching t)
-;; (setq ido-everywhere t)
 
 (setq-default tramp-default-method "ssh")
 
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 
-;(global-set-key (kbd "s-,") 'switch-to-buffer)
+(global-set-key (kbd "s-,") 'switch-to-buffer)
 (global-set-key (kbd "s-.") 'projectile--find-file)
-;(global-set-key (kbd "s-;") 'kill-buffer)
-;(global-set-key (kbd "s-'") 'delete-window)
+(global-set-key (kbd "s-;") 'kill-this-buffer)
+(global-set-key (kbd "s-'") 'delete-window)
 (global-set-key (kbd "s-\\") 'delete-other-windows)
 
 (global-set-key (kbd "C-,") 'eval-buffer)
@@ -50,8 +46,8 @@
 (global-set-key (kbd "C-R") 'replace-regexp)
 
 (global-set-key (kbd "s-[") (lambda ()(interactive)(split-window-below)(windmove-down)))
-;(global-set-key (kbd "s-]") (lambda ()(interactive)(split-window-right)(windmove-right)))
-;(global-set-key (kbd "s-h") 'windmove-left)
+(global-set-key (kbd "s-]") (lambda ()(interactive)(split-window-right)(windmove-right)))
+(global-set-key (kbd "s-h") 'windmove-left)
 (global-set-key (kbd "s-j") 'windmove-down)
 (global-set-key (kbd "s-k") 'windmove-up)
 (global-set-key (kbd "s-l") 'windmove-right)
@@ -66,9 +62,7 @@
 
 ;; ************* PACKAGES ************* ;;
 
-
 ;;; Commentary:
-;; 
 
 (require 'package)
 (add-to-list 'package-archives
@@ -77,8 +71,8 @@
 
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
-	(package-refresh-contents)
-	(package-install 'use-package))
+  (package-refresh-contents)
+  (package-install 'use-package))
 
 (require 'use-package)
 
@@ -94,10 +88,10 @@
   :init
   (load-theme 'doom-dracula t)
   :config
-   (add-hook 'after-make-frame-functions
-             (lambda (frame)
-               (with-selected-frame frame
-                 (set-cursor-color "white")))))
+  (add-hook 'after-make-frame-functions
+            (lambda (frame)
+              (with-selected-frame frame
+                (set-cursor-color "white")))))
 
 (use-package powerline
   :ensure t
@@ -116,54 +110,50 @@
   "Setup the default mode-line."
   (interactive)
   (setq-default mode-line-format
-                '("%e"
-	          (:eval
-	           (let* ((active (powerline-selected-window-active))
-                          (mode-line-buffer-id (if active 'mode-line-buffer-id 'mode-line-buffer-id-inactive))
-		          (mode-line (if active 'mode-line 'mode-line-inactive))
-		          (face-blue (if active 'cjp-powerline-blue 'mode-line-inactive))
-		          (face-red 'cjp-powerline-red)
-		          (face-green 'cjp-powerline-green)
-                          (face-yellow 'cjp-powerline-yellow)
-		          (separator-left (intern (format "powerline-%s-%s"
-						          (powerline-current-separator)
-						          (car powerline-default-separator-dir))))
-		          (separator-right (intern (format "powerline-%s-%s"
-						           (powerline-current-separator)
-						           (cdr powerline-default-separator-dir))))
-		          (lhs (list (powerline-raw "%*" face-yellow 'l)
-                                     (powerline-raw (concat "[" (projectile-project-name) "]") face-yellow 'l)
-			             (powerline-buffer-id face-yellow 'l)
-			             (powerline-vc face-yellow)
-			             (powerline-raw " " face-yellow)
-			             (funcall separator-left face-yellow face-red)
-			             (powerline-raw " " face-red)
-                                     (powerline-raw evil-mode-line-tag face-red 'l)
-                                     (powerline-raw " " face-red)
-                                     (funcall separator-right face-red face-green)
-                                     (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
-			               (powerline-raw erc-modified-channels-object face-green 'l))
-                                     (powerline-raw " " face-green)
-			             (powerline-major-mode face-green 'l)
-                                     (powerline-raw " " face-green)
-                                     (funcall separator-left face-green face-blue)
-			             (powerline-process face-blue)
-                                     (powerline-minor-modes face-blue 'l)
-                                     (powerline-raw " " face-blue)))
-		          (rhs (list (funcall separator-left face-blue mode-line)
-			             (powerline-raw " ")
-                                     (powerline-raw global-mode-string mode-line 'r)
-			             (powerline-raw "%4l" mode-line 'r)
-			             (powerline-raw ":" mode-line)
-			             (powerline-raw "%3c" mode-line 'r)
-			             (powerline-raw " ")
-			             (powerline-raw "%4p" mode-line 'r)
-			             (powerline-buffer-size mode-line 'r)
-                                     (powerline-raw mode-line-mule-info mode-line 'r)
-			             (powerline-hud face-red mode-line))))
-	             (concat (powerline-render lhs)
-		             (powerline-fill face-blue (powerline-width rhs))
-                             (powerline-render rhs)))))))
+        '("%e"
+          (:eval
+           (let* ((active (powerline-selected-window-active))
+                  (mode-line-buffer-id (if active 'mode-line-buffer-id 'mode-line-buffer-id-inactive))
+                  (mode-line (if active 'mode-line 'mode-line-inactive))
+                  (face-blue (if active 'cjp-powerline-blue 'mode-line-inactive))
+                  (face-red 'cjp-powerline-red)
+                  (face-green 'cjp-powerline-green)
+                  (face-yellow 'cjp-powerline-yellow)
+                  (separator-left (intern (format "powerline-%s-%s"
+                                                  (powerline-current-separator)
+                                                  (car powerline-default-separator-dir))))
+                  (separator-right (intern (format "powerline-%s-%s"
+                                                   (powerline-current-separator)
+                                                   (cdr powerline-default-separator-dir))))
+                  (lhs (list (powerline-raw evil-mode-line-tag face-red)
+                             (funcall separator-left face-red face-yellow)
+                             (powerline-raw (concat "[" (projectile-project-name) "]") face-yellow 'l)
+                             (powerline-raw "%*" face-yellow 'l)
+                             (powerline-buffer-id face-yellow 'l)
+                             (powerline-vc face-yellow 'l)
+                             (powerline-raw " " face-yellow)
+                             (funcall separator-right face-yellow face-green)
+                             (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
+                               (powerline-raw erc-modified-channels-object face-green 'l))
+                             (powerline-major-mode face-green 'l)
+                             (powerline-raw " " face-green)
+                             (funcall separator-left face-green face-blue)
+                             (powerline-process face-blue 'l)
+                             (powerline-minor-modes face-blue 'l)
+                             (powerline-raw " " face-blue)
+                             (funcall separator-left face-blue mode-line)))
+                  (rhs (list (funcall separator-right mode-line face-blue)
+                             (powerline-raw global-mode-string face-blue 'r)
+                             (powerline-raw "%4l" face-blue 'r)
+                             (powerline-raw ":" face-blue 'r)
+                             (powerline-raw "%3c" face-blue 'r)
+                             (powerline-raw "%4p" face-blue 'r)
+                             (powerline-buffer-size face-blue 'r)
+                             (powerline-raw mode-line-mule-info face-blue 'r)
+                             (powerline-hud face-red mode-line))))
+             (concat (powerline-render lhs)
+                     (powerline-fill mode-line (powerline-width rhs))
+                     (powerline-render rhs)))))))
 (my-powerline-theme)
 
 ;; (use-package tango-plus-theme
@@ -355,7 +345,7 @@
   :defer t
   :mode ("\\.pdf\\'" . pdf-tools-install)
   :config
-  (pdf-tools-install)
+  (pdf-tools-install t)
   (setq mouse-wheel-follow-mouse t)
   (setq-default pdf-view-display-size 'fit-width)
   (setq pdf-view-resize-factor 1.10)
@@ -415,6 +405,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(inhibit-startup-screen t)
  '(lsp-ui-doc-header nil)
  '(lsp-ui-doc-include-signature nil)
  '(lsp-ui-doc-max-width 100)
@@ -434,4 +425,4 @@
 
 (provide '.emacs)
 
-;;; .emacs ends here
+;;; emacs.init.el ends here
