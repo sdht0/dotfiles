@@ -169,14 +169,17 @@ dkrm() { sudo docker kill $@; sudo docker rm $@; }
 # Pacman package management
 alias pcmu='sudo pacman -Syu --needed'
 alias pcmi='sudo pacman -S --needed'
-alias pcms='sudo pacman -Ss'
-alias pcmsl='sudo pacman -Qs'
+alias pcms='pacman -Ss'
+alias pcmsl='pacman -Qs'
 alias pcmr='sudo pacman -Rc'
 alias pcmc='sudo pacman -Sc --noconfirm'
 
-alias pru='pakku -Syu --needed'
-alias pri='pakku -S --needed'
-alias prs='pakku -Ss'
+alias pru='pikaur -Syu --needed'
+alias pri='pikaur -S --needed'
+alias prs='pikaur -Ss'
+#alias pru='pakku -Syu --needed'
+#alias pri='pakku -S --needed'
+#alias prs='pakku -Ss'
 
 # Apt-get package management
 alias agu='sudo apt-get update && sudo apt-get upgrade'

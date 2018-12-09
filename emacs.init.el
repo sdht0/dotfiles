@@ -16,7 +16,7 @@
 (global-display-line-numbers-mode)          ;; Always display line and column numbers
 (column-number-mode t)
 (scroll-bar-mode -1)
-(setq-default fill-column 100)              ;; Lines should be 100 characters wide, not 72
+(setq-default fill-column 80)               ;; Lines should be 80 characters wide, not 72
 (fset 'yes-or-no-p 'y-or-n-p)               ;; y/n instead of yes/no
 (show-paren-mode 1)
 ;; (setq-default show-trailing-whitespace t)
@@ -353,7 +353,7 @@
   (add-hook 'TeX-after-compilation-finished-functions
             #'TeX-revert-document-buffer)
   :hook
-  (pdf-tools-install . (lambda ()(display-line-numbers-mode 0))))
+  (pdf-view-mode . (lambda ()(display-line-numbers-mode nil))))
 
 (use-package company-auctex
   :ensure t
