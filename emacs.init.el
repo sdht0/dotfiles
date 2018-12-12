@@ -217,6 +217,23 @@
   :init
   (smartparens-global-mode 1))
 
+(use-package elpy
+  :commands elpy-enable
+  :after flycheck
+  :init (add-hook 'python-mode-hook #'elpy-enable)
+  :config
+  (progn
+    (setq elpy-rpc-backend "jedi"
+          elpy-rpc-project-specific 't)
+    (when (fboundp 'flycheck-mode)
+      (setq elpy-modules (delete 'elpy-module-flymake elpy-modules)))))
+
+(use-package company-jedi
+  :ensure t
+  :defer t
+  :hook
+  (python-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-jedi)))))
+
 (use-package yasnippet
   :ensure t
   :init
