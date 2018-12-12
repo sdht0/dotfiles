@@ -1,0 +1,3 @@
+[submodule "zsh-peco-history"]
+	path = zsh-peco-history
+	url = https://github.com/jimeh/zsh-peco-history.git

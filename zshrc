@@ -94,3 +94,13 @@ setopt nobeep \
     nolisttypes \
     promptsubst \
     completealiases
+
+if [[ $- = *i* ]];then
+
+better_history="/home/sdh/dotfiles/zsh-peco-history/zsh-peco-history.zsh"
+if [[ -r "$better_history" ]];then
+    source "$better_history"
+fi
+
+fi
+
