@@ -217,31 +217,30 @@
   :init
   (smartparens-global-mode 1))
 
-(use-package elpy
-  :commands elpy-enable
-  :after flycheck
-  :init (add-hook 'python-mode-hook #'elpy-enable)
-  :config
-  (progn
-    (setq elpy-rpc-backend "jedi"
-          elpy-rpc-project-specific 't)
-    (when (fboundp 'flycheck-mode)
-      (setq elpy-modules (delete 'elpy-module-flymake elpy-modules)))))
-
-(use-package company-jedi
-  :ensure t
-  :defer t
-  :hook
-  (python-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-jedi)))))
+;; (use-package elpy
+;;   :commands elpy-enable
+;;   :after flycheck
+;;   :init (add-hook 'python-mode-hook #'elpy-enable)
+;;   :config
+;;   (progn
+;;     (setq elpy-rpc-backend "jedi"
+;;           elpy-rpc-project-specific 't)
+;;     (when (fboundp 'flycheck-mode)
+;;       (setq elpy-modules (delete 'elpy-module-flymake elpy-modules)))))
+;; 
+;; (use-package company-jedi
+;;   :ensure t
+;;   :defer t
+;;   :hook
+;;   (python-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-jedi)))))
 
 (use-package yasnippet
   :ensure t
-  :init
-  (add-hook 'prog-mode-hook #'yas-minor-mode)
   :config
-  (yas-reload-all)
   (use-package yasnippet-snippets         ; Collection of snippets
-    :ensure t))
+    :ensure t)
+  (yas-reload-all)
+  (add-hook 'prog-mode-hook #'yas-minor-mode))
 
 (use-package flycheck
     :ensure t
@@ -270,28 +269,25 @@
         (setq company-echo-delay 0)
         (setq company-minimum-prefix-length 1))
 
+(use-package lsp-ui
+  :ensure t
+  :config
+  (setq lsp-ui-sideline-ignore-duplicate t))
+(use-package company-lsp
+  :ensure t)
 (use-package lsp-mode
-    :ensure t
-    :config
-        (use-package lsp-ui
-            :ensure t
-            :config
-            (setq lsp-ui-sideline-ignore-duplicate t)
-            (add-hook 'lsp-mode-hook 'lsp-ui-mode))
-        (use-package company-lsp
-          :ensure t
-          :config
-          (push 'company-lsp company-backends)))
+  :ensure t
+  :requires lsp-ui company-lsp yasnippet
+  :init
+  (require 'lsp-clients)
+  :config
+  (setq lsp-prefer-flymake nil))
 
 (use-package rust-mode
   :ensure t
+  :requires lsp-mode
   :config
-  (use-package lsp-rust
-    :ensure t
-    :after lsp-mode
-    :config
-    (add-hook 'rust-mode-hook 'lsp-mode)
-    (add-hook 'rust-mode-hook #'lsp-rust-enable))
+  (add-hook 'rust-mode-hook 'lsp)
   (use-package cargo
     :ensure t
     :config
