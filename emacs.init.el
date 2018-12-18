@@ -13,9 +13,11 @@
 (set-buffer-file-coding-system 'utf-8)
 (setq locale-coding-system 'utf-8)
 
-(global-display-line-numbers-mode)          ;; Always display line and column numbers
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (column-number-mode t)
 (scroll-bar-mode -1)
+(setq-default truncate-lines t)
+(setq truncate-partial-width-windows nil)
 (setq-default fill-column 80)               ;; Lines should be 80 characters wide, not 72
 (fset 'yes-or-no-p 'y-or-n-p)               ;; y/n instead of yes/no
 (show-paren-mode 1)
@@ -321,7 +323,8 @@
             (lambda ()
               (turn-on-reftex)
               (setq-default reftex-plug-into-AUCTeX t)
-              (reftex-isearch-minor-mode)))
+              (reftex-isearch-minor-mode)
+              (display-line-numbers-mode t)))
 
   ;; Indentation
   (setq-default LaTeX-indent-level 4
@@ -360,7 +363,7 @@
 (use-package pdf-tools
   :ensure t
   :defer t
-  :mode ("\\.pdf\\'" . pdf-tools-install)
+  :mode ("\\.pdf\\'" . pdf-view-mode)
   :config
   (pdf-tools-install t)
   (setq mouse-wheel-follow-mouse t)
@@ -368,9 +371,7 @@
   (setq pdf-view-resize-factor 1.10)
   ;; Update PDF buffers after successful LaTeX runs
   (add-hook 'TeX-after-compilation-finished-functions
-            #'TeX-revert-document-buffer)
-  :hook
-  (pdf-view-mode . (lambda ()(display-line-numbers-mode nil))))
+            #'TeX-revert-document-buffer))
 
 (use-package company-auctex
   :ensure t
@@ -422,6 +423,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
  '(inhibit-startup-screen t)
  '(lsp-ui-doc-header nil)
  '(lsp-ui-doc-include-signature nil)
@@ -432,6 +434,7 @@
  '(package-selected-packages
    (quote
     (visual-regexp-steroids spaceline doom-themes doom-theme yasnippet-snippets smartparens smartparens-config powerline-evil counsel use-package swiper projectile powerline pdf-tools magit lsp-ui lsp-rust evil dracula-theme company-reftex company-math company-lsp company-bibtex company-auctex cargo)))
+ '(show-paren-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
