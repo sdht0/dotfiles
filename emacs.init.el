@@ -39,6 +39,7 @@
 (global-set-key (kbd "s-'") 'delete-window)
 (global-set-key (kbd "s-\\") 'delete-other-windows)
 
+(global-set-key (kbd "C-v") 'yank)
 (global-set-key (kbd "C-,") 'eval-buffer)
 (global-set-key (kbd "C-.") 'eval-region)
 (global-set-key (kbd "C-s") 'save-buffer)
@@ -310,7 +311,7 @@
   :ensure auctex
   :after (tex latex)
   :defer t
-  :mode ("\\.tex\\'" . latex-mode)
+  :mode ("\\.tex\\'" . LaTeX-mode)
   :config
   (setq-default TeX-auto-save t
                 TeX-parse-self t
@@ -333,6 +334,9 @@
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
   (add-hook 'LaTeX-mode-hook 'outline-minor-mode)
   (add-hook 'LaTeX-mode-hook 'visual-line-mode)
+  (add-hook 'LaTeX-mode-hook
+            (lambda() (add-hook 'after-save-hook
+                                (lambda ()(TeX-command-run-all nil)) nil 'make-it-local)))
 
   ;; to use pdfview with auctex
   (add-hook 'LaTeX-mode-hook 'pdf-tools-install)
