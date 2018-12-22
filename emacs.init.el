@@ -312,6 +312,8 @@
 ;;             :config
 ;;                 (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
+(setq ispell-dictionary "american")
+
 (use-package tex-site
   :ensure auctex
   :after (tex latex)
