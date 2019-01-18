@@ -102,5 +102,10 @@ if [[ -r "$better_history" ]];then
     source "$better_history"
 fi
 
+interactive_cd="/home/sdh/dotfiles/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh"
+if [[ -r "$interactive_cd" ]];then
+    source "$interactive_cd"
+fi
+
 fi
 
