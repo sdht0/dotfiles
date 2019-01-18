@@ -246,7 +246,9 @@
   (use-package yasnippet-snippets         ; Collection of snippets
     :ensure t)
   (yas-reload-all)
-  (add-hook 'prog-mode-hook #'yas-minor-mode))
+  (add-hook 'prog-mode-hook #'yas-minor-mode)
+  (add-hook 'LaTeX-mode-hook #'yas-minor-mode)
+  (add-hook 'bibtex-mode-hook #'yas-minor-mode))
 
 (use-package flycheck
     :ensure t
@@ -277,13 +279,16 @@
 
 (use-package lsp-ui
   :ensure t
+  :commands lsp-ui-mode
   :config
   (setq lsp-ui-sideline-ignore-duplicate t))
 (use-package company-lsp
-  :ensure t)
+  :ensure t
+  :commands company-lsp)
 (use-package lsp-mode
   :ensure t
   :requires lsp-ui company-lsp yasnippet
+  :commands lsp
   :init
   (require 'lsp-clients)
   :config
@@ -293,7 +298,7 @@
   :ensure t
   :requires lsp-mode
   :config
-  (add-hook 'rust-mode-hook 'lsp)
+  (add-hook 'rust-mode-hook #'lsp)
   (use-package cargo
     :ensure t
     :config
@@ -357,7 +362,9 @@
 
 (use-package bibtex
   :ensure t
-  :defer t)
+  :defer t
+  :config
+  (setq bibtex-align-at-equal-sign t))
 
 (use-package reftex
   :ensure t
