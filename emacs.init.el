@@ -14,6 +14,7 @@
 (setq locale-coding-system 'utf-8)
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
+(add-hook 'text-mode-hook #'display-line-numbers-mode)
 (column-number-mode t)
 (scroll-bar-mode -1)
 (setq-default truncate-lines t)
@@ -44,7 +45,6 @@
 (global-set-key (kbd "s-'") 'delete-window)
 (global-set-key (kbd "s-\\") 'delete-other-windows)
 
-(global-set-key (kbd "C-v") 'yank)
 (global-set-key (kbd "C-,") 'eval-buffer)
 (global-set-key (kbd "C-.") 'eval-region)
 (global-set-key (kbd "C-s") 'save-buffer)
@@ -358,8 +358,6 @@
 
   ;; to use pdfview with auctex
   (add-hook 'LaTeX-mode-hook 'pdf-tools-install)
-
-  ;; to use pdfview with auctex
   (setq-default TeX-view-program-selection '((output-pdf "pdf-tools"))
                 TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view"))
                 TeX-source-correlate-mode t)
@@ -403,10 +401,9 @@
   :defer t
   :requires company-reftex company-auctex
   :hook
-  (LaTeX-mode . (lambda () (add-to-list 'company-backends
-                                        '(company-math-symbols-latex
-                                          company-auctex-macros
-                                          company-auctex-environments)))))
+  (LaTeX-mode . (lambda () (add-to-list 'company-backends '(company-math-symbols-latex
+                                                            company-auctex-macros
+                                                            company-auctex-environments)))))
 
 ; (use-package company-bibtex
 ;   :ensure t
