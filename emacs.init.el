@@ -335,6 +335,9 @@
               (setq-default reftex-plug-into-AUCTeX t)
               (reftex-isearch-minor-mode)
               (display-line-numbers-mode t)))
+  ;; Update PDF buffers after successful LaTeX runs
+  (add-hook 'TeX-after-compilation-finished-functions
+            #'TeX-revert-document-buffer)
 
   ;; Indentation
   (setq-default LaTeX-indent-level 4
@@ -347,6 +350,8 @@
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
   (add-hook 'LaTeX-mode-hook 'outline-minor-mode)
   (add-hook 'LaTeX-mode-hook 'visual-line-mode)
+
+  ;; Build latex after saving
   (add-hook 'LaTeX-mode-hook
             (lambda() (add-hook 'after-save-hook
                                 (lambda ()(TeX-command-run-all nil)) nil 'make-it-local)))
@@ -363,6 +368,8 @@
 (use-package bibtex
   :ensure t
   :defer t
+  :bind (:map bibtex-mode-map
+         ("M-q" . bibtex-fill-entry))
   :config
   (setq bibtex-align-at-equal-sign t))
 
@@ -370,7 +377,7 @@
   :ensure t
   :defer t
   :config
-  (setq reftex-cite-prompt-optional-args t))
+  (setq reftex-cite-prompt-optional-args nil))
 
 (use-package pdf-tools
   :ensure t
@@ -380,40 +387,34 @@
   (pdf-tools-install t)
   (setq mouse-wheel-follow-mouse t)
   (setq-default pdf-view-display-size 'fit-width)
-  (setq pdf-view-resize-factor 1.10)
-  ;; Update PDF buffers after successful LaTeX runs
-  (add-hook 'TeX-after-compilation-finished-functions
-            #'TeX-revert-document-buffer))
-
-(use-package company-auctex
-  :ensure t
-  :defer t
-  :hook
-  (latex-mode . (company-auctex-init)))
-
-
-(use-package company-bibtex
-  :ensure t
-  :defer t
-  :hook
-  (latex-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-bibtex))))
-  (org-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-bibtex)))))
+  (setq pdf-view-resize-factor 1.10))
 
 (use-package company-reftex
   :ensure t
   :defer t
   :hook
-  (latex-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-reftex-labels company-reftex-citations))))
-  (org-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-reftex-labels company-reftex-citations)))))
-
+  (LaTeX-mode . (lambda () (add-to-list 'company-backends '(company-reftex-labels
+                                                            company-reftex-citations)))))
+(use-package company-auctex
+  :ensure t
+  :defer t)
 (use-package company-math
   :ensure t
   :defer t
+  :requires company-reftex company-auctex
   :hook
-  (latex-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-math-symbols-unicode))))
-  (org-mode . (lambda () (add-to-list (make-local-variable 'company-backends) '(company-math-symbols-unicode)))))
+  (LaTeX-mode . (lambda () (add-to-list 'company-backends
+                                        '(company-math-symbols-latex
+                                          company-auctex-macros
+                                          company-auctex-environments)))))
 
-;; (setq TeX-save-query nil)
+; (use-package company-bibtex
+;   :ensure t
+;   :defer t
+;   :hook
+;   (LaTeX-mode . (lambda () (add-to-list 'company-backends 'company-bibtex)))
+;   (org-mode . (lambda () (add-to-list 'company-backends 'company-bibtex))))
+
 ;; ;; Okular
 ;; (setq TeX-view-program-list '(("Okular" "okular --unique %o#src:%n%b")))
 ;; (add-hook 'LaTeX-mode-hook '(lambda ()
