@@ -172,6 +172,7 @@ alias pcmi='sudo pacman -S --needed'
 alias pcms='pacman -Ss'
 alias pcmsl='pacman -Qs'
 alias pcmr='sudo pacman -Rc'
+alias pcmrs='sudo pacman -Rcs'
 alias pcmc='sudo pacman -Sc --noconfirm'
 
 alias pru='pikaur -Syu --needed'
