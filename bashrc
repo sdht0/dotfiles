@@ -62,6 +62,8 @@ fi
 
 alias ..='cd ..'
 alias ...='cd ../..'
+alias ....='cd ../../..'
+alias sudo='sudo ' # Fix sudo+alias
 alias b='cd -'
 alias ls='ls --color=auto'
 alias sls='sudo ls --color=auto'
@@ -79,7 +81,6 @@ alias psg='ps aux | grep -v grep | grep -i -e VSZ -e '
 alias psgc='ps aux | grep -v grep | grep -i -e '
 alias pkl='kill -9'
 alias spkl='sudo kill -9'
-alias lsofs='sudo lsof | grep'
 alias portso='netstat -tulnp | grep LISTEN | sort -k6'
 alias portsa='netstat -tulanp'
 ports() {
@@ -108,10 +109,8 @@ alias mkdir="mkdir -p"
 alias smkdir="sudo mkdir -p"
 alias rmr='rm -rf'
 alias srmr='sudo rm -rf'
-alias mount='sudo mount -v'
-alias umount='sudo umount -v'
-alias pu='pushd'
-alias po='popd'
+alias mount='mount -v'
+alias umount='umount -v'
 alias dmesg='sudo dmesg --human -T'
 alias gitk='gitk --all'
 alias grep='grep -i --color=auto'
@@ -120,6 +119,7 @@ alias hn='head -n'
 alias tf='tail -F'
 alias df='df -h'
 alias du='du -sh'
+alias lsblk='lsblk -o NAME,FSTYPE,SIZE,RO,MOUNTPOINT,LABEL,UUID'
 alias rdl="readlink -f"
 alias vi='vim'
 alias se='sudoedit'
