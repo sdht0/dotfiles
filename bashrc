@@ -322,7 +322,7 @@ alias xstartproxy="ssh -TNfD 9999 root@5.175.167.132"
 alias xstartproxy2="ssh -TNfD '*:9999' -p 9999 dcadmin@172.16.32.222"
 
 # Systemd service management
-sds() { sudo systemctl status -l --no-pager -n0 $1 && echo && sudo journalctl -n10 -f -u $1 }
+sds() { sudo systemctl status -l --no-pager -n0 $1 && echo && sudo journalctl -n10 -f -u $1 -S "$(sudo systemctl show $1 | grep StateChangeTimestamp= | awk -F= '{print $2}')"; }
 sdst() { sudo systemctl start $1; sds $1; }
 sdsp() { sudo systemctl stop $1; sds $1; }
 sdr() { sudo systemctl restart $1; sds $1; }
