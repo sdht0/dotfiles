@@ -111,7 +111,7 @@ alias rmr='rm -rf'
 alias srmr='sudo rm -rf'
 alias mount='mount -v'
 alias umount='umount -v'
-alias dmesg='sudo dmesg --human -T'
+alias dmesg='dmesg --human -T'
 alias gitk='gitk --all'
 alias grep='grep -i --color=auto'
 alias tn='tail -n'
@@ -200,11 +200,11 @@ alias osv='cat /etc/*-release /etc/debian_version 2>/dev/null | sort | uniq | xa
 tfm() {
     n=${1:-30}
     if which journalctl >/dev/null 2>&1;then
-        sudo journalctl -n${n} -f
+        journalctl -n${n} -f
     elif [[ -f /var/log/messages ]];then
-        sudo tail -F /var/log/messages
+        tail -F /var/log/messages
     elif [[ -f /var/log/syslog ]];then
-        sudo tail -F /var/log/syslog
+        tail -F /var/log/syslog
     else
         echo "No system log found"
     fi
@@ -322,11 +322,12 @@ alias xstartproxy="ssh -TNfD 9999 root@5.175.167.132"
 alias xstartproxy2="ssh -TNfD '*:9999' -p 9999 dcadmin@172.16.32.222"
 
 # Systemd service management
-sds() { sudo systemctl status -l --no-pager -n0 $1 && echo && sudo journalctl -n10 -f -u $1 -S "$(sudo systemctl show $1 | grep StateChangeTimestamp= | awk -F= '{print $2}')"; }
-sdst() { sudo systemctl start $1; sds $1; }
-sdsp() { sudo systemctl stop $1; sds $1; }
-sdr() { sudo systemctl restart $1; sds $1; }
-sdrl() { sudo systemctl reload $1; sds $1; }
+sds() { sudo systemctl status -l --no-pager -n10 $1; }
+sdsf() { sudo systemctl status -l --no-pager -n0 $1; echo; sudo journalctl -f -u $1 -S "$2"; }
+sdst() { dt=$(date +'%a %Y-%m-%d %T %Z'); sudo systemctl start $1; sdsf $1 "$dt"; }
+sdsp() { dt=$(date +'%a %Y-%m-%d %T %Z'); sudo systemctl stop $1; sdsf $1 "$dt"; }
+sdr() { dt=$(date +'%a %Y-%m-%d %T %Z'); sudo systemctl restart $1; sdsf $1 "$dt"; }
+sdrl() { dt=$(date +'%a %Y-%m-%d %T %Z'); sudo systemctl reload $1; sdsf $1 "$dt"; }
 sde() { sudo systemctl enable $1; ls -l /etc/systemd/system/multi-user.target.wants; }
 sdd() { sudo systemctl disable $1; ls -l /etc/systemd/system/multi-user.target.wants; }
 

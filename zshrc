@@ -21,8 +21,8 @@ if [[ -r "$powerline" ]] && [[ ! $TTY = *tty* ]];then
     POWERLEVEL9K_PROMPT_ON_NEWLINE=true
     POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 
-    POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir dir_writable vcs status)
-    POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(time)
+    POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir dir_writable status)
+    POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(vcs time)
 
     POWERLEVEL9K_TIME_BACKGROUND='blue'
 
