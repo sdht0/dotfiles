@@ -167,6 +167,7 @@ dkrc() { sudo docker start $1 && sudo docker attach $1;}
 dkrm() { sudo docker kill $@; sudo docker rm $@; }
 
 # Pacman package management
+alias pcm='pacman'
 alias pcmu='sudo pacman -Syu --needed'
 alias pcmi='sudo pacman -S --needed'
 alias pcms='pacman -Ss'
@@ -174,6 +175,10 @@ alias pcmsl='pacman -Qs'
 alias pcmr='sudo pacman -Rc'
 alias pcmrs='sudo pacman -Rcs'
 alias pcmc='sudo pacman -Sc --noconfirm'
+alias pcmm='pacman -Qm'
+alias pcml='pacman -Ql'
+alias pcmo='pacman -Qo'
+alias pcmii='pacman -Qi'
 
 alias pru='pikaur -Syu --needed'
 alias pri='pikaur -S --needed'
@@ -327,9 +332,17 @@ sdsf() { sudo systemctl status -l --no-pager -n0 $1; echo; sudo journalctl -f -u
 sdst() { dt=$(date +'%a %Y-%m-%d %T %Z'); sudo systemctl start $1; sdsf $1 "$dt"; }
 sdsp() { dt=$(date +'%a %Y-%m-%d %T %Z'); sudo systemctl stop $1; sdsf $1 "$dt"; }
 sdr() { dt=$(date +'%a %Y-%m-%d %T %Z'); sudo systemctl restart $1; sdsf $1 "$dt"; }
-sdrl() { dt=$(date +'%a %Y-%m-%d %T %Z'); sudo systemctl reload $1; sdsf $1 "$dt"; }
 sde() { sudo systemctl enable $1; ls -l /etc/systemd/system/multi-user.target.wants; }
 sdd() { sudo systemctl disable $1; ls -l /etc/systemd/system/multi-user.target.wants; }
+
+# User service management
+sus() { systemctl --user status -l --no-pager -n10 $1; }
+susf() { systemctl --user status -l --no-pager -n0 $1; echo; journalctl --user -f -u $1 -S "$2"; }
+sust() { dt=$(date +'%a %Y-%m-%d %T %Z'); systemctl --user start $1; susf $1 "$dt"; }
+susp() { dt=$(date +'%a %Y-%m-%d %T %Z'); systemctl --user stop $1; susf $1 "$dt"; }
+sur() { dt=$(date +'%a %Y-%m-%d %T %Z'); systemctl --user restart $1; susf $1 "$dt"; }
+sue() { systemctl --user enable $1; ls -l /home/$USER/.config/systemd/user/*; }
+sud() { systemctl --user disable $1; ls -l /home/$USER/.config/systemd/user/*; }
 
 # Init scripts service management
 ups() { sudo service $1 status ; }
