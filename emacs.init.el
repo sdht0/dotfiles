@@ -289,16 +289,16 @@
   :commands company-lsp)
 (use-package lsp-mode
   :ensure t
-  :requires lsp-ui company-lsp yasnippet
+  ;:requires lsp-ui company-lsp yasnippet
   :commands lsp
-  :init
-  (require 'lsp-clients)
+  ;:init
+  ;(require 'lsp-clients)
   :config
   (setq lsp-prefer-flymake nil))
 
 (use-package rust-mode
   :ensure t
-  :requires lsp-mode
+  ;:requires lsp-mode
   :config
   (add-hook 'rust-mode-hook #'lsp)
   (use-package cargo
@@ -359,7 +359,7 @@
                                 (lambda ()(TeX-command-run-all nil)) nil 'make-it-local)))
 
   ;; to use pdfview with auctex
-  (add-hook 'LaTeX-mode-hook 'pdf-tools-install)
+  ;; (add-hook 'LaTeX-mode-hook 'pdf-tools-install)
   (setq-default TeX-view-program-selection '((output-pdf "pdf-tools"))
                 TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view"))
                 TeX-source-correlate-mode t)
