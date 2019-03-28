@@ -45,9 +45,9 @@ if [ -z $TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS ]; then
 		#"mailcount 9 255" \
 		#"now_playing 234 37" \
 		#"cpu 240 136" \
-        "tmux_session_info 148 234" \
+        "tmux_session_info 33 255" \
 		#"weather 9 255" \
-        "getips 33 255" \
+        #"getips 33 255" \
         "getusers 9 255" \
 		#"tmux_mem_cpu_load 234 136" \
 		"getuptime 148 234" \
