@@ -143,7 +143,7 @@ alias gc='git commit -m'
 alias gca='git commit -am'
 alias gcm='git commit --amend'
 alias gcma='git commit --amend -a'
-alias gs="git log --color --graph --pretty=format:'%C(red)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit -n10;echo;git status"
+alias gs="git log --color --graph --pretty=format:'%C(red)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit -n5;echo;git status"
 alias gt='git stash'
 alias gtp='git stash pop'
 alias gl='git ls'
