@@ -113,7 +113,7 @@ alias rmr='rm -rf'
 alias srmr='sudo rm -rf'
 alias mount='mount -v'
 alias umount='umount -v'
-alias dmesg='sudo dmesg --human -T'
+alias dmesg='dmesg --human -T'
 alias gitk='gitk --all'
 alias grep='grep -i --color=auto'
 alias tn='tail -n'
@@ -145,7 +145,7 @@ alias gc='git commit -m'
 alias gca='git commit -am'
 alias gcm='git commit --amend'
 alias gcma='git commit --amend -a'
-alias gs='git status'
+alias gs="git log --color --graph --pretty=format:'%C(red)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit -n5;echo;git status"
 alias gt='git stash'
 alias gtp='git stash pop'
 alias gl='git ls'
@@ -169,6 +169,7 @@ dkrc() { sudo docker start $1 && sudo docker attach $1;}
 dkrm() { sudo docker kill $@; sudo docker rm $@; }
 
 # Pacman package management
+alias pcm='pacman'
 alias pcmu='sudo pacman -Syu --needed'
 alias pcmi='sudo pacman -S --needed'
 alias pcms='pacman -Ss'
@@ -176,6 +177,10 @@ alias pcmsl='pacman -Qs'
 alias pcmr='sudo pacman -Rc'
 alias pcmrs='sudo pacman -Rcs'
 alias pcmc='sudo pacman -Sc --noconfirm'
+alias pcmm='pacman -Qm'
+alias pcml='pacman -Ql'
+alias pcmo='pacman -Qo'
+alias pcmii='pacman -Qi'
 
 alias pru='pikaur -Syu --needed'
 alias pri='pikaur -S --needed'
@@ -202,11 +207,11 @@ alias osv='cat /etc/*-release /etc/debian_version 2>/dev/null | sort | uniq | xa
 tfm() {
     n=${1:-30}
     if which journalctl >/dev/null 2>&1;then
-        sudo journalctl -n${n} -f
+        journalctl -n${n} -f
     elif [[ -f /var/log/messages ]];then
-        sudo tail -F /var/log/messages
+        tail -F /var/log/messages
     elif [[ -f /var/log/syslog ]];then
-        sudo tail -F /var/log/syslog
+        tail -F /var/log/syslog
     else
         echo "No system log found"
     fi
@@ -324,13 +329,22 @@ alias xstartproxy="ssh -TNfD 9999 root@5.175.167.132"
 alias xstartproxy2="ssh -TNfD '*:9999' -p 9999 dcadmin@172.16.32.222"
 
 # Systemd service management
-sds() { sudo systemctl status --no-pager -l -n7 $1.service; }
-sdst() { sudo systemctl start $1.service ; sds $1; }
-sdsp() { sudo systemctl stop $1.service ; sds $1; }
-sdr() { sudo systemctl restart $1.service ; sds $1; }
-sdrl() { sudo systemctl reload $1.service; sds $1; }
-sde() { sudo systemctl enable $1.service ; ls -l /etc/systemd/system/multi-user.target.wants; }
-sdd() { sudo systemctl disable $1.service ; ls -l /etc/systemd/system/multi-user.target.wants; }
+sds() { sudo systemctl status -l --no-pager -n10 $1; }
+sdsf() { sudo systemctl status -l --no-pager -n0 $1; echo; sudo journalctl -f -u $1 -S "$2"; }
+sdst() { dt=$(date +'%a %Y-%m-%d %T %Z'); sudo systemctl start $1; sdsf $1 "$dt"; }
+sdsp() { dt=$(date +'%a %Y-%m-%d %T %Z'); sudo systemctl stop $1; sdsf $1 "$dt"; }
+sdr() { dt=$(date +'%a %Y-%m-%d %T %Z'); sudo systemctl restart $1; sdsf $1 "$dt"; }
+sde() { sudo systemctl enable $1; ls -l /etc/systemd/system/multi-user.target.wants; }
+sdd() { sudo systemctl disable $1; ls -l /etc/systemd/system/multi-user.target.wants; }
+
+# User service management
+sus() { systemctl --user status -l --no-pager -n10 $1; }
+susf() { systemctl --user status -l --no-pager -n0 $1; echo; journalctl --user -f -u $1 -S "$2"; }
+sust() { dt=$(date +'%a %Y-%m-%d %T %Z'); systemctl --user start $1; susf $1 "$dt"; }
+susp() { dt=$(date +'%a %Y-%m-%d %T %Z'); systemctl --user stop $1; susf $1 "$dt"; }
+sur() { dt=$(date +'%a %Y-%m-%d %T %Z'); systemctl --user restart $1; susf $1 "$dt"; }
+sue() { systemctl --user enable $1; ls -l /home/$USER/.config/systemd/user/*; }
+sud() { systemctl --user disable $1; ls -l /home/$USER/.config/systemd/user/*; }
 
 # Init scripts service management
 ups() { sudo service $1 status ; }

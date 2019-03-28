@@ -11,22 +11,24 @@
 (set-file-name-coding-system 'utf-8)
 (set-clipboard-coding-system 'utf-8)
 (set-buffer-file-coding-system 'utf-8)
-(setq locale-coding-system 'utf-8)
+(setq-default locale-coding-system 'utf-8)
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'text-mode-hook #'display-line-numbers-mode)
 (column-number-mode t)
 (scroll-bar-mode -1)
 (setq-default truncate-lines t)
-(setq truncate-partial-width-windows nil)
+(setq-default truncate-partial-width-windows nil)
 (setq-default fill-column 80)               ;; Lines should be 80 characters wide, not 72
 (fset 'yes-or-no-p 'y-or-n-p)               ;; y/n instead of yes/no
 (show-paren-mode 1)
-;; (setq-default show-trailing-whitespace t)
-(setq-default indent-tabs-mode nil)
-(setq sentence-end-double-space nil)
+(delete-selection-mode 1)                   ;; Replace selected text with typing
+(setq-default indent-tabs-mode nil)         ;; make indentation commands use space only
+(setq-default tab-always-indent nil)        ;; make tab key call indent command or insert tab character
+(setq-default tab-width 4)                  ;; set default tab char's display width to 4 spaces
+(setq-default sentence-end-double-space nil)
 (autoload 'zap-up-to-char "misc"
-  "Kill up to, but not including ARGth occurrence of CHAR." t)
+    "Kill up to, but not including ARGth occurrence of CHAR." t)
 
 (customize-set-variable 'tool-bar-mode nil) ;; Remove the tool bar
 (add-to-list 'default-frame-alist '(fullscreen . maximized))    ;; always maximize the frame
@@ -63,8 +65,8 @@
 (global-set-key (kbd "s-K") (lambda ()(interactive)(enlarge-window-horizontally 5)))
 
 ;; do not create backup files
-(setq make-backup-files nil)
-(setq auto-save-default nil)
+(setq-default make-backup-files nil)
+(setq-default auto-save-default nil)
 
 ;; ************* PACKAGES ************* ;;
 
@@ -103,18 +105,18 @@
   :ensure t
   :requires projectile)
 
-(setq powerline-default-separator 'curve)
-(defface cjp-powerline-yellow '((t (:background "darkorange" :foreground "black" :inherit mode-line)))
-  "Yellow" :group 'powerline)
-(defface cjp-powerline-red '((t (:background "red" :foreground "white" :inherit mode-line)))
-  "Red" :group 'powerline)
-(defface cjp-powerline-green '((t (:background "#afd700" :foreground "#2d2d2d" :inherit mode-line)))
-  "" :group 'powerline)
-(defface cjp-powerline-blue '((t (:background "#0087ff" :foreground "white" :inherit mode-line)))
-  "Blue" :group 'powerline)
 (defun my-powerline-theme ()
   "Setup the default mode-line."
   (interactive)
+  (setq powerline-default-separator 'curve)
+  (defface cjp-powerline-yellow '((t (:background "darkorange" :foreground "black" :inherit mode-line)))
+    "Yellow" :group 'powerline)
+  (defface cjp-powerline-red '((t (:background "red" :foreground "white" :inherit mode-line)))
+    "Red" :group 'powerline)
+  (defface cjp-powerline-green '((t (:background "#afd700" :foreground "#2d2d2d" :inherit mode-line)))
+    "" :group 'powerline)
+  (defface cjp-powerline-blue '((t (:background "#0087ff" :foreground "white" :inherit mode-line)))
+    "Blue" :group 'powerline)
   (setq-default mode-line-format
         '("%e"
           (:eval
@@ -287,16 +289,16 @@
   :commands company-lsp)
 (use-package lsp-mode
   :ensure t
-  :requires lsp-ui company-lsp yasnippet
+  ;:requires lsp-ui company-lsp yasnippet
   :commands lsp
-  :init
-  (require 'lsp-clients)
+  ;:init
+  ;(require 'lsp-clients)
   :config
   (setq lsp-prefer-flymake nil))
 
 (use-package rust-mode
   :ensure t
-  :requires lsp-mode
+  ;:requires lsp-mode
   :config
   (add-hook 'rust-mode-hook #'lsp)
   (use-package cargo
@@ -357,7 +359,7 @@
                                 (lambda ()(TeX-command-run-all nil)) nil 'make-it-local)))
 
   ;; to use pdfview with auctex
-  (add-hook 'LaTeX-mode-hook 'pdf-tools-install)
+  ;; (add-hook 'LaTeX-mode-hook 'pdf-tools-install)
   (setq-default TeX-view-program-selection '((output-pdf "pdf-tools"))
                 TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view"))
                 TeX-source-correlate-mode t)
