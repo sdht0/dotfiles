@@ -449,7 +449,7 @@ pkla() {
         echo "No input!"
         return 1
     fi
-    sudo ps aux | grep -v grep | grep -i -e $1 | awk '{print $2}' | xargs sudo kill -9
+    ps aux | grep -v grep | grep -i -e $1 | awk '{print $2}' | xargs kill -9
 }
 
 gitkf() {
