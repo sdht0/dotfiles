@@ -41,13 +41,15 @@ This function should only modify configuration layer settings."
      ;; ----------------------------------------------------------------
      ;; lang
      lsp
-     rust
+     (rust :variables
+           rust-backend 'lsp
+           rust-format-on-save t)
      python
      c-c++
+     cmake
      pdf
      (latex :variables
-            latex-enable-auto-fill t
-            latex-view-with-pdf-tools t)
+            latex-enable-auto-fill t)
      bibtex
      ;; others
      helm
@@ -63,13 +65,12 @@ This function should only modify configuration layer settings."
      multiple-cursors
      treemacs
      org
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
+     (shell :variables
+            shell-default-height 30
+            shell-default-position 'bottom)
      (spell-checking :variables
                      enable-flyspell-auto-completion t)
      syntax-checking
-     ;; version-control
      )
 
    ;; List of additional packages that will be installed without being
@@ -150,6 +151,7 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-verify-spacelpa-archives nil
 
+
    ;; If non-nil then spacemacs will check for updates at startup
    ;; when the current branch is not `develop'. Note that checking for
    ;; new versions works via git commands, thus it calls GitHub services
@@ -168,6 +170,7 @@ It should only modify the values of Spacemacs settings."
    ;; section of the documentation for details on available variables.
    ;; (default 'vim)
    dotspacemacs-editing-style 'hybrid
+
 
    ;; If non-nil output loading progress in `*Messages*' buffer. (default nil)
    dotspacemacs-verbose-loading nil
@@ -471,22 +474,33 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  ;; Update PDF buffers after successful LaTeX runs
-  (add-hook 'TeX-after-compilation-finished-functions
-            #'TeX-revert-document-buffer)
+  ;; LATEX configuration
   ;; Indentation
   (setq-default LaTeX-indent-level 4
                 LaTeX-item-indent)
   ;; Build latex after saving
   (add-hook 'LaTeX-mode-hook
-            (lambda() (add-hook 'after-save-hook
-                                (lambda ()(TeX-command-run-all nil)) nil 'make-it-local)))
+            (lambda()
+              (add-hook 'after-save-hook
+                        (lambda ()
+                          (TeX-command-run-all nil))
+                        nil 'make-it-local)))
   (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+  ;; Update PDF buffers after successful LaTeX runs
+  (add-hook 'TeX-after-compilation-finished-functions
+            #'TeX-revert-document-buffer)
 
-  (delete-selection-mode 1)                   ;; Replace selected text with typing
-  (setq-default indent-tabs-mode nil)         ;; make indentation commands use space only
-  (setq-default tab-always-indent nil)        ;; make tab key call indent command or insert tab character
-  (setq-default tab-width 4)                  ;; set default tab char's display width to 4 spaces
+  ;; Rust configuration
+  (add-hook 'rust-mode-hook #'lsp)
+  (setq lsp-ui-sideline-enable nil)
+  (setq lsp-ui-sideline-ignore-duplicate t)
+
+  ;; Emacs configuration
+  (setq delete-selection-mode 1)                   ;; Replace selected text with typing
+  (setq indent-tabs-mode nil)         ;; make indentation commands use space only
+  (setq tab-always-indent nil)        ;; make tab key call indent command or insert tab character
+  (setq tab-width 4)                  ;; set default tab char's display width to 4 spaces
+  (spacemacs/toggle-highlight-current-line-globally-off)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -501,9 +515,10 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
    (quote
-    (org-ref pdf-tools key-chord tablist helm-bibtex parsebib biblio biblio-core helm-rtags google-c-style flycheck-rtags disaster cquery company-rtags rtags company-c-headers clang-format ccls orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-brain lsp-ui htmlize helm-org-rifle gnuplot evil-org company-lsp lsp-mode dash-functional yasnippet-snippets ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package unfill treemacs-projectile treemacs-evil toml-mode toc-org symon string-inflection spaceline-all-the-icons smeargle restart-emacs rainbow-delimiters racer popwin persp-mode pcre2el password-generator paradox overseer org-plus-contrib org-bullets open-junk-file nameless mwim move-text magit-svn magit-gitflow macrostep lorem-ipsum link-hint indent-guide ibuffer-projectile hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline diminish define-word counsel-projectile company-statistics company-quickhelp column-enforce-mode clean-aindent-mode centered-cursor-mode cargo auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell))))
+    (helm-ctest cmake-mode cmake-ide levenshtein xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help org-ref pdf-tools key-chord tablist helm-bibtex parsebib biblio biblio-core helm-rtags google-c-style flycheck-rtags disaster cquery company-rtags rtags company-c-headers clang-format ccls orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-brain lsp-ui htmlize helm-org-rifle gnuplot evil-org company-lsp lsp-mode dash-functional yasnippet-snippets ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package unfill treemacs-projectile treemacs-evil toml-mode toc-org symon string-inflection spaceline-all-the-icons smeargle restart-emacs rainbow-delimiters racer popwin persp-mode pcre2el password-generator paradox overseer org-plus-contrib org-bullets open-junk-file nameless mwim move-text magit-svn magit-gitflow macrostep lorem-ipsum link-hint indent-guide ibuffer-projectile hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline diminish define-word counsel-projectile company-statistics company-quickhelp column-enforce-mode clean-aindent-mode centered-cursor-mode cargo auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
