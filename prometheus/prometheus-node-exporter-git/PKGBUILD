@@ -1,0 +1,50 @@
+# Maintainer: Goutham Veeramachaneni <gouthamve[at]gmail.com>
+# Contributor: Slashbunny <demodevil5[at]yahoo>
+
+pkgname=prometheus-node-exporter-git
+pkgver=r1193.c3ce1ea
+pkgrel=1
+pkgdesc="Prometheus exporter for machine metrics (binary, not built from source)"
+arch=('x86_64' 'armv7h')
+url="https://github.com/prometheus/node_exporter"
+license=('Apache')
+makedepends=('git' 'go')
+provides=('prometheus-node-exporter')
+conflicts=('prometheus-node-exporter')
+source=( 'prometheus-node-exporter.service' 'node_exporter.config'
+"node_exporter::git+https://github.com/prometheus/node_exporter.git")
+backup=('etc/node_exporter.config')
+sha256sums=('SKIP' 'SKIP'
+                   'SKIP')
+
+pkgver() {
+  cd "${srcdir}/node_exporter"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+  cd "${srcdir}/node_exporter"
+
+  export GOPATH="${srcdir}/gopath"
+  export GOBIN="${GOPATH}/bin"
+  mkdir -p "${GOPATH}/src/github.com/prometheus"
+  ln -snf "${srcdir}/node_exporter" \
+    "${GOPATH}/src/github.com/prometheus/node_exporter"
+}
+
+build() {
+  export GOPATH="${srcdir}/gopath"
+  cd "${GOPATH}/src/github.com/prometheus/node_exporter"
+
+  make build
+}
+
+package() {
+  cd "${srcdir}/node_exporter"
+
+  install -Dm755 "node_exporter" "${pkgdir}/usr/bin/prometheus_node_exporter"
+  install -Dm644 "${srcdir}/prometheus-node-exporter.service" \
+    "${pkgdir}/usr/lib/systemd/system/prometheus-node-exporter.service"
+  install -Dm644 "${srcdir}/node_exporter.config" \
+    "${pkgdir}/etc/node_exporter.config"
+}

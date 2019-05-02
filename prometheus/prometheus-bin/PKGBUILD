@@ -1,0 +1,41 @@
+# Maintainer: Slashbunny <demodevil5[at]yahoo>
+
+pkgname=prometheus-bin
+pkgver=2.9.2
+pkgrel=1
+pkgdesc="An open-source service monitoring system and time series database (binary, not built from source)"
+arch=('x86_64')
+url="http://prometheus.io"
+license=('Apache')
+provides=('prometheus')
+conflicts=('prometheus' 'prometheus-git')
+backup=('etc/prometheus/prometheus.yml')
+source=('prometheus.service'
+    "https://github.com/prometheus/prometheus/releases/download/v${pkgver}/prometheus-${pkgver}.linux-amd64.tar.gz" )
+sha256sums=('e9044026baab6e6a472eff01086f1a4ffc8b424ee84f1c9af7ed879bb4374756' '19d29910fd0e51765d47b59b9276df016441ad4c6c48e3b27e5aa9acb5d1da26')
+
+package() {
+    cd "${srcdir}/prometheus-${pkgver}.linux-amd64"
+
+    # Install Binaries
+    install -D -m0755 prometheus \
+        "${pkgdir}/usr/bin/prometheus"
+
+    install -D -m0755 promtool \
+        "${pkgdir}/usr/bin/promtool"
+
+    # Install Config File
+    install -D -m0755 prometheus.yml \
+        "${pkgdir}/etc/prometheus/prometheus.yml"
+
+    # Install SystemD Service File
+    install -D -m0644 "${srcdir}/prometheus.service" \
+        "${pkgdir}/usr/lib/systemd/system/prometheus.service"
+
+    # Install Console files
+    cp -R consoles/ \
+        "${pkgdir}/etc/prometheus/consoles"
+
+    cp -R console_libraries/ \
+        "${pkgdir}/etc/prometheus/console_libraries"
+}

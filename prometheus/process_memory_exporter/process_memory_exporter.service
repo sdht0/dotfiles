@@ -1,0 +1,10 @@
+[Unit]
+Description=Prometheus exporter for selected processes
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /opt/process_memory_exporter.py
+Restart=always
+
+[Install]
+WantedBy=default.target
