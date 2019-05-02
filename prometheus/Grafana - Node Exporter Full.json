@@ -52,7 +52,7 @@
   "gnetId": 1860,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1556839377489,
+  "iteration": 1556912601502,
   "links": [],
   "panels": [
     {
@@ -1605,19 +1605,19 @@
       },
       "id": 74,
       "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": false,
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
         "hideEmpty": false,
         "hideZero": false,
-        "max": false,
-        "min": false,
+        "max": true,
+        "min": true,
         "rightSide": false,
         "show": true,
         "sort": "current",
         "sortDesc": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
@@ -21518,7 +21518,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {
@@ -21549,5 +21549,5 @@
   "timezone": "browser",
   "title": "Node Exporter Full",
   "uid": "81lkRRmZz",
-  "version": 19
+  "version": 20
 }

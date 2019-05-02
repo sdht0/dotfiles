@@ -28,6 +28,9 @@ def get_stats():
                 details[detail].append(getattr(mem,detail))
         for detail,values in details.items():
             output.append('%s{process="%s",memory_type="%s"} %s' % (attribute_name, process_string, detail, sum(values)/1024/1024/1024))
+    output.append("# HELP node_exporter_build_info A metric with a constant '1' value.")
+    output.append("# TYPE node_exporter_build_info gauge")
+    output.append('node_exporter_build_info{branch="master"} 1')
     return output
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
