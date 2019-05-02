@@ -52,7 +52,7 @@
   "gnetId": 1860,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1556837857786,
+  "iteration": 1556837857801,
   "links": [],
   "panels": [
     {
@@ -134,6 +134,7 @@
       "targets": [
         {
           "expr": "(((count(count(node_cpu_seconds_total{instance=~\"$node:$port\",job=~\"$job\"}) by (cpu))) - avg(sum by (mode)(irate(node_cpu_seconds_total{mode='idle',instance=~\"$node:$port\",job=~\"$job\"}[5m])))) * 100) / count(count(node_cpu_seconds_total{instance=~\"$node:$port\",job=~\"$job\"}) by (cpu))",
+          "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
           "legendFormat": "",
@@ -1147,7 +1148,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "process_memory_usage{process=\"$process\"}",
+          "expr": "process_memory_usage{instance=~\"$node:.*\",job=~\"$job\",process=\"$process\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{memory_type}}",
@@ -1174,7 +1175,7 @@
       },
       "yaxes": [
         {
-          "format": "short",
+          "format": "decgbytes",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -21472,11 +21473,11 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_PROMETHEUS}",
-        "definition": "",
+        "definition": "label_values(node_exporter_build_info{instance=~\"$node:(.*)\"}, instance)",
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "Port",
-        "multi": false,
+        "multi": true,
         "name": "port",
         "options": [],
         "query": "label_values(node_exporter_build_info{instance=~\"$node:(.*)\"}, instance)",
@@ -21546,5 +21547,5 @@
   "timezone": "browser",
   "title": "Node Exporter Full",
   "uid": "81lkRRmZz",
-  "version": 12
+  "version": 17
 }
