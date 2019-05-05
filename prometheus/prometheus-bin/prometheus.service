@@ -1,0 +1,19 @@
+[Unit]
+Description=Prometheus service
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+DynamicUser=yes
+StateDirectory=prometheus
+Restart=on-failure
+ExecStart=/usr/bin/prometheus \
+    --web.listen-address="localhost:9090" \
+    --config.file "/etc/prometheus/prometheus.yml" \
+    --storage.tsdb.path "/var/lib/prometheus" \
+    --web.console.libraries "/etc/prometheus/console_libraries" \
+    --web.console.templates "/etc/prometheus/consoles"
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

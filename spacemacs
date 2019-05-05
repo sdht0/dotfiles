@@ -45,7 +45,11 @@ This function should only modify configuration layer settings."
            rust-backend 'lsp
            rust-format-on-save t)
      python
-     c-c++
+     (c-c++ :variables
+            c-c++-default-mode-for-headers 'c++-mode
+            c-c++-enable-clang-support t)
+     semantic
+     cscope
      cmake
      pdf
      (latex :variables
