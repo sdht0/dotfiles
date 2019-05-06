@@ -14,7 +14,7 @@ export TERM=screen-256color
 
 if [[ $- = *i* ]];then
 
-powerline="/home/sdh/dotfiles/powerlevel9k/powerlevel9k.zsh-theme"
+powerline=~/.dotfiles/powerlevel9k/powerlevel9k.zsh-theme
 if [[ -r "$powerline" ]] && [[ ! $TTY = *tty* ]];then
     #POWERLEVEL9K_MODE='awesome-fontconfig'
 
@@ -97,12 +97,12 @@ setopt nobeep \
 
 if [[ $- = *i* ]];then
 
-better_history="/home/sdh/dotfiles/zsh-peco-history/zsh-peco-history.zsh"
+better_history=~/.dotfiles/zsh-peco-history/zsh-peco-history.zsh
 if [[ -r "$better_history" ]];then
     source "$better_history"
 fi
 
-interactive_cd="/home/sdh/dotfiles/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh"
+interactive_cd=~/.dotfiles/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
 if [[ -r "$interactive_cd" ]];then
     source "$interactive_cd"
 fi

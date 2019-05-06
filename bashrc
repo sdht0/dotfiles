@@ -216,8 +216,8 @@ tfm() {
 }
 alias magicm2='cd;sudo openvpn --config ~/directi/client.ovpn'
 alias magicm='cd;sudo openvpn --config ~/directi/mnet-client.ovpn'
-alias magic2='cd;~/dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
-alias magic='cd;~/dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py`'
+alias magic2='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py`'
+alias magic='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py`'
 
 s() {
     [[ $# -lt 1 ]] && echo "No input!" && return 1
@@ -418,7 +418,7 @@ sxf() {
 h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
 
 rand() {
-    python ~/dotfiles/password.py "$@"
+    python ~/.dotfiles/password.py "$@"
 }
 
 randc() {
@@ -668,12 +668,12 @@ xget() {
     if [ $# -lt 1 ]; then
         for i in $(cat ~/sshhhh | grep ')' | grep -v '*' | grep -v 'mnet' | cut -f1 -d')' | xargs);do
             printf "$i "
-            code=$(~/sshhhh "$i" | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py)
+            code=$(~/sshhhh "$i" | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py)
             printf $code
             echo
         done
     else
-        code=$(~/sshhhh "$1" | base64 --decode | python2 ~/dotfiles/scripts/gauthenticator.py)
+        code=$(~/sshhhh "$1" | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py)
         printf $code | xclip -selection clipboard
         echo "Copied $code to clipboard"
     fi
