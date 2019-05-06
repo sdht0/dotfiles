@@ -5,6 +5,8 @@ Description=Prometheus exporter for selected processes
 Type=simple
 ExecStart=/usr/bin/python /opt/process_memory_exporter.py
 Restart=always
+StandardOutput=null
+StandardError=null
 
 [Install]
 WantedBy=default.target
