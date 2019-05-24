@@ -178,6 +178,11 @@ alias pcmc='sudo pacman -Sc --noconfirm'
 alias pcmm='pacman -Qm'
 alias pcml='pacman -Ql'
 alias pcmo='pacman -Qo'
+pcmwo() {
+    wch="$(which $1 2>/dev/null)"
+    echo $wch
+    [[ "$wch" =~ ^/.* ]] && pcmo "$wch"
+}
 alias pcmii='pacman -Qi'
 
 alias pru='pikaur -Syu --needed'
