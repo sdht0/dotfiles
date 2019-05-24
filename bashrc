@@ -145,7 +145,7 @@ alias gc='git commit -m'
 alias gca='git commit -am'
 alias gcm='git commit --amend'
 alias gcma='git commit --amend -a'
-alias gs="git log --color --graph --pretty=format:'%C(red)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit -n5;echo;git status"
+alias gs="git log --color --graph --pretty=format:'%C(red)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%an <%ae>%Creset' --abbrev-commit -n5;echo;git status"
 alias gt='git stash'
 alias gtp='git stash pop'
 alias gl='git ls'
@@ -180,6 +180,11 @@ alias pcmc='sudo pacman -Sc --noconfirm'
 alias pcmm='pacman -Qm'
 alias pcml='pacman -Ql'
 alias pcmo='pacman -Qo'
+pcmwo() {
+    wch="$(which $1 2>/dev/null)"
+    echo $wch
+    [[ "$wch" =~ ^/.* ]] && pcmo "$wch"
+}
 alias pcmii='pacman -Qi'
 
 alias pru='pikaur -Syu --needed'

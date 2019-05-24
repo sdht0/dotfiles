@@ -104,6 +104,7 @@ fi
 
 interactive_cd=~/.dotfiles/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
 if [[ -r "$interactive_cd" ]];then
+    export FZF_DEFAULT_OPTS="--cycle"
     source "$interactive_cd"
 fi
 
