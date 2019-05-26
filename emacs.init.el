@@ -35,8 +35,8 @@
 
 (setq-default tramp-default-method "ssh")
 
-(define-key global-map [f2] 'toggle-truncate-lines)
-(define-key global-map [f3] 'display-line-numbers-mode)
+(global-set-key [f2] 'toggle-truncate-lines)
+(global-set-key [f3] 'display-line-numbers-mode)
 
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "M-z") 'zap-up-to-char)
