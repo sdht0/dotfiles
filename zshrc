@@ -108,5 +108,10 @@ if [[ -r "$interactive_cd" ]];then
     source "$interactive_cd"
 fi
 
+syntax_highlighting=/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [[ -r "$syntax_highlighting" ]];then
+    source "$syntax_highlighting"
+fi
+
 fi
 
