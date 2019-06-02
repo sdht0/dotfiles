@@ -67,9 +67,10 @@ This function should only modify configuration layer settings."
      emacs-lisp
      git
      ibuffer
-     ;; markdown
+     markdown
      multiple-cursors
-     treemacs
+     (treemacs :variables
+               treemacs-use-follow-mode t)
      org
      (shell :variables
             shell-default-height 30
@@ -77,6 +78,8 @@ This function should only modify configuration layer settings."
      (spell-checking :variables
                      enable-flyspell-auto-completion t)
      syntax-checking
+     ;; social
+     slack
      )
 
    ;; List of additional packages that will be installed without being
@@ -504,6 +507,9 @@ before packages are loaded."
   (add-hook 'rust-mode-hook #'lsp)
   (setq lsp-ui-sideline-enable nil)
   (setq lsp-ui-sideline-ignore-duplicate t)
+  (evil-define-key 'normal rust-mode-map (kbd "M-.") 'spacemacs/jump-to-definition)
+  (evil-define-key 'insert rust-mode-map (kbd "M-.") 'spacemacs/jump-to-definition)
+  (evil-define-key 'normal rust-mode-map (kbd "M-S-.") 'spacemacs/jump-to-definition-other-window)
 
   ;; Emacs configuration
   (setq delete-selection-mode 1)      ;; Replace selected text with typing
@@ -514,6 +520,7 @@ before packages are loaded."
 
   ;; Key bindings
   (global-set-key (kbd "s-;") 'kill-this-buffer)
+  (global-set-key (kbd "s-:") 'kill-buffer-and-window)
   (global-set-key (kbd "s-'") 'delete-window)
   (global-set-key (kbd "s-\\") 'delete-other-windows)
 
@@ -529,26 +536,3 @@ before packages are loaded."
   (global-set-key (kbd "s-K") (lambda ()(interactive)(enlarge-window-horizontally 5)))
 )
 
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
-(defun dotspacemacs/emacs-custom-settings ()
-  "Emacs custom settings.
-This is an auto-generated function, do not modify its content directly, use
-Emacs customize menu instead.
-This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(evil-want-Y-yank-to-eol nil)
- '(package-selected-packages
-   (quote
-    (dap-mode bui tree-mode zeal-at-point helm-dash dash-docs helm-ctest cmake-mode cmake-ide levenshtein xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help org-ref pdf-tools key-chord tablist helm-bibtex parsebib biblio biblio-core helm-rtags google-c-style flycheck-rtags disaster cquery company-rtags rtags company-c-headers clang-format ccls orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-brain lsp-ui htmlize helm-org-rifle gnuplot evil-org company-lsp lsp-mode dash-functional yasnippet-snippets ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package unfill treemacs-projectile treemacs-evil toml-mode toc-org symon string-inflection spaceline-all-the-icons smeargle restart-emacs rainbow-delimiters racer popwin persp-mode pcre2el password-generator paradox overseer org-plus-contrib org-bullets open-junk-file nameless mwim move-text magit-svn magit-gitflow macrostep lorem-ipsum link-hint indent-guide ibuffer-projectile hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline diminish define-word counsel-projectile company-statistics company-quickhelp column-enforce-mode clean-aindent-mode centered-cursor-mode cargo auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-)
