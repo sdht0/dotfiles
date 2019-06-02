@@ -424,9 +424,14 @@ up() {
 }
 
 fawk() {
-    first="awk '{print "
-    last="}'"
-    cmd="${first}\$${1}${last}"
+    if [ $# -lt 1 ]; then
+        echo "No input!"
+        return 1
+    fi
+    [[ -n "$2" ]] && local sep="-F$2"
+    local first="awk $sep '{print "
+    local last="}'"
+    local cmd="${first}\$${1}${last}"
     eval $cmd
 }
 
