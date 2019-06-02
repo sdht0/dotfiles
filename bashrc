@@ -404,7 +404,7 @@ xf() {
 h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
 
 rand() {
-    python ~/.dotfiles/password.py "$@"
+    python ~/.dotfiles/scripts/password.py "$@"
 }
 
 randc() {
