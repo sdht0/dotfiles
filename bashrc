@@ -213,15 +213,7 @@ alias yumf='sudo yum --showduplicates info'
 alias osv='cat /etc/*-release /etc/debian_version 2>/dev/null | sort | uniq | xargs -L1'
 tfm() {
     n=${1:-30}
-    if which journalctl >/dev/null 2>&1;then
-        journalctl -n${n} -f
-    elif [[ -f /var/log/messages ]];then
-        tail -F /var/log/messages
-    elif [[ -f /var/log/syslog ]];then
-        tail -F /var/log/syslog
-    else
-        echo "No system log found"
-    fi
+    sudo journalctl -n${n} -f
 }
 alias magic2='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py`'
 alias magic='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py`'
