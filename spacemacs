@@ -48,8 +48,13 @@ This function should only modify configuration layer settings."
      dash
      python
      (c-c++ :variables
-            c-c++-default-mode-for-headers 'c++-mode
-            c-c++-enable-clang-support t)
+            c-c++-backend 'lsp-ccls
+            c-c++-adopt-subprojects t
+            c-c++-lsp-sem-highlight-rainbow t
+            ;c-c++-default-mode-for-headers 'c++-mode
+            ;c-c++-enable-clang-support t
+            )
+     debug
      semantic
      cscope
      cmake
@@ -76,7 +81,8 @@ This function should only modify configuration layer settings."
             shell-default-height 30
             shell-default-position 'bottom)
      (spell-checking :variables
-                     enable-flyspell-auto-completion t)
+                     ;enable-flyspell-auto-completion t
+                     )
      syntax-checking
      ;; social
      slack
@@ -468,6 +474,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  (setq dap-gdb-lldb-path "/home/sdh/.emacs.d/private/webfreak.debug-0.23.1.vsix")
   )
 
 (defun dotspacemacs/user-load ()
@@ -510,6 +517,7 @@ before packages are loaded."
   (evil-define-key 'normal rust-mode-map (kbd "M-.") 'spacemacs/jump-to-definition)
   (evil-define-key 'insert rust-mode-map (kbd "M-.") 'spacemacs/jump-to-definition)
   (evil-define-key 'normal rust-mode-map (kbd "M-S-.") 'spacemacs/jump-to-definition-other-window)
+
 
   ;; Emacs configuration
   (setq delete-selection-mode 1)      ;; Replace selected text with typing
