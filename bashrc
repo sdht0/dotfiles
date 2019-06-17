@@ -192,9 +192,21 @@ alias pcmii='pacman -Qi'
 alias pru='pikaur -Syu --needed'
 alias pri='pikaur -S --needed'
 alias prs='pikaur -Ss'
-#alias pru='pakku -Syu --needed'
-#alias pri='pakku -S --needed'
-#alias prs='pakku -Ss'
+
+add_to_repo() {
+    [[ $# -lt 2 ]] && echo "Inputs missing!" && return 1
+    [[ ! -r PKGBUILD ]] && echo "Must be run in a PKGBUILD dir" && return 1
+    root=$1
+    repo_db=$2
+    source PKGBUILD
+    [[ "$MYSHELL" = 'bash' ]] && shopt -s failglob
+    for i in *$pkgver*tar*;do
+        x=$(echo $i | sed -r "s/(.*)-$pkgver.*/\1/")
+        sudo rm -v $root/$x* 2> /dev/null
+        sudo cp -v $i $root/$i
+        sudo repo-add $root/$repo_db $i
+    done
+}
 
 # Apt-get package management
 alias agu='sudo apt-get update && sudo apt-get upgrade'
