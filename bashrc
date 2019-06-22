@@ -199,6 +199,7 @@ add_to_repo() {
     root=$1
     repo_db=$2
     source PKGBUILD
+    pkgver="$pkgver-$pkgrel"
     [[ "$MYSHELL" = 'bash' ]] && shopt -s failglob
     for i in *$pkgver*tar*;do
         x=$(echo $i | sed -r "s/(.*)-$pkgver.*/\1/")
