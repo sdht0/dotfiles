@@ -4,7 +4,7 @@ import psutil
 
 def get_stats():
     output = []
-    process_strings = ['firefox','intellij','slack', 'electron']
+    process_strings = ['firefox','intellij','slack', 'electron/electron']
     data = {k: list() for k in process_strings}
     for proc in psutil.process_iter():
 
