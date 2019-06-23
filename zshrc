@@ -14,7 +14,7 @@ export TERM=screen-256color
 
 if [[ $- = *i* ]];then
 
-powerline=~/.dotfiles/powerlevel9k/powerlevel9k.zsh-theme
+powerline=~/.dotfiles/powerlevel10k/powerlevel10k.zsh-theme
 if [[ -r "$powerline" ]] && [[ ! $TTY = *tty* ]];then
     #POWERLEVEL9K_MODE='awesome-fontconfig'
 
