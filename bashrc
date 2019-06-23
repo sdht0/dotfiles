@@ -79,6 +79,7 @@ sudof() {
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
+alias .....='cd ../../../..'
 alias b='cd -'
 alias ls='ls --color=auto'
 alias sls='sudo ls --color=auto'
