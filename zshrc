@@ -109,7 +109,12 @@ if [[ -r "$interactive_cd" ]];then
     source "$interactive_cd"
 fi
 
-syntax_highlighting=/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+autosuggestions=~/.dotfiles/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [[ -r "$autosuggestions" ]];then
+    source "$autosuggestions"
+fi
+
+syntax_highlighting=~/.dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 if [[ -r "$syntax_highlighting" ]];then
     source "$syntax_highlighting"
 fi
