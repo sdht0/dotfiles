@@ -78,6 +78,7 @@ setopt nobeep \
     interactivecomments \
     autocd \
     autopushd \
+    pushdignoredups \
     pushdtohome \
     chaselinks \
     histverify \
