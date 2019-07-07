@@ -40,24 +40,24 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      ;; lang
-     lsp
-     (rust :variables
-           rust-backend 'lsp
-           rust-format-on-save t)
-     dap
-     dash
-     python
-     (c-c++ :variables
-            c-c++-backend 'lsp-ccls
-            c-c++-adopt-subprojects t
-            c-c++-lsp-sem-highlight-rainbow t
-            ;c-c++-default-mode-for-headers 'c++-mode
-            ;c-c++-enable-clang-support t
-            )
-     debug
-     semantic
-     cscope
-     cmake
+     ;lsp
+     ;(rust :variables
+     ;      rust-backend 'lsp
+     ;      rust-format-on-save t)
+     ;dap
+     ;dash
+     ;python
+     ;(c-c++ :variables
+     ;       c-c++-backend 'lsp-ccls
+     ;       c-c++-adopt-subprojects t
+     ;       c-c++-lsp-sem-highlight-rainbow t
+     ;       ;c-c++-default-mode-for-headers 'c++-mode
+     ;       ;c-c++-enable-clang-support t
+     ;       )
+     ;debug
+     ;semantic
+     ;cscope
+     ;cmake
      pdf
      (latex :variables
             latex-enable-auto-fill t)
@@ -85,7 +85,7 @@ This function should only modify configuration layer settings."
                      )
      syntax-checking
      ;; social
-     slack
+     ;slack
      )
 
    ;; List of additional packages that will be installed without being
@@ -474,7 +474,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  (setq dap-gdb-lldb-path "/home/sdh/.emacs.d/private/webfreak.debug-0.23.1.vsix")
+  ;(setq dap-gdb-lldb-path "/home/sdh/.emacs.d/private/webfreak.debug-0.23.1.vsix")
   )
 
 (defun dotspacemacs/user-load ()
@@ -509,14 +509,14 @@ before packages are loaded."
   (setq pdf-sync-forward-display-action t)
 
   ;; Rust configuration
-  (add-to-list 'load-path "~/.emacs.d/private/local")
-  (require 'ra-emacs-lsp)
-  (add-hook 'rust-mode-hook #'lsp)
-  (setq lsp-ui-sideline-enable nil)
-  (setq lsp-ui-sideline-ignore-duplicate t)
-  (evil-define-key 'normal rust-mode-map (kbd "M-.") 'spacemacs/jump-to-definition)
-  (evil-define-key 'insert rust-mode-map (kbd "M-.") 'spacemacs/jump-to-definition)
-  (evil-define-key 'normal rust-mode-map (kbd "M-S-.") 'spacemacs/jump-to-definition-other-window)
+  ;(add-to-list 'load-path "~/.emacs.d/private/local")
+  ;(require 'ra-emacs-lsp)
+  ;(add-hook 'rust-mode-hook #'lsp)
+  ;(setq lsp-ui-sideline-enable nil)
+  ;(setq lsp-ui-sideline-ignore-duplicate t)
+  ;(evil-define-key 'normal rust-mode-map (kbd "M-.") 'spacemacs/jump-to-definition)
+  ;(evil-define-key 'insert rust-mode-map (kbd "M-.") 'spacemacs/jump-to-definition)
+  ;(evil-define-key 'normal rust-mode-map (kbd "M-S-.") 'spacemacs/jump-to-definition-other-window)
 
 
   ;; Emacs configuration
@@ -527,9 +527,9 @@ before packages are loaded."
   (spacemacs/toggle-highlight-current-line-globally-off)
 
   ;; Key bindings
-  (global-set-key (kbd "s-;") 'kill-this-buffer)
-  (global-set-key (kbd "s-:") 'kill-buffer-and-window)
-  (global-set-key (kbd "s-'") 'delete-window)
+  (global-set-key (kbd "s-:") 'kill-this-buffer)
+  ;(global-set-key (kbd "s-:") 'kill-buffer-and-window)
+  (global-set-key (kbd "s-\"") 'delete-window)
   (global-set-key (kbd "s-\\") 'delete-other-windows)
 
   (global-set-key (kbd "s-[") (lambda ()(interactive)(split-window-below)(windmove-down)))
