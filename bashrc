@@ -256,7 +256,7 @@ printColors() {
 }
 
 # Taken from http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
-export MARKPATH=$HOME/.marks
+export MARKPATH=$HOME/.local/share/marks
 function j {
     cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
 }
@@ -264,7 +264,7 @@ function m {
     mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$1"
 }
 function um {
-    cd $MARKPATH && rm $@
+    bash -c "cd $MARKPATH && rm $@"
 }
 function mks {
     ls -l "$MARKPATH" | sed 's/  / /g' | cut -d' ' -f9- | sed 's/ -/\t-/g' && echo
