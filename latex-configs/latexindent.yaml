@@ -1,0 +1,19 @@
+defaultIndent: '    '
+modifyLineBreaks:
+    textWrapOptions:
+        columns: 80
+        all: 1
+        environments: 
+            quotation: 1
+        ifElseFi: 1
+        optionalArguments: 1
+        mandatoryArguments: 1
+        items: 1
+        specialBeginEnd: 1
+        afterHeading: 1
+        filecontents: 1
+    specialBeginEnd:
+        SpecialBeginStartsOnOwnLine: 0
+        SpecialBodyStartsOnOwnLine: 0
+        SpecialEndStartsOnOwnLine: 0 
+        SpecialEndFinishesWithLineBreak: 0
