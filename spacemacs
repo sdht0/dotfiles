@@ -40,17 +40,24 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      ;; lang
-     lsp
-     (rust :variables
-           rust-backend 'lsp
-           rust-format-on-save t)
-     python
-     (c-c++ :variables
-            c-c++-default-mode-for-headers 'c++-mode
-            c-c++-enable-clang-support t)
-     semantic
-     cscope
-     cmake
+     ;lsp
+     ;(rust :variables
+     ;      rust-backend 'lsp
+     ;      rust-format-on-save t)
+     ;dap
+     ;dash
+     ;python
+     ;(c-c++ :variables
+     ;       c-c++-backend 'lsp-ccls
+     ;       c-c++-adopt-subprojects t
+     ;       c-c++-lsp-sem-highlight-rainbow t
+     ;       ;c-c++-default-mode-for-headers 'c++-mode
+     ;       ;c-c++-enable-clang-support t
+     ;       )
+     ;debug
+     ;semantic
+     ;cscope
+     ;cmake
      pdf
      (latex :variables
             latex-enable-auto-fill t)
@@ -65,16 +72,20 @@ This function should only modify configuration layer settings."
      emacs-lisp
      git
      ibuffer
-     ;; markdown
+     markdown
      multiple-cursors
-     treemacs
+     (treemacs :variables
+               treemacs-use-follow-mode t)
      org
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
      (spell-checking :variables
-                     enable-flyspell-auto-completion t)
+                     ;enable-flyspell-auto-completion t
+                     )
      syntax-checking
+     ;; social
+     ;slack
      )
 
    ;; List of additional packages that will be installed without being
@@ -463,6 +474,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  ;(setq dap-gdb-lldb-path "/home/sdh/.emacs.d/private/webfreak.debug-0.23.1.vsix")
   )
 
 (defun dotspacemacs/user-load ()
@@ -493,40 +505,42 @@ before packages are loaded."
   ;; Update PDF buffers after successful LaTeX runs
   (add-hook 'TeX-after-compilation-finished-functions
             #'TeX-revert-document-buffer)
+  (setq pdf-sync-backward-display-action t)
+  (setq pdf-sync-forward-display-action t)
 
   ;; Rust configuration
-  (add-hook 'rust-mode-hook #'lsp)
-  (setq lsp-ui-sideline-enable nil)
-  (setq lsp-ui-sideline-ignore-duplicate t)
+  ;(add-to-list 'load-path "~/.emacs.d/private/local")
+  ;(require 'ra-emacs-lsp)
+  ;(add-hook 'rust-mode-hook #'lsp)
+  ;(setq lsp-ui-sideline-enable nil)
+  ;(setq lsp-ui-sideline-ignore-duplicate t)
+  ;(evil-define-key 'normal rust-mode-map (kbd "M-.") 'spacemacs/jump-to-definition)
+  ;(evil-define-key 'insert rust-mode-map (kbd "M-.") 'spacemacs/jump-to-definition)
+  ;(evil-define-key 'normal rust-mode-map (kbd "M-S-.") 'spacemacs/jump-to-definition-other-window)
+
 
   ;; Emacs configuration
-  (setq delete-selection-mode 1)                   ;; Replace selected text with typing
+  (setq delete-selection-mode 1)      ;; Replace selected text with typing
   (setq indent-tabs-mode nil)         ;; make indentation commands use space only
   (setq tab-always-indent nil)        ;; make tab key call indent command or insert tab character
   (setq tab-width 4)                  ;; set default tab char's display width to 4 spaces
   (spacemacs/toggle-highlight-current-line-globally-off)
+
+  ;; Key bindings
+  (global-set-key (kbd "s-:") 'kill-this-buffer)
+  ;(global-set-key (kbd "s-:") 'kill-buffer-and-window)
+  (global-set-key (kbd "s-\"") 'delete-window)
+  (global-set-key (kbd "s-\\") 'delete-other-windows)
+
+  (global-set-key (kbd "s-[") (lambda ()(interactive)(split-window-below)(windmove-down)))
+  (global-set-key (kbd "s-]") (lambda ()(interactive)(split-window-right)(windmove-right)))
+  (global-set-key (kbd "s-h") 'windmove-left)
+  (global-set-key (kbd "s-j") 'windmove-down)
+  (global-set-key (kbd "s-k") 'windmove-up)
+  (global-set-key (kbd "s-l") 'windmove-right)
+  (global-set-key (kbd "s-J") (lambda ()(interactive)(shrink-window 5)))
+  (global-set-key (kbd "s-H") (lambda ()(interactive)(enlarge-window 5)))
+  (global-set-key (kbd "s-L") (lambda ()(interactive)(shrink-window-horizontally 5)))
+  (global-set-key (kbd "s-K") (lambda ()(interactive)(enlarge-window-horizontally 5)))
 )
 
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
-(defun dotspacemacs/emacs-custom-settings ()
-  "Emacs custom settings.
-This is an auto-generated function, do not modify its content directly, use
-Emacs customize menu instead.
-This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(evil-want-Y-yank-to-eol nil)
- '(package-selected-packages
-   (quote
-    (helm-ctest cmake-mode cmake-ide levenshtein xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help org-ref pdf-tools key-chord tablist helm-bibtex parsebib biblio biblio-core helm-rtags google-c-style flycheck-rtags disaster cquery company-rtags rtags company-c-headers clang-format ccls orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-brain lsp-ui htmlize helm-org-rifle gnuplot evil-org company-lsp lsp-mode dash-functional yasnippet-snippets ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package unfill treemacs-projectile treemacs-evil toml-mode toc-org symon string-inflection spaceline-all-the-icons smeargle restart-emacs rainbow-delimiters racer popwin persp-mode pcre2el password-generator paradox overseer org-plus-contrib org-bullets open-junk-file nameless mwim move-text magit-svn magit-gitflow macrostep lorem-ipsum link-hint indent-guide ibuffer-projectile hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline diminish define-word counsel-projectile company-statistics company-quickhelp column-enforce-mode clean-aindent-mode centered-cursor-mode cargo auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-)

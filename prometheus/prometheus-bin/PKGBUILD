@@ -1,7 +1,7 @@
 # Maintainer: Slashbunny <demodevil5[at]yahoo>
 
 pkgname=prometheus-bin
-pkgver=2.9.2
+pkgver=2.10.0
 pkgrel=1
 pkgdesc="An open-source service monitoring system and time series database (binary, not built from source)"
 arch=('x86_64')
@@ -12,7 +12,7 @@ conflicts=('prometheus' 'prometheus-git')
 backup=('etc/prometheus/prometheus.yml')
 source=('prometheus.service'
     "https://github.com/prometheus/prometheus/releases/download/v${pkgver}/prometheus-${pkgver}.linux-amd64.tar.gz" )
-sha256sums=('e9044026baab6e6a472eff01086f1a4ffc8b424ee84f1c9af7ed879bb4374756' '19d29910fd0e51765d47b59b9276df016441ad4c6c48e3b27e5aa9acb5d1da26')
+sha256sums=('e9044026baab6e6a472eff01086f1a4ffc8b424ee84f1c9af7ed879bb4374756' 'f4233783826f18606b79e5cef0686e4a9c2030146a3c7ce134f0add09f5adcb7')
 
 package() {
     cd "${srcdir}/prometheus-${pkgver}.linux-amd64"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 dotfiles=~/.dotfiles
-bkdir=~/.backup_dotfiles
+bkdir=~/.backup_dotfiles/"$(date +"%Y%m%d-%H%M%S")"
 
 link_file() {
     [[ -z "$1" ]] && return -1
@@ -26,3 +26,10 @@ echo -e ". $dotfiles/bashrc\n. $dotfiles/zshrc" > ~/.zshrc
 link_file "tmux.conf"
 link_file "gitconfig"
 link_file "vimrc"
+
+cat << EOF > ~/.spacemacs
+(load-file "~/.dotfiles/spacemacs")
+
+;; Do not write anything past this comment. This is where Emacs will
+;; auto-generate custom variable definitions.
+EOF

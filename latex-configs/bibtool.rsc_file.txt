@@ -1,0 +1,17 @@
+parse.exit.on.error = on
+pass.comments = off
+print.line.length = 79
+print.indent = 2
+print.align = 15
+print.align.key = 0
+print.use.tab = off
+symbol.type = lower
+suppress.initial.newline = on
+preserve.key.case = {on}
+sort = {on}
+sort.format = {%s($type) # %s($key)}
+sort.order = {* = key # title # author # editor # booktitle # journal # year # volume # number # pages # doi # url # note}
+rewrite.rule = {shorttitle abstract keywords file eventtitle langid isbn location editorb editorbtype issn language publisher address month urldate # "^.*$"}
+rewrite.rule = {pages # "\([:0-9]+\) *- *\([:0-9]+\)" = "\1--\2"}
+rewrite.rule = {title # "^\(.*\){{\(https?.*\)}}\(.*\)$" = "\1\\url{\2}\3"}
+rewrite.rule = {note # "^{\(https?.*\)}$" = "{\\url{\1}}"}

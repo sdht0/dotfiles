@@ -62,10 +62,26 @@ if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
 
 fi
 
+# Enable `sudo alias`
+alias sudo='sudo '
+
+# Enable `sudo bash_function`
+sudof() {
+    if [[ $# -lt 1 || -z "$1" ]]; then
+        echo "Error: Missing input arguments!"
+        return 1
+    fi
+    fn_name=$1
+    shift
+    FUNC=$(declare -f $fn_name)
+    [[ -z "$FUNC" ]] && { echo "Error: Function '$fn_name' not found"; return; }
+    sudo bash -c "$FUNC; $fn_name $@"
+}
+
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-alias sudo='sudo ' # Fix sudo+alias
+alias .....='cd ../../../..'
 alias b='cd -'
 alias ls='ls --color=auto'
 alias sls='sudo ls --color=auto'
@@ -96,19 +112,6 @@ ports() {
     fi
     echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(netstat -lnp${option} | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k${pos})" | column -t
 }
-sports() {
-    option="${1:-b}"
-    pos="${2:-5}"
-    if [[ "$option" == "b" ]];then
-        sports u "$pos"
-        echo
-        sports t "$pos"
-        return 0
-    fi
-    echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(sudo netstat -lnp${option} | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k${pos})" | column -t
-}
-alias mkdir="mkdir -p"
-alias smkdir="sudo mkdir -p"
 alias rmr='rm -rf'
 alias srmr='sudo rm -rf'
 alias mount='mount -v'
@@ -135,7 +138,7 @@ alias httpserver="python2 -m SimpleHTTPServer"
 alias sx="startx"
 
 alias please='sudo $(fc -ln -1)'
-alias pleaseplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
+alias prettyplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
 
 alias rzsh='. ~/.bashrc && . ~/.zshrc'
 alias rbash='. ~/.bashrc'
@@ -167,6 +170,8 @@ alias dkc='sudo docker ps'
 alias dkca='sudo docker ps -a'
 dkrc() { sudo docker start $1 && sudo docker attach $1;}
 dkrm() { sudo docker kill $@; sudo docker rm $@; }
+alias isolate="sudo docker network disconnect bridge"
+alias join="sudo docker network connect bridge"
 
 # Pacman package management
 alias pcm='pacman'
@@ -174,8 +179,8 @@ alias pcmu='sudo pacman -Syu --needed'
 alias pcmi='sudo pacman -S --needed'
 alias pcms='pacman -Ss'
 alias pcmsl='pacman -Qs'
-alias pcmr='sudo pacman -Rc'
-alias pcmrs='sudo pacman -Rcs'
+alias pcmr='sudo pacman -Rcs'
+alias pcmri='sudo pacman -Rc'
 alias pcmc='sudo pacman -Sc --noconfirm'
 alias pcmm='pacman -Qm'
 alias pcml='pacman -Ql'
@@ -190,9 +195,22 @@ alias pcmii='pacman -Qi'
 alias pru='pikaur -Syu --needed'
 alias pri='pikaur -S --needed'
 alias prs='pikaur -Ss'
-#alias pru='pakku -Syu --needed'
-#alias pri='pakku -S --needed'
-#alias prs='pakku -Ss'
+
+add_to_repo() {
+    [[ $# -lt 2 ]] && echo "Inputs missing!" && return 1
+    [[ ! -r PKGBUILD ]] && echo "Must be run in a PKGBUILD dir" && return 1
+    root=$1
+    repo_db=$2
+    source PKGBUILD
+    pkgver="$pkgver-$pkgrel"
+    [[ "$MYSHELL" = 'bash' ]] && shopt -s failglob
+    for i in *$pkgver*tar*;do
+        x=$(echo $i | sed -r "s/(.*)-$pkgver.*/\1/")
+        sudo rm -v $root/$x* 2> /dev/null
+        sudo cp -v $i $root/$i
+        sudo repo-add $root/$repo_db $i
+    done
+}
 
 # Apt-get package management
 alias agu='sudo apt-get update && sudo apt-get upgrade'
@@ -211,18 +229,8 @@ alias yumf='sudo yum --showduplicates info'
 alias osv='cat /etc/*-release /etc/debian_version 2>/dev/null | sort | uniq | xargs -L1'
 tfm() {
     n=${1:-30}
-    if which journalctl >/dev/null 2>&1;then
-        journalctl -n${n} -f
-    elif [[ -f /var/log/messages ]];then
-        tail -F /var/log/messages
-    elif [[ -f /var/log/syslog ]];then
-        tail -F /var/log/syslog
-    else
-        echo "No system log found"
-    fi
+    sudo journalctl -n${n} -f
 }
-alias magicm2='cd;sudo openvpn --config ~/directi/client.ovpn'
-alias magicm='cd;sudo openvpn --config ~/directi/mnet-client.ovpn'
 alias magic2='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py`'
 alias magic='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py`'
 
@@ -250,7 +258,7 @@ printColors() {
 }
 
 # Taken from http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
-export MARKPATH=$HOME/.marks
+export MARKPATH=$HOME/.local/share/marks
 function j {
     cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
 }
@@ -258,7 +266,7 @@ function m {
     mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$1"
 }
 function um {
-    cd $MARKPATH && rm $@
+    bash -c "cd $MARKPATH && rm $@"
 }
 function mks {
     ls -l "$MARKPATH" | sed 's/  / /g' | cut -d' ' -f9- | sed 's/ -/\t-/g' && echo
@@ -375,9 +383,6 @@ hold_fort() {
     done
 }
 
-alias isolate="sudo docker network disconnect bridge"
-alias join="sudo docker network connect bridge"
-
 mkcd() {
     mkdir -p $1 && cd $1
 }
@@ -392,16 +397,7 @@ xs() {
         return 1
     fi
 
-    grep --exclude-dir=".git" --color=auto -Rn $* .
-}
-
-sxs() {
-    if [ $# -lt 1 ]; then
-        echo "No input!"
-        return 1
-    fi
-
-    sudo grep --exclude-dir=".git" --color=auto -Rn $* .
+    rg $@
 }
 
 xf() {
@@ -413,19 +409,10 @@ xf() {
     find -name "*$**"
 }
 
-sxf() {
-    if [ $# -lt 1 ]; then
-        echo "No input!"
-        return 1
-    fi
-
-    sudo find -name "*$**"
-}
-
 h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
 
 rand() {
-    python ~/.dotfiles/password.py "$@"
+    python ~/.dotfiles/scripts/password.py "$@"
 }
 
 randc() {
@@ -445,9 +432,14 @@ up() {
 }
 
 fawk() {
-    first="awk '{print "
-    last="}'"
-    cmd="${first}\$${1}${last}"
+    if [ $# -lt 1 ]; then
+        echo "No input!"
+        return 1
+    fi
+    [[ -n "$2" ]] && local sep="-F$2"
+    local first="awk $sep '{print "
+    local last="}'"
+    local cmd="${first}\$${1}${last}"
     eval $cmd
 }
 
@@ -706,10 +698,6 @@ xlistfiles() {
     esac
 
     find "$1" -type d \( -name ".git" -o -name ".hg" -o -name "Dev" -o -name "\$RECYCLE.BIN" -o -name "System Volume Information" -o -name "version-controlled-soft" -o -name "manuals" -o -name "eclipse" \) -prune -o -print | sort > ~/Downloads/${flname}.txt
-}
-
-xxown() {
-    sudo chown -R $(whoami):http .
 }
 
 xintegration() {

@@ -47,4 +47,3 @@ for i in range(0, length - length_from_sets):
 
 random.shuffle(password)
 print(''.join(password))
-

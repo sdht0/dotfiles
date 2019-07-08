@@ -16,7 +16,7 @@ export TERM=screen-256color
 
 if [[ $- = *i* ]];then
 
-powerline=~/.dotfiles/powerlevel9k/powerlevel9k.zsh-theme
+powerline=~/.dotfiles/powerlevel10k/powerlevel10k.zsh-theme
 if [[ -r "$powerline" ]] && [[ ! $TTY = *tty* ]];then
     #POWERLEVEL9K_MODE='awesome-fontconfig'
 
@@ -78,6 +78,7 @@ setopt nobeep \
     interactivecomments \
     autocd \
     autopushd \
+    pushdignoredups \
     pushdtohome \
     chaselinks \
     histverify \
@@ -106,6 +107,16 @@ interactive_cd=~/.dotfiles/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
 if [[ -r "$interactive_cd" ]];then
     export FZF_DEFAULT_OPTS="--cycle"
     source "$interactive_cd"
+fi
+
+autosuggestions=~/.dotfiles/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [[ -r "$autosuggestions" ]];then
+    source "$autosuggestions"
+fi
+
+syntax_highlighting=~/.dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [[ -r "$syntax_highlighting" ]];then
+    source "$syntax_highlighting"
 fi
 
 fi

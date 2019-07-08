@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "6.2.0"
+      "version": "6.2.4"
     },
     {
       "type": "panel",
@@ -52,7 +52,7 @@
   "gnetId": 1860,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1558586873616,
+  "iteration": 1561148005493,
   "links": [],
   "panels": [
     {
@@ -1123,7 +1123,7 @@
       "fill": 1,
       "gridPos": {
         "h": 9,
-        "w": 8,
+        "w": 6,
         "x": 0,
         "y": 7
       },
@@ -1141,7 +1141,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "maxPerRow": 3,
+      "maxPerRow": 4,
       "nullPointMode": "null",
       "options": {},
       "percentage": false,
@@ -21570,5 +21570,5 @@
   "timezone": "browser",
   "title": "Node Exporter Full",
   "uid": "81lkRRmZz",
-  "version": 5
+  "version": 7
 }
