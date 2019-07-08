@@ -1,7 +1,7 @@
 #!/bin/bash
 
 dotfiles=~/.dotfiles
-bkdir=~/.backup_dotfiles
+bkdir=~/.backup_dotfiles/"$(date +"%Y%m%d-%H%M%S")"
 
 link_file() {
     [[ -z "$1" ]] && return -1
