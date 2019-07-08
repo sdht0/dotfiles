@@ -11,6 +11,7 @@ promptinit
 prompt walters
 
 export TERM=screen-256color
+unset LANGUAGE
 
 if [[ $- = *i* ]];then
 
@@ -43,7 +44,6 @@ if [[ -r "$powerline" ]] && [[ ! $TTY = *tty* ]];then
     #POWERLEVEL9K_MULTILINE_SECOD_PROMPT_PREFIX="%(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
     
     source "$powerline"
-    unset LC_CTYPE
 else
     source ~/zsh-git-prompt/zshrc.sh 2>/dev/null
     GIT_PROMPT_EXECUTABLE="haskell"
@@ -120,4 +120,3 @@ if [[ -r "$syntax_highlighting" ]];then
 fi
 
 fi
-
