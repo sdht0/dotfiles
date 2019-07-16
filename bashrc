@@ -411,18 +411,29 @@ xf() {
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
 
+japanese() {
+    python ~/.dotfiles/scripts/japanese-get-kana.py "$1"
+}
+
+japanesec() {
+    japanese "$1" | xcp
+    echo "Copied to clipboard"
+}
+
 rand() {
     python ~/.dotfiles/scripts/password.py "$@"
 }
 
 randc() {
     rand "$@" | tr -d '\n' | xcp
+    echo "Copied to clipboard"
 }
 
 randp() {
     password=$(rand "$@" | tr -d '\n')
     echo "${#password} $password"
     echo -n "$password" | xcp
+    echo "Copied to clipboard"
 }
 
 up() {

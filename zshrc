@@ -11,6 +11,7 @@ promptinit
 prompt walters
 
 export TERM=screen-256color
+unset LANGUAGE
 
 if [[ $- = *i* ]];then
 
@@ -43,7 +44,6 @@ if [[ -r "$powerline" ]] && [[ ! $TTY = *tty* ]];then
     #POWERLEVEL9K_MULTILINE_SECOD_PROMPT_PREFIX="%(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
     
     source "$powerline"
-    unset LC_CTYPE
 else
     MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
     [[ $UID -eq 0 ]] && color=red || color=magenta
@@ -118,4 +118,3 @@ if [[ -r "$syntax_highlighting" ]];then
 fi
 
 fi
-
