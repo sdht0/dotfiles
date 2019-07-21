@@ -2,7 +2,7 @@
 # Contributor: Slashbunny <demodevil5[at]yahoo>
 
 pkgname=prometheus-node-exporter-git
-pkgver=r1217.2bc133c
+pkgver=r1238.5d3e2ce
 pkgrel=1
 pkgdesc="Prometheus exporter for machine metrics (binary, not built from source)"
 arch=('x86_64' 'armv7h')
