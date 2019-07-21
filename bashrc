@@ -414,7 +414,9 @@ japanese() {
 }
 
 japanesec() {
-    japanese "$1" | xcp
+    p=$(japanese "$1")
+    echo $p
+    echo -n $p | xcp
     echo "Copied to clipboard"
 }
 

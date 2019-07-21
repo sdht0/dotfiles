@@ -23,7 +23,7 @@ for c in list(x.children):
     if c.name == "span":
         types.append(c['class'][0])
         out.append(c.string)
-kana = "".join(out)
+kana = " ".join(out)
 
 x = soup.find(id="res_romaji")
 out = []
