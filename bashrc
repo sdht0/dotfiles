@@ -115,7 +115,6 @@ alias srmr='sudo rm -rf'
 alias mount='mount -v'
 alias umount='umount -v'
 alias dmesg='dmesg --human -T'
-alias gitk='gitk --all'
 alias grep='grep -i --color=auto'
 alias tn='tail -n'
 alias hn='head -n'
@@ -159,6 +158,8 @@ alias gcf='git config --list'
 alias grh='git reset HEAD'
 alias grc='git rebase --continue'
 alias gra='git rebase --abort'
+alias gd="git diff"
+alias gk="gitk --all"
 
 alias dk='sudo docker'
 alias dkr='sudo docker run'
@@ -409,12 +410,23 @@ xf() {
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
 
+alias jp="japanesec"
 japanese() {
-    python ~/.dotfiles/scripts/japanese-get-kana.py "$1"
+    if [ $# -lt 1 ]; then
+        echo "No input!"
+        return 1
+    fi
+
+    python ~/.dotfiles/scripts/japanese-get-kana.py "$@"
 }
 
 japanesec() {
-    p=$(japanese "$1")
+	if [ $# -lt 1 ]; then
+        echo "No input!"
+        return 1
+    fi
+
+    p=$(japanese "$@")
     echo $p
     echo -n $p | xcp
     echo "Copied to clipboard"
