@@ -2,17 +2,19 @@
 
 pkgname=prometheus-bin
 pkgver=2.11.1
-pkgrel=1
+pkgrel=4
 pkgdesc="An open-source service monitoring system and time series database (binary, not built from source)"
 arch=('x86_64')
 url="http://prometheus.io"
 license=('Apache')
 provides=('prometheus')
 conflicts=('prometheus' 'prometheus-git')
-backup=('etc/prometheus/prometheus.yml')
-source=('prometheus.service'
+backup=('etc/prometheus/prometheus.yml' 'etc/prometheus/cli.config')
+source=('prometheus.service' 'cli.config'
     "https://github.com/prometheus/prometheus/releases/download/v${pkgver}/prometheus-${pkgver}.linux-amd64.tar.gz" )
-sha256sums=('e9044026baab6e6a472eff01086f1a4ffc8b424ee84f1c9af7ed879bb4374756' '50b5f4dfd3f358518c1aaa3bd7df2e90780bdb5292b5c996137c2b1e81102390')
+sha256sums=('3461430433f75e3c083244003399c661e8f71c252013e4f0508c31ac33c7380a'
+    '77a087931de4e397e58da2eea9f54c61add54d04411d352876deb6befefd8fb0'
+    '50b5f4dfd3f358518c1aaa3bd7df2e90780bdb5292b5c996137c2b1e81102390')
 
 package() {
     cd "${srcdir}/prometheus-${pkgver}.linux-amd64"
@@ -27,6 +29,9 @@ package() {
     # Install Config File
     install -D -m0755 prometheus.yml \
         "${pkgdir}/etc/prometheus/prometheus.yml"
+    
+    install -D -m0755 "${srcdir}/cli.config" \
+        "${pkgdir}/etc/prometheus/cli.config"
 
     # Install SystemD Service File
     install -D -m0644 "${srcdir}/prometheus.service" \
