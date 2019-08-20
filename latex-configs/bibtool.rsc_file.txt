@@ -12,7 +12,7 @@ sort = {on}
 sort.format = {%s($type) # %s($key)}
 sort.order = {* = key # title # author # editor # booktitle # journal # school # year # volume # number # pages # doi # url # note}
 rename.field {editor = delete if author = ".+" }
-rewrite.rule = {delete shorttitle abstract keywords file eventtitle langid isbn location editorb editorbtype issn language publisher address month urldate issue_date articleno numpages acmid # "^.*$"}
+rewrite.rule = {delete shorttitle abstract keywords file eventtitle langid isbn location editorb editorbtype issn language publisher address month issue_date articleno numpages acmid copyright # "^.*$"}
 rewrite.rule = {pages # "\([:0-9]+\) *- *\([:0-9]+\)" = "\1--\2"}
 rewrite.rule = {title # "^\(.*\){{\(https?.*\)}}\(.*\)$" = "\1\\url{\2}\3"}
 rewrite.rule = {note # "^{\(https?.*\)}$" = "{\\url{\1}}"}
