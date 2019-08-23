@@ -233,22 +233,14 @@ tfm() {
 alias magic2='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py`'
 alias magic='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py`'
 
-s() {
-    [[ $# -lt 1 ]] && echo "No input!" && return 1
-    case "$1" in
-        rpr*) ssh c8-proxy-"${1:2}".srv.media.net ${*:2};;
-        rlg*) ssh c8-logging-"${1:2}".srv.media.net ${*:2};;
-        rds*) ssh c8-data-store-"${1:2}".srv.media.net ${*:2};;
-        rlr*) ssh c8-logging-redis-"${1:2}".srv.media.net ${*:2};;
-        rlk*) ssh c8-logging-kafka-"${1:2}".srv.media.net ${*:2};;
-        rw8*) ssh c8-web-"${1:2}".srv.media.net ${*:2};;
-        rw10*) ssh c10-web-"${1:3}".srv.media.net ${*:2};;
-        rw12b*) ssh c12-nc1b-web-"${1:4}".srv.media.net ${*:2};;
-        rw12c*) ssh c12-nc1c-web-"${1:4}".srv.media.net ${*:2};;
-        rddrc) ssh c12-nc1c-dadar.srv.media.net ${*:2};;
-        rddrb) ssh c12-nc1b-dadar.srv.media.net ${*:2};;
-        *) ssh ${*};;
-    esac
+xsshlistener() {
+    [[ $# -lt 2 ]] && echo "Inputs missing!" && return 1
+    host=$1
+    shift
+    str=""
+    for i in "$@";do str="$str -L ${i}:localhost:${i}"; done
+    cmd="ssh -o ServerAliveInterval=60 -fN $str $host"
+    bash -c "$cmd"
 }
 
 printColors() {
