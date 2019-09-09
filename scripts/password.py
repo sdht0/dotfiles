@@ -2,7 +2,7 @@ import string
 import random
 import sys
 
-length = int(sys.argv[1]) if len(sys.argv) >= 2 else random.randint(23, 27)
+length = int(sys.argv[1]) if len(sys.argv) >= 2 else random.randint(27, 30)
 if length == 0:
     print("Zero length password. Exiting")
     sys.exit(0)
