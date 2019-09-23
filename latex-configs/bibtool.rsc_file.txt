@@ -10,8 +10,9 @@ suppress.initial.newline = on
 preserve.key.case = {on}
 sort = {on}
 sort.format = {%s($type) # %s($key)}
-sort.order = {* = key # title # author # editor # booktitle # journal # school # year # volume # number # pages # doi # url # note}
+sort.order = {* = key # title # author # editor # booktitle # journal # school # year # volume # number # pages # doi # url # lastaccessed # note}
 rename.field {editor = delete if author = ".+" }
+rename.field {urldate = lastaccessed }
 rewrite.rule = {delete shorttitle abstract keywords file eventtitle langid isbn location editorb editorbtype issn language publisher address month issue_date articleno numpages acmid copyright # "^.*$"}
 rewrite.rule = {pages # "\([:0-9]+\) *- *\([:0-9]+\)" = "\1--\2"}
 rewrite.rule = {title # "^\(.*\){{\(https?.*\)}}\(.*\)$" = "\1\\url{\2}\3"}
