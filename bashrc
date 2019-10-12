@@ -122,7 +122,10 @@ alias tf='tail -F'
 alias df='df -h'
 alias du='du -sh'
 alias lsblk='lsblk -o NAME,FSTYPE,SIZE,RO,MOUNTPOINT,LABEL,UUID'
-alias rdl="readlink -f"
+rdl() {
+    dir="${1:-.}"
+    readlink -f $dir
+}
 alias vi='vim'
 alias se='sudoedit'
 alias sv='sudo vim -u ~/.vimrc'

@@ -60,7 +60,8 @@ This function should only modify configuration layer settings."
      ;cmake
      pdf
      (latex :variables
-            latex-enable-auto-fill t)
+            latex-enable-auto-fill t
+            latex-build-command "LaTeX")
      bibtex
      ;; others
      helm
@@ -503,8 +504,9 @@ before packages are loaded."
                         nil 'make-it-local)))
   (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
   ;; Update PDF buffers after successful LaTeX runs
-  (add-hook 'TeX-after-compilation-finished-functions
-            #'TeX-revert-document-buffer)
+  ;(add-hook 'TeX-after-compilation-finished-functions
+  ;          #'TeX-revert-document-buffer)
+  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
   (setq pdf-sync-backward-display-action t)
   (setq pdf-sync-forward-display-action t)
 
