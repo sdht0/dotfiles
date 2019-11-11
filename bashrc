@@ -291,6 +291,7 @@ fi
 xmultispawn() {
     option=$1; shift
     max="$1"; shift
+    [[ $max -le 0 ]] && echo "max should be >= 1" && return
     name="$1"; shift
     { [[ -z "$name" ]] || tmux list-windows | awk '{print $2}' | tr 'A-Z' 'a-z' | tr -dc 'a-z\n' | grep "^$name$" >/dev/null 2>&1; } && name=$(< /dev/urandom tr -dc "a-z" | head -c3) || true
 
@@ -305,9 +306,11 @@ xmultispawn() {
     esac
 
     total=$#
-    [[ $# -eq 0 ]] && return
+    echo "Total = $total"
+    [[ $total -eq 0 ]] && return
 
     totalwindows=$(echo "($total+$max-1)/$max" | bc)
+    echo "Total windows = $totalwindows"
     adjust=$((total%totalwindows))
 
     for i in $(eval echo "{1..$totalwindows}");do
@@ -320,6 +323,7 @@ xmultispawn() {
         c=h
         for j in $(eval echo "{1..$paneperwindow}");do
             tmux splitw -$c -t ${name}-${i}.$j -d "$1"; shift
+            sleep 0.5
             [[ "$c" = "h" ]] && c=v || c=h
         done
         tmux select-layout -t ${name}-${i} $layout
