@@ -316,14 +316,15 @@ xmultispawn() {
     for i in $(eval echo "{1..$totalwindows}");do
         paneperwindow=$((total/totalwindows)); [[ $adjust -gt 0 ]] && paneperwindow=$((paneperwindow+1)) && adjust=$((adjust-1))
 
+        echo "Spawning window $i"
         tmux neww -dn ${name}-${i} "$1"; shift
+        sleep 0.3
 
         paneperwindow=$((paneperwindow-1))
         [[ $paneperwindow -lt 1 ]] && continue
         c=h
         for j in $(eval echo "{1..$paneperwindow}");do
             tmux splitw -$c -t ${name}-${i}.$j -d "$1"; shift
-            sleep 0.5
             [[ "$c" = "h" ]] && c=v || c=h
         done
         tmux select-layout -t ${name}-${i} $layout
