@@ -138,10 +138,6 @@ alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; 
 alias xcp='xclip -selection clipboard'
 alias httpserver="python2 -m SimpleHTTPServer"
 alias sx="startx"
-alias rcc="rclone check ~/Zotero-ipad gdrive-zotero:ipad"
-alias rcid="rclone sync --progress --fast-list --drive-use-trash=false --max-delete 0 gdrive-zotero:ipad ~/Zotero-ipad"
-alias rciu="rclone sync --progress --fast-list --drive-use-trash=false --immutable --retries 1 --max-delete 0 ~/Zotero-ipad gdrive-zotero:ipad"
-alias rcdu="rclone sync --progress --fast-list --drive-use-trash=false ~/Zotero/ gdrive-zotero:data-dir"
 
 alias please='sudo $(fc -ln -1)'
 alias prettyplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
@@ -297,7 +293,6 @@ fi
 xmultispawn() {
     option=$1; shift
     max="$1"; shift
-    [[ $max -le 0 ]] && echo "max should be >= 1" && return
     name="$1"; shift
     { [[ -z "$name" ]] || tmux list-windows | awk '{print $2}' | tr 'A-Z' 'a-z' | tr -dc 'a-z\n' | grep "^$name$" >/dev/null 2>&1; } && name=$(< /dev/urandom tr -dc "a-z" | head -c3) || true
 
@@ -312,19 +307,15 @@ xmultispawn() {
     esac
 
     total=$#
-    echo "Total = $total"
-    [[ $total -eq 0 ]] && return
+    [[ $# -eq 0 ]] && return
 
     totalwindows=$(echo "($total+$max-1)/$max" | bc)
-    echo "Total windows = $totalwindows"
     adjust=$((total%totalwindows))
 
     for i in $(eval echo "{1..$totalwindows}");do
         paneperwindow=$((total/totalwindows)); [[ $adjust -gt 0 ]] && paneperwindow=$((paneperwindow+1)) && adjust=$((adjust-1))
 
-        echo "Spawning window $i"
         tmux neww -dn ${name}-${i} "$1"; shift
-        sleep 0.3
 
         paneperwindow=$((paneperwindow-1))
         [[ $paneperwindow -lt 1 ]] && continue
@@ -402,7 +393,7 @@ xs() {
         return 1
     fi
 
-    rg $@
+    grep -R $@ .
 }
 
 xf() {
