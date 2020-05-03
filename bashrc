@@ -139,6 +139,7 @@ alias sx="startx"
 alias rcc="rclone check ~/Zotero-ipad gdrive-zotero:ipad"
 alias rcid="rclone sync --progress --fast-list --drive-use-trash=false --max-delete 0 gdrive-zotero:ipad ~/Zotero-ipad"
 alias rciu="rclone sync --progress --fast-list --drive-use-trash=false --immutable --retries 1 --max-delete 0 ~/Zotero-ipad gdrive-zotero:ipad"
+alias rciudd="rclone sync --progress --fast-list --drive-use-trash=false --retries 1 ~/Zotero-ipad gdrive-zotero:ipad"
 alias rcdu="rclone sync --progress --fast-list --drive-use-trash=false ~/Zotero/ gdrive-zotero:data-dir"
 
 alias please='sudo $(fc -ln -1)'
@@ -337,9 +338,6 @@ xmultispawn() {
 }
 
 alias ccm='sudo ccm64'
-alias xcdwebfol='cd /srv/www'
-alias xcddev='cd /home/sdh/dev'
-alias xcdactive='cd /home/sdh/dev/sources/telepathy-kde-active/ktp-active/application/package'
 alias xchromestart="chromium --proxy-server='socks://127.0.0.1:9999' --incognito"
 alias xstartproxy="ssh -TNfD 9999 root@5.175.167.132"
 alias xstartproxy2="ssh -TNfD '*:9999' -p 9999 dcadmin@172.16.32.222"
