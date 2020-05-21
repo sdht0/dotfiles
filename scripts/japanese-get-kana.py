@@ -23,14 +23,19 @@ for c in list(x.children):
     if c.name == "span":
         types.append(c['class'][0])
         out.append(c.string)
-kana = " ".join(out).replace("( ","(").replace(" )",")").replace(" ？","？").replace(" ｡","｡")
+kana = " ".join(out)
 
 x = soup.find(id="res_romaji")
 out = []
 for c in list(x.children):
     if c.name == "span":
         out.append(c.string)
-romaji = " ".join(out).replace("( ","(").replace(" )",")").replace(" ？","？").replace(" ｡","｡")
+romaji = " ".join(out).replace("｡",".")
+
+replace_chars = [("( ","("),(" )",")"),("[ ","["),(" ]","]"),(" ?","?"),(" ｡","｡"),(" .","."),(" !","!")]
+for search,replace in replace_chars:
+    kana = kana.replace(search,replace)
+    romaji = romaji.replace(search,replace)
 
 print("%s\t%s\t%s" % (kanji, kana, romaji))
 print(types, file=sys.stderr)
