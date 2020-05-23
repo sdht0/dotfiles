@@ -199,7 +199,8 @@ pcmwo() {
 }
 alias pcmii='pacman -Qi'
 
-alias pru='pikaur -Syu --devel --needed'
+alias pru='pikaur -Syu --needed'
+alias prua='pikaur -Syu --devel --needed'
 alias pri='pikaur -S --needed'
 alias prs='pikaur -Ss'
 
