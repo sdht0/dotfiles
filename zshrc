@@ -116,4 +116,10 @@ if [[ -r "$syntax_highlighting" ]];then
     source "$syntax_highlighting"
 fi
 
+git_fuzzy=~/.dotfiles/git-fuzzy/bin
+if [[ -d "$git_fuzzy" ]];then
+    export PATH="$PATH:$git_fuzzy"
 fi
+
+fi
+

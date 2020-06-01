@@ -13,3 +13,6 @@
 [submodule "zsh-autosuggestions"]
 	path = zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule "git-fuzzy"]
+	path = git-fuzzy
+	url = https://github.com/bigH/git-fuzzy.git
