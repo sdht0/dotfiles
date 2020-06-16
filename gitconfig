@@ -30,3 +30,5 @@
 	ui = auto
 [credential]
 	helper = cache
+[pull]
+	rebase = true
