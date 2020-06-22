@@ -145,7 +145,7 @@ alias rcdu="rclone sync --progress --fast-list --drive-use-trash=false ~/Zotero/
 alias please='sudo $(fc -ln -1)'
 alias prettyplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
 
-alias rzsh='. ~/.bashrc && . ~/.zshrc'
+alias rzsh='. ~/.zshrc'
 alias rbash='. ~/.bashrc'
 
 alias ga='git add'
