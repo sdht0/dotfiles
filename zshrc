@@ -105,7 +105,7 @@ if [[ -r "$better_history" ]];then
 fi
 
 interactive_cd=~/.dotfiles/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
-if [[ -r "$interactive_cd" ]];then
+if [[ -r "$interactive_cd" ]] && which fzf &>/dev/null ;then
     export FZF_DEFAULT_OPTS="--cycle"
     source "$interactive_cd"
 fi
