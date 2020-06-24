@@ -91,6 +91,12 @@ lld() { ls -CFalh $* --color=force | grep -e "^d" -e total --color=never;ls -CFa
 alias lldt='ls -CFalht --color=force | grep -e "^d" -e total --color=never;ls -CFalht --color=force | grep -vE "^d|total"'
 alias llds='ls -CFalhS --color=force | grep -e "^d" -e total --color=never;ls -CFalhS --color=force | grep -vE "^d|total"'
 cl() { cd "$@" && lls; }
+
+alias zs="zpool status -v"
+alias zi="zpool iostat -v"
+alias zl="zpool list -v"
+alias za="zs;echo;zi;echo;zl"
+
 alias df='df -Th'
 alias lsg='ls -CFalh --color=auto | grep --color=auto -i'
 alias psg='ps aux | grep -v grep | grep -i -e VSZ -e '
