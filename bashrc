@@ -139,10 +139,16 @@ alias xcp='xclip -selection clipboard'
 alias httpserver="python2 -m SimpleHTTPServer"
 alias sx="startx"
 
+alias rcc="rclone check ~/Zotero-ipad gdrive-zotero:ipad"
+alias rcid="rclone sync --progress --fast-list --drive-use-trash=false --max-delete 0 gdrive-zotero:ipad ~/Zotero-ipad"
+alias rciu="rclone sync --progress --fast-list --drive-use-trash=false --immutable --retries 1 --max-delete 0 ~/Zotero-ipad gdrive-zotero:ipad"
+alias rciudd="rclone sync --progress --fast-list --drive-use-trash=false --retries 1 ~/Zotero-ipad gdrive-zotero:ipad"
+alias rcdu="rclone sync --progress --fast-list --drive-use-trash=false ~/Zotero/ gdrive-zotero:data-dir"
+
 alias please='sudo $(fc -ln -1)'
 alias prettyplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
 
-alias rzsh='. ~/.bashrc && . ~/.zshrc'
+alias rzsh='. ~/.zshrc'
 alias rbash='. ~/.bashrc'
 
 alias ga='git add'
@@ -197,6 +203,7 @@ pcmwo() {
 alias pcmii='pacman -Qi'
 
 alias pru='pikaur -Syu --needed'
+alias prua='pikaur -Syu --devel --needed'
 alias pri='pikaur -S --needed'
 alias prs='pikaur -Ss'
 
@@ -330,9 +337,6 @@ xmultispawn() {
 }
 
 alias ccm='sudo ccm64'
-alias xcdwebfol='cd /srv/www'
-alias xcddev='cd /home/sdh/dev'
-alias xcdactive='cd /home/sdh/dev/sources/telepathy-kde-active/ktp-active/application/package'
 alias xchromestart="chromium --proxy-server='socks://127.0.0.1:9999' --incognito"
 alias xstartproxy="ssh -TNfD 9999 root@5.175.167.132"
 alias xstartproxy2="ssh -TNfD '*:9999' -p 9999 dcadmin@172.16.32.222"
@@ -365,7 +369,7 @@ upe() { sudo chkconfig --add $1 && sudo chkconfig $1 on && sudo chkconfig --list
 upd() { sudo chkconfig $1 off && sudo chkconfig --list $1 ; }
 
 mypublicip() {
-    printf "dig +short @resolver1.opendns.com myip.opendns.com\ndig +short -t txt @ns1.google.com o-o.myaddr.l.google.com\ncurl -s ident.me\ncurl -s icanhazip.com" | xargs -L1 -P0 -I{} sh -c 'x=$({} | tr -d "\"";echo " | {}");echo $x'
+    printf "dig +short @resolver1.opendns.com myip.opendns.com\ndig +short -t txt @ns1.google.com o-o.myaddr.l.google.com\ncurl -s ident.me\ncurl -s icanhazip.com\ncurl -s4 ifconfig.co\ncurl -s6 ifconfig.co" | xargs -L1 -P0 -I{} sh -c 'x=$({} | tr -d "\"";echo " | {}");echo $x'
 }
 
 hold_fort() {

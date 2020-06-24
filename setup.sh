@@ -17,7 +17,7 @@ echo -e ". $dotfiles/bashrc" > ~/.bashrc
 
 echo "Setting up .zshrc"
 [[ -r ~/.zshrc ]] && echo "Backing up .zshrc" && mkdir -p ${bkdir} && mv ~/.zshrc ${bkdir}/.zshrc.bk
-echo -e ". $dotfiles/bashrc\n. $dotfiles/zshrc" > ~/.zshrc
+echo -e ". ~/.bashrc\n. $dotfiles/zshrc" > ~/.zshrc
 
 # echo "Setting up .emacs"
 # [[ -r ~/.emacs.d/init.el ]] && echo "Backing up init.el" mkdir -p ${bkdir} && && mv ~/.emacs.d/init.el ${bkdir}/.emacs.d/init.el.bk

@@ -3,7 +3,7 @@ onetimepass module is designed to work for one-time passwords - HMAC-based and
 time-based. It is compatible with Google Authenticator application and
 applications based on it.
 
-@version: 0.3.0
+@version: 1.0.1
 @author: Tomasz Jaskowski
 @contact: http://github.com/tadeck
 @license: MIT
@@ -35,8 +35,8 @@ import struct
 import time
 
 __author__ = 'Tomasz Jaskowski <tadeck@gmail.com>'
-__date__ = '16 August 2014'
-__version_info__ = (0, 3, 0)
+__date__ = '31 July 2015'
+__version_info__ = (1, 0, 1)
 __version__ = '%s.%s.%s' % __version_info__
 __license__ = 'MIT'
 
@@ -107,6 +107,8 @@ def get_hotp(
     if isinstance(secret, six.string_types):
         # It is unicode, convert it to bytes
         secret = secret.encode('utf-8')
+    # Get rid of all the spacing:
+    secret = secret.replace(b' ', b'')
     try:
         key = base64.b32decode(secret, casefold=casefold)
     except (TypeError):
@@ -130,6 +132,7 @@ def get_totp(
         digest_method=hashlib.sha1,
         token_length=6,
         interval_length=30,
+        clock=None,
 ):
     """Get time-based one-time password on the basis of given secret and time.
 
@@ -143,6 +146,8 @@ def get_totp(
     :type token_length: int
     :param interval_length: length of TOTP interval (30 seconds by default)
     :type interval_length: int
+    :param clock: time in epoch seconds to generate totp for, default is now
+    :type clock: int
     :return: generated TOTP token
     :rtype: int or str
 
@@ -153,7 +158,9 @@ def get_totp(
         get_totp(b'MFRGGZDFMZTWQ2LK', as_string=True)
     False
     """
-    interv_no = int(time.time()) // interval_length
+    if clock is None:
+        clock = time.time()
+    interv_no = int(clock) // interval_length
     return get_hotp(
         secret,
         intervals_no=interv_no,
@@ -217,6 +224,8 @@ def valid_totp(
         digest_method=hashlib.sha1,
         token_length=6,
         interval_length=30,
+        clock=None,
+        window=0,
 ):
     """Check if given token is valid time-based one-time password for given
     secret.
@@ -231,6 +240,12 @@ def valid_totp(
     :type token_length: int
     :param interval_length: length of TOTP interval (30 seconds by default)
     :type interval_length: int
+    :param clock: time in epoch seconds to generate totp for, default is now
+    :type clock: int
+    :param window: compensate for clock skew, number of intervals to check on
+        each side of the current time. (default is 0 - only check the current
+        clock time)
+    :type window: int (positive)
     :return: True, if is valid token, False otherwise
     :rtype: bool
 
@@ -246,15 +261,19 @@ def valid_totp(
     >>> valid_totp(token + b'1', secret)
     False
     """
-    return _is_possible_token(
-        token,
-        token_length=token_length,
-    ) and int(token) == get_totp(
-        secret,
-        digest_method=digest_method,
-        token_length=token_length,
-        interval_length=interval_length,
-    )
+    if _is_possible_token(token, token_length=token_length):
+        if clock is None:
+            clock = time.time()
+        for w in range(-window, window+1):
+            if int(token) == get_totp(
+                secret,
+                digest_method=digest_method,
+                token_length=token_length,
+                interval_length=interval_length,
+                clock=int(clock)+(w*interval_length)
+            ):
+                return True
+    return False
 
 __all__ = [
     'get_hotp',
@@ -267,3 +286,4 @@ my_secret = raw_input()
 my_token = get_totp(my_secret)
 
 print(my_token)
+

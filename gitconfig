@@ -24,4 +24,11 @@
     smtpuser = sh.siddhartha@gmail.com
     smtppass =
     chainreplyto = false
-
+[push]
+	default = simple
+[color]
+	ui = auto
+[credential]
+	helper = cache
+[pull]
+	rebase = true

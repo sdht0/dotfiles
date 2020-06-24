@@ -30,7 +30,12 @@ out = []
 for c in list(x.children):
     if c.name == "span":
         out.append(c.string)
-romaji = " ".join(out)
+romaji = " ".join(out).replace("｡",".")
 
-print("%s\t%s\t%s" % (kanji, kana,romaji))
+replace_chars = [("( ","("),(" )",")"),("[ ","["),(" ]","]"),(" ?","?"),(" ｡","｡"),(" .","."),(" !","!")]
+for search,replace in replace_chars:
+    kana = kana.replace(search,replace)
+    romaji = romaji.replace(search,replace)
+
+print("%s\t%s\t%s" % (kanji, kana, romaji))
 print(types, file=sys.stderr)
