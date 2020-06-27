@@ -174,6 +174,7 @@ alias grc='git rebase --continue'
 alias gra='git rebase --abort'
 alias gd="git diff"
 alias gk="gitk --all"
+alias gg="git gui"
 
 alias dk='sudo docker'
 alias dkr='sudo docker run'
