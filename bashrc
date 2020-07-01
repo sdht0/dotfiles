@@ -60,6 +60,15 @@ if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
 
 fi
 
+_checkargs() {
+	[[ $# -lt 2 ]] && echo "Incorrect check usage" && return 2
+    if [[ $1 -lt $2 ]]; then
+        echo "Arguments missing!"
+        return 1
+    fi
+	return 0
+}
+
 # Enable `sudo alias`
 alias sudo='sudo '
 
@@ -212,7 +221,7 @@ alias pri='pikaur -S --needed'
 alias prs='pikaur -Ss'
 
 add_to_repo() {
-    [[ $# -lt 2 ]] && echo "Inputs missing!" && return 1
+    _checkargs $# 2 || return 1
     [[ ! -r PKGBUILD ]] && echo "Must be run in a PKGBUILD dir" && return 1
     root=$1
     repo_db=$2
@@ -300,6 +309,11 @@ if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
     complete -F _completemarksbash j um
 
 fi
+
+xsendkeys() {
+    _checkargs $# 1 || return 1
+    tmux list-windows | grep -v active | cut -d: -f1 | sort -n -r | xargs -I{} bash -c "echo {} && tmux send-keys -t :{} $1"
+}
 
 xmultispawn() {
     option=$1; shift
