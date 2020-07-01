@@ -285,7 +285,7 @@ function um {
     bash -c "cd $MARKPATH && rm $@"
 }
 function mks {
-    ls -l "$MARKPATH" | sed 's/  / /g' | cut -d' ' -f9- | sed 's/ -/\t-/g' && echo
+    ls -l "$MARKPATH" | grep -v total | awk '{print $(NF-2),"\t", $(NF-1),$NF}' | column -t
 }
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
 
