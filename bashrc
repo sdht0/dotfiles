@@ -271,6 +271,13 @@ xsshlistener() {
     bash -c "$cmd"
 }
 
+xgen() {
+    _checkargs $# 1 || return 1
+    x="$(printf "%d\n" \'${1: -1})"
+    y=${#1}
+    echo "$1$((x+5))$((y+5))"
+}
+
 printColors() {
     echo $(for code ({0..255}) print -P -- "%F{$code}$code %f")
     for C in {0..255}; do tput setab $C; echo -n "$C "; done; tput sgr0; echo
@@ -359,8 +366,6 @@ xmultispawn() {
 
 alias ccm='sudo ccm64'
 alias xchromestart="chromium --proxy-server='socks://127.0.0.1:9999' --incognito"
-alias xstartproxy="ssh -TNfD 9999 root@5.175.167.132"
-alias xstartproxy2="ssh -TNfD '*:9999' -p 9999 dcadmin@172.16.32.222"
 
 # Systemd service management
 sds() { sudo systemctl status -l --no-pager -n10 $1; }

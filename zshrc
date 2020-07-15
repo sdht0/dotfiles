@@ -75,7 +75,6 @@ bindkey '\e[B' down-line-or-beginning-search
 setopt nobeep \
     notify \
     nobgnice \
-    correct \
     interactivecomments \
     autocd \
     autopushd \
