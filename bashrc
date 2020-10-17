@@ -268,11 +268,20 @@ xsshlistener() {
     bash -c "$cmd"
 }
 
-xgen() {
+xgen2() {
     _checkargs $# 1 || return 1
     x="$(printf "%d\n" \'${1: -1})"
     y=${#1}
     echo "$1$((x+5))$((y+5))"
+}
+
+xgen() {
+    _checkargs $# 1 || return 1
+    f="$(printf "%d\n" \'${1:0:1})"
+    l="$(printf "%d\n" \'${1: -1})"
+    y=${#1}
+    t=$((f+l-96*2))
+    echo "$1$((t+t%y))"
 }
 
 printColors() {

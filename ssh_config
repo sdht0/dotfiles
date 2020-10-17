@@ -1,4 +1,4 @@
 Host *
     ServerAliveInterval 60
-    StrictHostKeyChecking no
-
+Host 192.168.0.27
+    Port 26501
