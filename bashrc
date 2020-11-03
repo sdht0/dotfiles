@@ -443,7 +443,7 @@ xf() {
         return 1
     fi
 
-    find -name "*$**"
+    find -iname "*$**"
 }
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
