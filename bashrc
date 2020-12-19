@@ -328,7 +328,7 @@ fi
 
 xsendkeys() {
     _checkargs $# 1 || return 1
-    tmux list-windows | grep -v active | cut -d: -f1 | sort -n -r | xargs -I{} bash -c "echo {} && tmux send-keys -t :{} $1"
+    tmux list-windows | grep -v active | cut -d: -f1 | sort -n -r | xargs -I{} bash -c "echo {} && tmux send-keys -t :{} $(echo $1 | sed 's/ / SPACE /g')"
 }
 
 xmultispawn() {
