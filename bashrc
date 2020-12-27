@@ -149,7 +149,7 @@ alias ee='emacsclient -c'
 alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d'/' -f1 | sed -r "s/[ \t]+/ /g" | cut -d" " -f2-4 | awk "{print \$1\": \"\$3}" | sort | uniq'
 alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
 alias xcp='xclip -selection clipboard'
-alias httpserver="python2 -m SimpleHTTPServer"
+alias httpserver="python3 -m http.server"
 alias sx="startx"
 alias rcc="rclone check ~/Zotero-ipad gdrive-zotero:ipad"
 alias rcid="rclone sync --progress --fast-list --drive-use-trash=false --max-delete 0 gdrive-zotero:ipad ~/Zotero-ipad"
