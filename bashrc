@@ -105,6 +105,9 @@ alias zs="zpool status -v"
 alias zi="zpool iostat -v"
 alias zl="zpool list -v"
 alias za="zs;echo;zi;echo;zl"
+alias zss="zfs list -t snapshot"
+alias zssc="sudo zfs snapshot"
+alias zssd="sudo zfs destroy"
 
 alias df='df -Th'
 alias lsg='ls -CFalh --color=auto | grep --color=auto -i'
