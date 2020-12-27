@@ -107,6 +107,9 @@ alias zs="zpool status -v"
 alias zi="zpool iostat -v"
 alias zl="zpool list -v"
 alias za="zs;echo;zi;echo;zl"
+alias zss="zfs list -t snapshot"
+alias zssc="sudo zfs snapshot"
+alias zssd="sudo zfs destroy"
 
 alias df='df -Th'
 alias lsg='ls -CFalh --color=auto | grep --color=auto -i'
@@ -151,7 +154,7 @@ alias ee='emacsclient -c'
 alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d'/' -f1 | sed -r "s/[ \t]+/ /g" | cut -d" " -f2-4 | awk "{print \$1\": \"\$3}" | sort | uniq'
 alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
 alias xcp='xclip -selection clipboard'
-alias httpserver="python2 -m SimpleHTTPServer"
+alias httpserver="python3 -m http.server"
 alias sx="startx"
 
 alias rcc="rclone check ~/Zotero-ipad gdrive-zotero:ipad"
@@ -331,7 +334,7 @@ fi
 
 xsendkeys() {
     _checkargs $# 1 || return 1
-    tmux list-windows | grep -v active | cut -d: -f1 | sort -n -r | xargs -I{} bash -c "echo {} && tmux send-keys -t :{} $1"
+    tmux list-windows | grep -v active | cut -d: -f1 | sort -n -r | xargs -I{} bash -c "echo {} && tmux send-keys -t :{} $(echo $1 | sed 's/ / SPACE /g')"
 }
 
 xmultispawn() {
