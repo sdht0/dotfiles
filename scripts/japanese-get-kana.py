@@ -4,13 +4,18 @@
 from bs4 import BeautifulSoup
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+import socket
 import sys
 
 url = 'http://www.romajidesu.com/translator' # Set destination URL here
-post_fields = {'m': 'converters', 'a':'kanji_romaji', 'k': sys.argv[1]}     # Set POST fields here
+post_fields = {'m': 'converters', 'a':'kanji_romaji', 'k': "".join(sys.argv[1:])}     # Set POST fields here
 
-request = Request(url, urlencode(post_fields).encode())
-result = urlopen(request).read().decode()
+try:
+    request = Request(url, urlencode(post_fields).encode())
+    result = urlopen(request,timeout=5).read().decode()
+except:
+    sys.exit(1)
+
 soup = BeautifulSoup(result,features="lxml")
 
 x = soup.find(id="japanese_input")
