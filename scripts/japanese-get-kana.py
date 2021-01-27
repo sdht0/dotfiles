@@ -12,7 +12,7 @@ post_fields = {'m': 'converters', 'a':'kanji_romaji', 'k': "".join(sys.argv[1:])
 
 try:
     request = Request(url, urlencode(post_fields).encode())
-    result = urlopen(request,timeout=5).read().decode()
+    result = urlopen(request,timeout=10).read().decode()
 except:
     sys.exit(1)
 
