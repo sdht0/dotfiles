@@ -294,11 +294,15 @@ printColors() {
 
 # Taken from http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
 export MARKPATH=$HOME/.local/share/marks
+mkdir "$MARKPATH" &>/dev/null
 function j {
     cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
 }
 function m {
     mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$1"
+}
+function mf {
+    mkdir -p "$MARKPATH"; ln -snf "$(pwd)" "$MARKPATH/$1"
 }
 function um {
     bash -c "cd $MARKPATH && rm $@"
@@ -307,26 +311,20 @@ function mks {
     ls -l "$MARKPATH" | grep -v total | awk '{print $(NF-2),"\t", $(NF-1),$NF}' | column -t
 }
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
-
     function _completemarkszsh {
-    reply=($(ls $MARKPATH))
+        reply=($(ls $MARKPATH))
     }
-
     compctl -K _completemarkszsh j
     compctl -K _completemarkszsh um
-
 fi
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
-
     _completemarksbash() {
-    local curw=${COMP_WORDS[COMP_CWORD]}
-    local wordlist=$(find $MARKPATH -type l -printf "%f\n")
-    COMPREPLY=($(compgen -W '${wordlist[@]}' -- "$curw"))
-    return 0
+        local curw=${COMP_WORDS[COMP_CWORD]}
+        local wordlist=$(find $MARKPATH -type l -printf "%f\n")
+        COMPREPLY=($(compgen -W '${wordlist[@]}' -- "$curw"))
+        return 0
     }
-
     complete -F _completemarksbash j um
-
 fi
 
 xsendkeys() {
