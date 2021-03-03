@@ -154,11 +154,11 @@ alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; 
 alias xcp='xclip -selection clipboard'
 alias httpserver="python3 -m http.server"
 alias sx="startx"
-alias rcc="rclone check ~/Zotero-ipad gdrive-zotero:ipad"
-alias rcid="rclone sync --progress --fast-list --drive-use-trash=false --max-delete 0 gdrive-zotero:ipad ~/Zotero-ipad"
-alias rciu="rclone sync --progress --fast-list --drive-use-trash=false --immutable --retries 1 --max-delete 0 ~/Zotero-ipad gdrive-zotero:ipad"
-alias rciudd="rclone sync --progress --fast-list --drive-use-trash=false --retries 1 ~/Zotero-ipad gdrive-zotero:ipad"
-alias rcdu="rclone sync --progress --fast-list --drive-use-trash=false ~/Zotero/ gdrive-zotero:data-dir"
+alias rcc="rclone check ~/Zotero-ipad gdrive-zotero:Tablet"
+alias rcid="rclone sync --progress --fast-list --drive-use-trash=false --max-delete 0 gdrive-zotero:Tablet ~/Zotero-ipad"
+alias rciu="rclone sync --progress --fast-list --drive-use-trash=false --immutable --retries 1 --max-delete 0 ~/Zotero-ipad gdrive-zotero:Tablet"
+alias rciudd="rclone sync --progress --fast-list --drive-use-trash=false --retries 1 ~/Zotero-ipad gdrive-zotero:Tablet"
+alias rcdu="rclone sync --progress --fast-list --drive-use-trash=false ~/Zotero/ gdrive-zotero:Backup"
 
 alias please='sudo $(fc -ln -1)'
 alias prettyplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
