@@ -89,6 +89,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
+alias g=htop
 alias b='cd -'
 alias ls='ls --color=auto'
 alias sls='sudo ls --color=auto'
