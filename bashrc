@@ -105,7 +105,8 @@ cl() { cd "$@" && lls; }
 alias zs="zpool status -v"
 alias zi="zpool iostat -v"
 alias zl="zpool list -v"
-alias za="zs;echo;zi;echo;zl"
+alias zsp="zfs list -t snapshot"
+alias za="zs;echo;zi;echo;zl;zsp"
 alias zss="zfs list -t snapshot"
 alias zssc="sudo zfs snapshot"
 alias zssd="sudo zfs destroy"
@@ -300,7 +301,7 @@ function j {
     cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
 }
 function m {
-    mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$1"
+    mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$1" 2>/dev/null || echo "Could not mark"
 }
 function mf {
     mkdir -p "$MARKPATH"; ln -snf "$(pwd)" "$MARKPATH/$1"
