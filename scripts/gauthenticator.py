@@ -33,6 +33,7 @@ import hmac
 import six
 import struct
 import time
+import sys
 
 __author__ = 'Tomasz Jaskowski <tadeck@gmail.com>'
 __date__ = '31 July 2015'
@@ -282,7 +283,7 @@ __all__ = [
     'valid_totp'
 ]
 
-my_secret = raw_input()
+my_secret = sys.argv[1]
 my_token = get_totp(my_secret)
 
 print(my_token)
