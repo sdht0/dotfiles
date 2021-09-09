@@ -1,4 +1,0 @@
-Host *
-    ServerAliveInterval 60
-Host 192.168.0.27
-    Port 26501

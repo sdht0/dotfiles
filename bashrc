@@ -91,6 +91,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
+alias g=htop
 alias b='cd -'
 alias ls='ls --color=auto'
 alias sls='sudo ls --color=auto'
@@ -106,11 +107,15 @@ cl() { cd "$@" && lls; }
 alias zs="zpool status -v"
 alias zi="zpool iostat -v"
 alias zl="zpool list -v"
-alias za="zs;echo;zi;echo;zl"
+alias zsp="zfs list -t snapshot"
+alias za="zs;echo;zi;echo;zl;zsp"
 alias zss="zfs list -t snapshot"
 alias zssc="sudo zfs snapshot"
 alias zssd="sudo zfs destroy"
 
+alias ydl="yt-dlp -f 'bestvideo[height<=1080]+bestaudio/best[height<=1080]' --embed-chapters"
+alias sydl="ydl --embed-subs"
+alias dydl="ydl --write-description"
 alias df='df -Th'
 alias lsg='ls -CFalh --color=auto | grep --color=auto -i'
 alias psg='ps aux | grep -v grep | grep -i -e VSZ -e '
@@ -157,11 +162,11 @@ alias xcp='xclip -selection clipboard'
 alias httpserver="python3 -m http.server"
 alias sx="startx"
 
-alias rcc="rclone check ~/Zotero-ipad gdrive-zotero:ipad"
-alias rcid="rclone sync --progress --fast-list --drive-use-trash=false --max-delete 0 gdrive-zotero:ipad ~/Zotero-ipad"
-alias rciu="rclone sync --progress --fast-list --drive-use-trash=false --immutable --retries 1 --max-delete 0 ~/Zotero-ipad gdrive-zotero:ipad"
-alias rciudd="rclone sync --progress --fast-list --drive-use-trash=false --retries 1 ~/Zotero-ipad gdrive-zotero:ipad"
-alias rcdu="rclone sync --progress --fast-list --drive-use-trash=false ~/Zotero/ gdrive-zotero:data-dir"
+alias rcc="rclone check ~/Zotero-ipad gdrive-zotero:Tablet"
+alias rcid="rclone sync --progress --fast-list --drive-use-trash=false --max-delete 0 gdrive-zotero:Tablet ~/Zotero-ipad"
+alias rciu="rclone sync --progress --fast-list --drive-use-trash=false --immutable --retries 1 --max-delete 0 ~/Zotero-ipad gdrive-zotero:Tablet"
+alias rciudd="rclone sync --progress --fast-list --drive-use-trash=false --retries 1 ~/Zotero-ipad gdrive-zotero:Tablet"
+alias rcdu="rclone sync --progress --fast-list --drive-use-trash=false ~/Zotero/ gdrive-zotero:Backup"
 
 alias please='sudo $(fc -ln -1)'
 alias prettyplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
@@ -297,11 +302,15 @@ printColors() {
 
 # Taken from http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
 export MARKPATH=$HOME/.local/share/marks
+mkdir "$MARKPATH" &>/dev/null
 function j {
     cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
 }
 function m {
-    mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$1"
+    mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$1" 2>/dev/null || echo "Could not mark"
+}
+function mf {
+    mkdir -p "$MARKPATH"; ln -snf "$(pwd)" "$MARKPATH/$1"
 }
 function um {
     bash -c "cd $MARKPATH && rm $@"
@@ -310,26 +319,20 @@ function mks {
     ls -l "$MARKPATH" | grep -v total | awk '{print $(NF-2),"\t", $(NF-1),$NF}' | column -t
 }
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
-
     function _completemarkszsh {
-    reply=($(ls $MARKPATH))
+        reply=($(ls $MARKPATH))
     }
-
     compctl -K _completemarkszsh j
     compctl -K _completemarkszsh um
-
 fi
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
-
     _completemarksbash() {
-    local curw=${COMP_WORDS[COMP_CWORD]}
-    local wordlist=$(find $MARKPATH -type l -printf "%f\n")
-    COMPREPLY=($(compgen -W '${wordlist[@]}' -- "$curw"))
-    return 0
+        local curw=${COMP_WORDS[COMP_CWORD]}
+        local wordlist=$(find $MARKPATH -type l -printf "%f\n")
+        COMPREPLY=($(compgen -W '${wordlist[@]}' -- "$curw"))
+        return 0
     }
-
     complete -F _completemarksbash j um
-
 fi
 
 xsendkeys() {
