@@ -111,6 +111,9 @@ alias zss="zfs list -t snapshot"
 alias zssc="sudo zfs snapshot"
 alias zssd="sudo zfs destroy"
 
+alias ydl="yt-dlp -f 'bestvideo[height<=1080]+bestaudio/best[height<=1080]' --embed-chapters"
+alias sydl="ydl --embed-subs"
+alias dydl="ydl --write-description"
 alias df='df -Th'
 alias lsg='ls -CFalh --color=auto | grep --color=auto -i'
 alias psg='ps aux | grep -v grep | grep -i -e VSZ -e '
