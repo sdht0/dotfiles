@@ -1,4 +1,0 @@
-Host *
-    ServerAliveInterval 60
-Host sdhmedia
-    Port 26501
