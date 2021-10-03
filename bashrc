@@ -316,7 +316,7 @@ function um {
     bash -c "cd $MARKPATH && rm $@"
 }
 function mks {
-    ls -l "$MARKPATH" | grep -v total | awk '{print $(NF-2),"\t", $(NF-1),$NF}' | column -t
+    ls -l "$MARKPATH" | grep -v total | tr -s ' ' | cut -d ' ' -f 9- | sed 's/->/:/' | column -t -s ':'
 }
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
     function _completemarkszsh {
