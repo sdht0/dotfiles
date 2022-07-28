@@ -112,8 +112,8 @@ alias zssc="sudo zfs snapshot"
 alias zssd="sudo zfs destroy"
 
 alias bydl="yt-dlp -o '%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext)s'"
-alias ydl="bydl -f 'bestvideo[height<=1080]+bestaudio/best[height<=1080]' --embed-chapters"
-alias ydla="bydl -f 'bestaudio' -x"
+alias ydl="bydl -f 'bestvideo[height<=1080]+bestaudio/best[height<=1080]' --embed-metadata --no-embed-info-json"
+alias ydla="bydl -f 'bestaudio' --embed-metadata --no-embed-info-json"
 alias sydl="ydl --embed-subs"
 alias dydl="ydl --write-description"
 alias df='df -Th'
