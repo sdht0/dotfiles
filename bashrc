@@ -113,7 +113,7 @@ alias zss="zfs list -t snapshot"
 alias zssc="sudo zfs snapshot"
 alias zssd="sudo zfs destroy"
 
-alias bydl="yt-dlp -o '%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext)s'"
+alias bydl="yt-dlp -o '%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext)s' --no-mtime"
 alias ydl="bydl -f 'bestvideo[height<=1080]+bestaudio/best[height<=1080]' --embed-metadata --no-embed-info-json"
 alias ydla="bydl -f 'bestaudio' --embed-metadata --no-embed-info-json"
 alias sydl="ydl --embed-subs"
@@ -412,7 +412,7 @@ upe() { sudo chkconfig --add $1 && sudo chkconfig $1 on && sudo chkconfig --list
 upd() { sudo chkconfig $1 off && sudo chkconfig --list $1 ; }
 
 mypublicip() {
-    printf "dig +short @resolver1.opendns.com myip.opendns.com\ndig +short -t txt @ns1.google.com o-o.myaddr.l.google.com\ncurl -s ident.me\ncurl -s icanhazip.com\ncurl -s4 ifconfig.co\ncurl -s6 ifconfig.co" | xargs -L1 -P0 -I{} sh -c 'x=$({} | tr -d "\"";echo " | {}");echo $x'
+    printf "curl -s ident.me\ncurl -s icanhazip.com\ncurl -s4 ifconfig.co\ncurl -s6 ifconfig.co" | xargs -I{} sh -c 'x=$({} | tr -d "\"";echo " | {}");echo $x'
 }
 
 hold_fort() {
