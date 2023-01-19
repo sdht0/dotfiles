@@ -115,6 +115,7 @@ alias bydl="yt-dlp -o '%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext
 alias ydl="bydl -f 'bestvideo[height<=1080]+bestaudio/best[height<=1080]'"
 alias ydla="bydl -f 'bestaudio' -x --audio-quality 0"
 alias sydl="ydl --embed-subs"
+alias swydl="ydl --write-subs --write-auto-subs -o 'subtitle:subs/%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext)s' --convert-subs 'srt'"
 alias dydl="ydl --write-description"
 alias df='df -Th'
 alias lsg='ls -CFalh --color=auto | grep --color=auto -i'
