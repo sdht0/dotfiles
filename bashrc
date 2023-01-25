@@ -65,7 +65,7 @@ fi
 _checkargs() {
 	[[ $# -lt 2 ]] && echo "Incorrect check usage" && return 2
     if [[ $1 -lt $2 ]]; then
-        echo "Arguments missing!"
+        echo "Atleast $2 argument(s) expected!"
         return 1
     fi
 	return 0
@@ -118,12 +118,10 @@ ydl() {
     _checkargs $# 1 || return 1
     opts=()
     res="480"
-    [[ "$1" == "r" ]] && { res="$2"; shift; }
-    [[ "$1" == "ad" ]] && opts+=(-f 'bestaudio' -x --audio-quality 0) || opts+=(-f "bestvideo[height<=$res]+bestaudio/best[height<=$res]")
-    shift
-    [[ "$1" == "ws" ]] && opts+=(--write-subs --write-auto-subs -o 'subtitle:ysubs/%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext)s' --convert-subs 'srt' --compat-options 'no-live-chat')
-    [[ "$1" == "es" ]] && opts+=(--embed-subs)
-    shift
+    [[ "$1" == "r" ]] && { res="$2"; shift; shift; }
+    [[ "$1" == "ad" ]] && { opts+=(-f 'bestaudio' -x --audio-quality 0); shift; } || opts+=(-f "bestvideo[height<=$res]+bestaudio/best[height<=$res]")
+    [[ "$1" == "ws" ]] && { opts+=(--write-subs --write-auto-subs -o 'subtitle:ysubs/%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext)s' --convert-subs 'srt' --compat-options 'no-live-chat'); shift; }
+    [[ "$1" == "es" ]] && { opts+=(--embed-subs); shift; }
     bydl "${opts[@]}" "$@"
 }
 alias df='df -Th'
