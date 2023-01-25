@@ -113,14 +113,18 @@ alias zss="zfs list -t snapshot"
 alias zssc="sudo zfs snapshot"
 alias zssd="sudo zfs destroy"
 
-alias bydl="yt-dlp -o '%(title)s [%(upload_date>%Y.%m.%d)s][%(channel)s][%(id)s].%(ext)s' --embed-metadata --no-embed-info-json --extractor-args 'youtube:lang=en'"
-alias ydl="bydl -f 'bestvideo[height<=480]+bestaudio/best[height<=480]'"
-alias ydlhd="bydl -f 'bestvideo[height<=720]+bestaudio/best[height<=720]'"
-alias ydlfhd="bydl -f 'bestvideo[height<=1080]+bestaudio/best[height<=1080]'"
-alias ydla="bydl -f 'bestaudio' -x --audio-quality 0"
-alias sydl="ydl --embed-subs"
-alias swydl="ydl --write-subs --write-auto-subs -o 'subtitle:subs/%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext)s' --convert-subs 'srt' --compat-options 'no-live-chat'"
-alias dydl="ydl --write-description"
+alias bydl="yt-dlp -o '%(title)s [%(upload_date>%Y.%m.%d)s][%(channel)s][%(id)s].%(ext)s' --no-mtime --embed-metadata --no-embed-info-json --extractor-args 'youtube:lang=en'"
+ydl() {
+    opts=()
+    res="480"
+    [[ "$1" == "r" ]] && { res="$2"; shift; }
+    [[ "$1" == "ad" ]] && opts+=("-f 'bestaudio' -x --audio-quality 0") || opts+=(-f 'bestvideo[height<=$res]+bestaudio/best[height<=$res]')
+    shift
+    [[ "$1" == "ws" ]] && subs="--write-subs --write-auto-subs -o 'subtitle:ysubs/%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext)s' --convert-subs 'srt' --compat-options 'no-live-chat'"
+    [[ "$1" == "es" ]] && subs="--embed-subs"
+    shift
+    bydl "${opts[@]}" "$@"
+}
 alias df='df -Th'
 alias lsg='ls -CFalh --color=auto | grep --color=auto -i'
 alias psg='ps aux | grep -v grep | grep -i -e VSZ -e '
