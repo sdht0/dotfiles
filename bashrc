@@ -115,10 +115,11 @@ alias zssd="sudo zfs destroy"
 
 alias bydl="yt-dlp -o '%(title)s [%(upload_date>%Y.%m.%d)s][%(channel)s][%(id)s].%(ext)s' --no-mtime --embed-metadata --no-embed-info-json --extractor-args 'youtube:lang=en'"
 ydl() {
+    _checkargs $# 1 || return 1
     opts=()
     res="480"
     [[ "$1" == "r" ]] && { res="$2"; shift; }
-    [[ "$1" == "ad" ]] && opts+=("-f 'bestaudio' -x --audio-quality 0") || opts+=(-f 'bestvideo[height<=$res]+bestaudio/best[height<=$res]')
+    [[ "$1" == "ad" ]] && opts+=("-f 'bestaudio' -x --audio-quality 0") || opts+=(-f "bestvideo[height<=$res]+bestaudio/best[height<=$res]")
     shift
     [[ "$1" == "ws" ]] && subs="--write-subs --write-auto-subs -o 'subtitle:ysubs/%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext)s' --convert-subs 'srt' --compat-options 'no-live-chat'"
     [[ "$1" == "es" ]] && subs="--embed-subs"
