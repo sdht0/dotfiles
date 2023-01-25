@@ -119,10 +119,10 @@ ydl() {
     opts=()
     res="480"
     [[ "$1" == "r" ]] && { res="$2"; shift; }
-    [[ "$1" == "ad" ]] && opts+=("-f 'bestaudio' -x --audio-quality 0") || opts+=(-f "bestvideo[height<=$res]+bestaudio/best[height<=$res]")
+    [[ "$1" == "ad" ]] && opts+=(-f 'bestaudio' -x --audio-quality 0) || opts+=(-f "bestvideo[height<=$res]+bestaudio/best[height<=$res]")
     shift
-    [[ "$1" == "ws" ]] && subs="--write-subs --write-auto-subs -o 'subtitle:ysubs/%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext)s' --convert-subs 'srt' --compat-options 'no-live-chat'"
-    [[ "$1" == "es" ]] && subs="--embed-subs"
+    [[ "$1" == "ws" ]] && opts+=(--write-subs --write-auto-subs -o 'subtitle:ysubs/%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext)s' --convert-subs 'srt' --compat-options 'no-live-chat')
+    [[ "$1" == "es" ]] && opts+=(--embed-subs)
     shift
     bydl "${opts[@]}" "$@"
 }
