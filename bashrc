@@ -117,7 +117,7 @@ ydl() {
     opts=()
     res="480"
     [[ "$1" == "r" ]] && { res="$2"; shift; shift; }
-    [[ "$1" == "ad" ]] && { opts+=(-f 'bestaudio' -x --audio-quality 0); shift; } || opts+=(-f "bestvideo[height<=$res]+bestaudio/best[height<=$res]")
+    [[ "$1" == "ad" ]] && { opts+=(-f 'bestaudio' -x --audio-format opus --audio-quality 0 --embed-metadata --no-embed-info-json --embed-thumbnail); shift; } || opts+=(-f "bestvideo[height<=$res]+bestaudio/best[height<=$res]")
     [[ "$1" == "ws" ]] && { opts+=(--write-subs --write-auto-subs -o 'subtitle:ysubs/%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext)s' --convert-subs 'srt' --compat-options 'no-live-chat'); shift; }
     [[ "$1" == "es" ]] && { opts+=(--embed-subs); shift; }
     bydl "${opts[@]}" "$@"
