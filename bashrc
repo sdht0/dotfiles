@@ -113,7 +113,7 @@ alias zss="zfs list -t snapshot"
 alias zssc="sudo zfs snapshot"
 alias zssd="sudo zfs destroy"
 
-alias bydl="yt-dlp -o '%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext)s' --no-mtime --embed-metadata --no-embed-info-json --extractor-args 'youtube:lang=en'"
+alias bydl="yt-dlp -o '%(title)s [%(upload_date>%Y.%m.%d)s][%(channel)s][%(id)s].%(ext)s' --embed-metadata --no-embed-info-json --extractor-args 'youtube:lang=en'"
 alias ydl="bydl -f 'bestvideo[height<=480]+bestaudio/best[height<=480]'"
 alias ydlhd="bydl -f 'bestvideo[height<=720]+bestaudio/best[height<=720]'"
 alias ydlfhd="bydl -f 'bestvideo[height<=1080]+bestaudio/best[height<=1080]'"
