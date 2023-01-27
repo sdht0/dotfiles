@@ -143,8 +143,8 @@ ports() {
     fi
     echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(netstat -lnp${option} | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k${pos})" | column -t
 }
-alias rmr='rm -rf'
-alias srmr='sudo rm -rf'
+alias rmr='rm -vrf'
+alias srmr='sudo rm -vrf'
 alias mount='mount -v'
 alias umount='umount -v'
 alias dmesg='dmesg --human -T'
@@ -312,16 +312,19 @@ printColors() {
 export MARKPATH=$HOME/.local/share/marks
 mkdir "$MARKPATH" &>/dev/null
 function j {
-    cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
+    cd -P "$MARKPATH/${1:-d}" 2>/dev/null || echo "No such mark: $1"
 }
 function m {
+    _checkargs $# 1 || return 1
     mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$1" 2>/dev/null || echo "Could not mark"
 }
 function mf {
+    _checkargs $# 1 || return 1
     mkdir -p "$MARKPATH"; ln -snf "$(pwd)" "$MARKPATH/$1"
 }
 function um {
-    bash -c "cd $MARKPATH && rm $@"
+    _checkargs $# 1 || return 1
+    bash -c "cd $MARKPATH && rm -v $1"
 }
 function mks {
     ls -n "$MARKPATH" | grep -v total | tr -s ' ' | cut -d ' ' -f 9- | sed 's/->/:/' | column -t -s ':'
