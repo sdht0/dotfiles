@@ -143,6 +143,8 @@ ports() {
     fi
     echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(netstat -lnp${option} | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k${pos})" | column -t
 }
+alias rm='rm -v'
+alias rmd='rmdir -v'
 alias rmr='rm -vrf'
 alias srmr='sudo rm -vrf'
 alias mount='mount -v'
@@ -164,7 +166,6 @@ alias se='sudoedit'
 alias sv='sudo vim -u ~/.vimrc'
 alias e='vim'
 alias ee='emacsclient -c'
-alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d'/' -f1 | sed -r "s/[ \t]+/ /g" | cut -d" " -f2-4 | awk "{print \$1\": \"\$3}" | sort | uniq'
 alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
 alias xcp='xclip -selection clipboard'
 alias httpserver="python3 -m http.server"
@@ -175,6 +176,11 @@ alias rcid="rclone sync --progress --fast-list --drive-use-trash=false --max-del
 alias rciu="rclone sync --progress --fast-list --drive-use-trash=false --immutable --retries 1 --max-delete 0 ~/Zotero-ipad gdrive-zotero:Tablet"
 alias rciudd="rclone sync --progress --fast-list --drive-use-trash=false --retries 1 ~/Zotero-ipad gdrive-zotero:Tablet"
 alias rcdu="rclone sync --progress --fast-list --drive-use-trash=false ~/Zotero/ gdrive-zotero:Backup"
+
+alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d'/' -f1 | sed -r "s/[ \t]+/ /g" | cut -d" " -f2-4 | awk "{print \$1\": \"\$3}" | sort | uniq'
+mypublicip() {
+    printf "curl -s ident.me\ncurl -s icanhazip.com\ncurl -s4 ifconfig.co\ncurl -s6 ifconfig.co" | xargs -I{} sh -c 'x=$({} | tr -d "\"";echo " | {}");echo $x'
+}
 
 alias please='sudo $(fc -ln -1)'
 alias prettyplease='sudo $(history | tail -1 | awk "{\$1=\"\";print}" | xargs)'
@@ -419,10 +425,6 @@ upr() { sudo service $1 restart ; }
 uprl() { sudo service $1 reload ; }
 upe() { sudo chkconfig --add $1 && sudo chkconfig $1 on && sudo chkconfig --list $1 ; }
 upd() { sudo chkconfig $1 off && sudo chkconfig --list $1 ; }
-
-mypublicip() {
-    printf "curl -s ident.me\ncurl -s icanhazip.com\ncurl -s4 ifconfig.co\ncurl -s6 ifconfig.co" | xargs -I{} sh -c 'x=$({} | tr -d "\"";echo " | {}");echo $x'
-}
 
 hold_fort() {
     while true;do
