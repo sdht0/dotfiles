@@ -144,6 +144,7 @@ ports() {
     echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(netstat -lnp${option} | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k${pos})" | column -t
 }
 alias rm='rm -v'
+alias rmdir='rmdir -v'
 alias rmd='rmdir -v'
 alias rmr='rm -vrf'
 alias srmr='sudo rm -vrf'
@@ -446,48 +447,52 @@ ctg() {
 }
 
 xs() {
-    if [ $# -lt 1 ]; then
-        echo "No input!"
-        return 1
-    fi
+    _checkargs $# 1 || return 1
+
+    [[ "$1" == "___strict___" ]] && strict="true" && shift
 
     if command -v rg &> /dev/null;then
-        rg $@
+        [[ "${strict:-}" == "true" ]] && args="-s" || args="-i"
+        rg ${args:-} "$@"
     else
-        grep -R $@ .
+        [[ "${strict:-}" != "true" ]] && args="-i"
+        grep -ER ${args:-} "$@" .
     fi
+}
+xss() {
+    _checkargs $# 1 || return 1
+    xs "___strict___" "$@"
 }
 
 xf() {
-    if [ $# -lt 1 ]; then
-        echo "No input!"
-        return 1
-    fi
+    _checkargs $# 1 || return 1
+
+    [[ "$1" == "___strict___" ]] && strict="true" && shift
 
     if command -v fd &> /dev/null;then
-        fd $@
+        [[ "${strict:-}" == "true" ]] && args="-s" || args="-i"
+        fd -j1 ${args:-} "$@"
     else
-        find -iname "*$**"
+        [[ "${strict:-}" != "true" ]] && args="-iname"
+        find ${args:-} "*$**"
     fi
+}
+xfs() {
+    _checkargs $# 1 || return 1
+    xf "___strict___" "$@"
 }
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
 
 alias jp="japanesec"
 japanese() {
-    if [ $# -lt 1 ]; then
-        echo "No input!"
-        return 1
-    fi
+    _checkargs $# 1 || return 1
 
     python ~/.dotfiles/scripts/japanese-get-kana.py "$@"
 }
 
 japanesec() {
-	if [ $# -lt 1 ]; then
-        echo "No input!"
-        return 1
-    fi
+    _checkargs $# 1 || return 1
 
     p=$(japanese "$@")
     echo $p
@@ -518,10 +523,8 @@ up() {
 }
 
 fawk() {
-    if [ $# -lt 1 ]; then
-        echo "No input!"
-        return 1
-    fi
+    _checkargs $# 1 || return 1
+
     [[ -n "$2" ]] && local sep="-F$2"
     local first="awk $sep '{print "
     local last="}'"
@@ -530,10 +533,7 @@ fawk() {
 }
 
 pkla() {
-    if [ $# -lt 1 ]; then
-        echo "No input!"
-        return 1
-    fi
+    _checkargs $# 1 || return 1
     ps aux | grep -v grep | grep -i -e $1 | awk '{print $2}' | xargs kill -9
 }
 
@@ -581,9 +581,7 @@ changehostname() {
 }
 
 xdeletefromgit() {
-    if [ $# -eq 0 ]; then
-        return 0
-    fi
+    _checkargs $# 1 || return 1
 
     # make sure we're at the root of git repo
     if [ ! -d .git ]; then
@@ -600,9 +598,7 @@ xdeletefromgit() {
 }
 
 xreauthorgit() {
-    if [ $# -lt 3 ]; then
-        return 0
-    fi
+    _checkargs $# 3 || return 1
 
 git filter-branch --env-filter '
 
@@ -719,10 +715,8 @@ xuploadpicasa() {
 }
 
 xmakecustomarchiso() {
-    if [ $# -lt 1 ]; then
-        echo "Need iso path and iso label!"
-        return 1
-    fi
+    _checkargs $# 1 || return 1
+
     isoname=sdh-$(basename "$1")
     isolabel=$(isoinfo -d -i "$1" | grep "Volume id" | sed "s/Volume id: //")
     outputdir=$(pwd)
@@ -803,10 +797,7 @@ xintegration() {
 }
 
 xplaylist() {
-    if [ $# -lt 1 ]; then
-    echo "No input!"
-    return 1
-    fi
+    _checkargs $# 1 || return 1
 
     cd $1
 
@@ -843,38 +834,29 @@ xpatternrename() {
 }
 
 xgpp() {
-    if [ $# -lt 1 ]; then
-    echo "No input files!"
-    return 1
+    _checkargs $# 1 || return 1
 
-    elif [ $# -eq 2 ]; then
-    g++ $1 && ./a.out < $2
-
+    if [ $# -eq 2 ]; then
+        g++ $1 && ./a.out < $2
     else
-    g++ $1 && ./a.out
+        g++ $1 && ./a.out
     fi
 
     rm -f a.out
 }
 
 xgcc() {
-    if [ $# -lt 1 ]; then
-    echo "No input files!"
-    return 1
+    _checkargs $# 1 || return 1
 
-    elif [ $# -eq 2 ]; then
-    gcc $1 && ./a.out < $2 && rm a.out
-
+    if [ $# -eq 2 ]; then
+        gcc $1 && ./a.out < $2 && rm a.out
     else
-    gcc $1 && ./a.out  && rm a.out
+        gcc $1 && ./a.out  && rm a.out
     fi
 }
 
 xccreatefolder() {
-    if [ $# -ne 1 ]; then
-    echo "Wrong input!"
-    return 1
-    fi
+    _checkargs $# 1 || return 1
 
     mkdir -p $1 && ( echo '#include<stdio.h>
 int main() {
@@ -884,10 +866,7 @@ int main() {
 }
 
 xcppcreatefolder() {
-    if [ $# -ne 1 ]; then
-    echo "Wrong input!"
-    return 1
-    fi
+    _checkargs $# 1 || return 1
 
     mkdir -p $1 && ( echo '#include<iostream>
 using namespace std;
@@ -898,13 +877,11 @@ int main() {
 }
 
 xregexrename() {
-  if [ $# -lt 1 ]; then
-    echo "Wrong input!"
-    return 1
-  fi
-  for i in *;do
-    x=$(echo $i | sed "$1"); [[ ! -r "$x" ]] && echo "$i -> $x" && [[ "$2" = "m" ]] && mv "$i" "$x"
-  done
+    _checkargs $# 1 || return 1
+
+    for i in *;do
+        x=$(echo $i | sed "$1"); [[ ! -r "$x" ]] && echo "$i -> $x" && [[ "$2" = "m" ]] && mv "$i" "$x"
+    done
 }
 
 xrenametotitlecase() {
