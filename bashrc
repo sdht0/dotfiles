@@ -142,6 +142,7 @@ ports() {
     echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(netstat -lnp${option} | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k${pos})" | column -t
 }
 alias rm='rm -v'
+alias rmdir='rmdir -v'
 alias rmd='rmdir -v'
 alias rmr='rm -vrf'
 alias srmr='sudo rm -vrf'
@@ -450,22 +451,37 @@ ctg() {
 xs() {
     _checkargs $# 1 || return 1
 
-    if command -v rg &> /dev/null;then
-        rg $@
-    else
-        grep -R $@ .
-    fi
+    [[ "$1" == "___strict___" ]] && strict="true" && shift
 
+    if command -v rg &> /dev/null;then
+        [[ "${strict:-}" == "true" ]] && args="-s" || args="-i"
+        rg ${args:-} "$@"
+    else
+        [[ "${strict:-}" != "true" ]] && args="-i"
+        grep -ER ${args:-} "$@" .
+    fi
+}
+xss() {
+    _checkargs $# 1 || return 1
+    xs "___strict___" "$@"
 }
 
 xf() {
     _checkargs $# 1 || return 1
 
+    [[ "$1" == "___strict___" ]] && strict="true" && shift
+
     if command -v fd &> /dev/null;then
-        fd -j1 -i $@
+        [[ "${strict:-}" == "true" ]] && args="-s" || args="-i"
+        fd -j1 ${args:-} "$@"
     else
-        find -iname "*$**"
+        [[ "${strict:-}" != "true" ]] && args="-iname"
+        find ${args:-} "*$**"
     fi
+}
+xfs() {
+    _checkargs $# 1 || return 1
+    xf "___strict___" "$@"
 }
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
@@ -834,11 +850,10 @@ xgpp() {
 xgcc() {
     _checkargs $# 1 || return 1
 
-    elif [ $# -eq 2 ]; then
-    gcc $1 && ./a.out < $2 && rm a.out
-
+    if [ $# -eq 2 ]; then
+        gcc $1 && ./a.out < $2 && rm a.out
     else
-    gcc $1 && ./a.out  && rm a.out
+        gcc $1 && ./a.out  && rm a.out
     fi
 }
 
