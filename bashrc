@@ -89,7 +89,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
-alias g=htop
+alias h=htop
 alias b='cd -'
 alias ls='ls --color=auto'
 alias sls='sudo ls --color=auto'
@@ -491,7 +491,7 @@ xfs() {
     xf "___strict___" "$@"
 }
 
-h() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
+hh() { if [ -z "$*" ]; then history 1; else history 1 | grep -E "$@"; fi; }
 
 alias jp="japanesec"
 japanese() {
