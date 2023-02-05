@@ -118,12 +118,18 @@ ydl() {
     _checkargs $# 1 || return 1
     opts=()
     res="480"
-    [[ "$1" == "r" ]] && { res="$2"; shift; shift; }
-    [[ "$1" == "ad" ]] && { opts+=(-f 'bestaudio' -x --audio-format opus --audio-quality 0 --embed-metadata --no-embed-info-json --embed-thumbnail); shift; } || opts+=(-f "bestvideo[height<=$res]+bestaudio/best[height<=$res]")
+    if [[ "$1" == "ad" ]];then
+        opts+=(-f 'bestaudio' -x --audio-format opus --audio-quality 0 --embed-metadata --no-embed-info-json --embed-thumbnail)
+        shift
+    else
+        [[ "$1" == "r" ]] && { res="$2"; shift; shift; }
+        opts+=(-f "bestvideo[height<=$res]+bestaudio/best[height<=$res]")
+    fi
     [[ "$1" == "ws" ]] && { opts+=(--write-subs --write-auto-subs -o 'subtitle:ysubs/%(title)s [%(upload_date>%Y)s][%(channel)s][%(id)s].%(ext)s' --convert-subs 'srt' --compat-options 'no-live-chat'); shift; }
     [[ "$1" == "es" ]] && { opts+=(--embed-subs); shift; }
     bydl "${opts[@]}" "$@"
 }
+alias ydla='ydl ad'
 alias df='df -Th'
 alias lsg='ls -CFalh --color=auto | grep --color=auto -i'
 alias psg='ps aux | grep -v grep | grep -i -e VSZ -e '
@@ -143,6 +149,7 @@ ports() {
     fi
     echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(netstat -lnp${option} | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k${pos})" | column -t
 }
+alias mv='mv -v'
 alias rm='rm -v'
 alias rmdir='rmdir -v'
 alias rmd='rmdir -v'
