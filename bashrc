@@ -178,13 +178,6 @@ alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; 
 alias xcp='xclip -selection clipboard'
 alias httpserver="python3 -m http.server"
 alias sx="startx"
-
-alias rcc="rclone check ~/Zotero-ipad gdrive-zotero:Tablet"
-alias rcid="rclone sync --progress --fast-list --drive-use-trash=false --max-delete 0 gdrive-zotero:Tablet ~/Zotero-ipad"
-alias rciu="rclone sync --progress --fast-list --drive-use-trash=false --immutable --retries 1 --max-delete 0 ~/Zotero-ipad gdrive-zotero:Tablet"
-alias rciudd="rclone sync --progress --fast-list --drive-use-trash=false --retries 1 ~/Zotero-ipad gdrive-zotero:Tablet"
-alias rcdu="rclone sync --progress --fast-list --drive-use-trash=false ~/Zotero/ gdrive-zotero:Backup"
-
 alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d'/' -f1 | sed -r "s/[ \t]+/ /g" | cut -d" " -f2-4 | awk "{print \$1\": \"\$3}" | sort | uniq'
 mypublicip() {
     printf "curl -s ident.me\ncurl -s icanhazip.com\ncurl -s4 ifconfig.co\ncurl -s6 ifconfig.co" | xargs -I{} sh -c 'x=$({} | tr -d "\"";echo " | {}");echo $x'
