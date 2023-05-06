@@ -91,16 +91,13 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias h=htop
 alias b='cd -'
-alias ls='ls --color=auto'
-alias sls='sudo ls --color=auto'
-alias lsa='ls -CFah --color=auto'
-alias ll='ls -CFlh --color=auto'           # Use ll -t, ll -tr, ll -S, ll -Sr for more sorting options. Similarly for lla and lld
-alias lla='ls -CFalh --color=auto'
-alias slla='sudo ls -CFalh --color=auto'
-lld() { ls -CFalh $* --color=force | grep -e "^d" -e total --color=never;ls -CFalh $* --color=force | grep -vE "^d|total"; }
-alias lldt='ls -CFalht --color=force | grep -e "^d" -e total --color=never;ls -CFalht --color=force | grep -vE "^d|total"'
-alias llds='ls -CFalhS --color=force | grep -e "^d" -e total --color=never;ls -CFalhS --color=force | grep -vE "^d|total"'
-cl() { cd "$@" && lls; }
+alias ls='ls -XFh --color=auto --group-directories-first'
+alias lsa='ls -A'
+alias ll='ls -l'           # Use ll -t, ll -tr, ll -S, ll -Sr for more sorting options. Similarly for lla and lld
+alias la="ll -A"
+alias lla='la'
+ld() { la $* --color=force | grep -E "^d|total"; }
+cl() { cd "$@" && la; }
 
 alias zs="zpool status -v"
 alias zi="zpool iostat -v"
