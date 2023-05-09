@@ -440,7 +440,7 @@ ctg() {
     cat "$1" | grep "$2"
 }
 
-ls() {
+li() {
     unset long all dir
     [[ "$1" == "_long" ]] && long="true" && shift
     [[ "$1" == "_all" ]] && all="true" && shift
@@ -458,8 +458,8 @@ ls() {
         ls -XF --color=auto --group-directories-first "${args[@]}" "$@"
     fi
 }
-alias lsa='ls _all'
-alias ll='ls _long'
+alias lsa='li _all'
+alias ll='li _long'
 alias la="ll _all"
 alias ld='ll _dir'
 alias lda='la _dir'
