@@ -93,13 +93,6 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias h=htop
 alias b='cd -'
-alias ls='ls -XFh --color=auto --group-directories-first'
-alias lsa='ls -A'
-alias ll='ls -l'           # Use ll -t, ll -tr, ll -S, ll -Sr for more sorting options. Similarly for lla and lld
-alias la="ll -A"
-alias lla='la'
-ld() { la $* --color=force | grep -E "^d|total"; }
-cl() { cd "$@" && la; }
 
 alias zs="zpool status -v"
 alias zi="zpool iostat -v"
@@ -442,6 +435,30 @@ mkcd() {
 ctg() {
     cat "$1" | grep "$2"
 }
+
+ls() {
+    unset long all dir
+    [[ "$1" == "_long" ]] && long="true" && shift
+    [[ "$1" == "_all" ]] && all="true" && shift
+    [[ "$1" == "_dir" ]] && dir="true" && shift
+
+    args=()
+    [[ "${long:-}" == "true" ]] && args+=("-l")
+
+    if command -v exa &> /dev/null;then
+        [[ "${all:-}" == "true" ]] && args+=("--all")
+        [[ "${dir:-}" == "true" ]] && args+=("--only-dirs")
+        exa --group-directories-first --color=auto --sort=extension "${args[@]}" "$@"
+    else
+        [[ "${all:-}" == "true" ]] && args+=("--almost-all")
+        ls -XF --color=auto --group-directories-first "${args[@]}" "$@"
+    fi
+}
+alias lsa='ls _all'
+alias ll='ls _long'
+alias la="ll _all"
+alias ld='ll _dir'
+alias lda='la _dir'
 
 xs() {
     _checkargs $# 1 || return 1
