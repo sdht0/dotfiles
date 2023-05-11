@@ -447,22 +447,21 @@ li() {
     [[ "$1" == "_dir" ]] && dir="true" && shift
 
     args=()
-    [[ "${long:-}" == "true" ]] && args+=("-l")
 
     if command -v exa &> /dev/null;then
-        [[ "${all:-}" == "true" ]] && args+=("--all")
+        [[ "${long:-}" == "true" ]] && args+=("-lg")
+        [[ "${all:-}" == "true" ]] && args+=("-aa")
         [[ "${dir:-}" == "true" ]] && args+=("--only-dirs")
         exa --group-directories-first --color=auto --sort=extension "${args[@]}" "$@"
     else
-        [[ "${all:-}" == "true" ]] && args+=("--almost-all")
+        [[ "${long:-}" == "true" ]] && args+=("-l")
+        [[ "${all:-}" == "true" ]] && args+=("--all")
         ls -XF --color=auto --group-directories-first "${args[@]}" "$@"
     fi
 }
-alias lsa='li _all'
-alias ll='li _long'
-alias la="ll _all"
+alias la='li _all'
+alias ll='li _long _all'
 alias ld='ll _dir'
-alias lda='la _dir'
 
 xs() {
     _checkargs $# 1 || return 1
