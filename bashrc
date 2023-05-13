@@ -433,7 +433,8 @@ hold_fort() {
 }
 
 mkcd() {
-    mkdir -p $1 && cd $1
+    dir="$*"
+    mkdir -vp "$dir" && cd "$dir"
 }
 
 ctg() {
