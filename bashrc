@@ -313,15 +313,15 @@ function j {
 }
 function m {
     _checkargs $# 1 || return 1
-    mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$1" 2>/dev/null || echo "Could not mark"
+    mkdir -p "$MARKPATH"; ln -vs "$(pwd)" "$MARKPATH/$1" 2>/dev/null || echo "Could not mark"
 }
 function mf {
     _checkargs $# 1 || return 1
-    mkdir -p "$MARKPATH"; ln -snf "$(pwd)" "$MARKPATH/$1"
+    mkdir -p "$MARKPATH"; ln -snvf "$(pwd)" "$MARKPATH/$1"
 }
 function um {
     _checkargs $# 1 || return 1
-    bash -c "cd $MARKPATH && rm -v $1"
+    (cd $MARKPATH && rm -v $1)
 }
 function mks {
     ls -n "$MARKPATH" | grep -v total | tr -s ' ' | cut -d ' ' -f 9- | sed 's/->/:/' | column -t -s ':'
