@@ -94,6 +94,8 @@ alias .....='cd ../../../..'
 alias h=htop
 alias b='cd -'
 
+alias p="pnpm"
+
 alias zs="zpool status -v"
 alias zi="zpool iostat -v"
 alias zl="zpool list -v"
@@ -231,9 +233,10 @@ pcmwo() {
 }
 alias pcmii='pacman -Qi'
 
-alias pru='yay --needed --mflags=--skippgpcheck'
-alias pri='yay -S --needed'
-alias prs='yay -Ss'
+alias pru='pikaur -Syu --needed --mflags=--skippgpcheck'
+alias prua='pru --devel'
+alias pri='pikaur -S --needed'
+alias prs='pikaur -Ss'
 
 add_to_repo() {
     _checkargs $# 2 || return 1
