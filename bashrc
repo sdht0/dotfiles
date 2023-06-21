@@ -92,6 +92,8 @@ alias .....='cd ../../../..'
 alias h=htop
 alias b='cd -'
 
+alias p="pnpm"
+
 alias zs="zpool status -v"
 alias zi="zpool iostat -v"
 alias zl="zpool list -v"
