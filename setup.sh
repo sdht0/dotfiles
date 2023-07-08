@@ -27,9 +27,3 @@ link_file "tmux.conf"
 link_file "gitconfig"
 link_file "vimrc"
 
-cat << EOF > ~/.spacemacs
-(load-file "~/.dotfiles/spacemacs")
-
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
-EOF
