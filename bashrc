@@ -127,7 +127,7 @@ alias psgc='ps aux | grep -v grep | grep -i -e '
 alias pkl='kill -9'
 alias spkl='sudo kill -9'
 ports() {
-    [[ "$1" == "" ]] && { 1="-k6,6"; 2="-k1,1r"; 3="-k4,4n"; }
+    [[ "$1" == "" ]] && { 1="-k6,6"; 2="-k4,4n"; 3="-k1,1"; 4="-k2,2"; }
     sep=";"
     (
         echo -e "IP${sep}Proto${sep}Address${sep}Port${sep}UID${sep}Process${sep}PID${sep}Other"
@@ -327,7 +327,7 @@ function mks {
 }
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
     function _completemarkszsh {
-        reply=($(ls $MARKPATH))
+        reply=($(/usr/bin/ls $MARKPATH))
     }
     compctl -K _completemarkszsh j
     compctl -K _completemarkszsh um
