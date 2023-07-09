@@ -129,9 +129,15 @@ alias psgc='ps aux | grep -v grep | grep -i -e '
 alias pkl='kill -9'
 alias spkl='sudo kill -9'
 ports() {
-    [[ "$1" == "" ]] && { 1="-k1,1r"; 2="-k3,3n"; }
+    [[ "$1" == "" ]] && { 1="-k6,6"; 2="-k1,1r"; 3="-k4,4n"; }
     sep=";"
-    echo -e "Proto${sep}Address${sep}Port${sep}Process${sep}UID\n$(sudo ss -lntupe | grep -vE '^Netid' | awk '{$5=gensub(/(.+):(.+)/,"\\1'${sep}'\\2",1,$5);$7=gensub(/^users:\(\((.+)\)\)/,"\\1",1,$7);$7=gensub(/\),\(/,"/","g",$7);$8=gensub(/^ino.*/,"0",1,$8);;$8=gensub(/^uid:/,"",1,$8);OFS="'${sep}'"}{print $1,$5,$7,$8}' | sort --field-separator "${sep}" "$@")" | column -t -s"${sep}"
+    (
+        echo -e "IP${sep}Proto${sep}Address${sep}Port${sep}UID${sep}Process${sep}PID${sep}Other"
+        (
+            sudo ss -l4tunpe | grep -vE '^Netid' | awk '{$5=gensub(/(.+):(.+)/,"\\1'${sep}'\\2",1,$5);$7=gensub(/^users:\(\("([^"]+)",pid=([0-9]+),(.*)\)\)/,"\\1'${sep}'\\2'${sep}'\\3",1,$7);$7=gensub(/\),\(/,",","g",$7);$8=gensub(/^ino.*/,"0",1,$8);;$8=gensub(/^uid:/,"",1,$8);OFS="'${sep}'"}{print $1,$5,$8,$7}' | sed -r "s/^/ipv4${sep}/"
+            sudo ss -l6tunpe | grep -vE '^Netid' | awk '{$5=gensub(/(.+):(.+)/,"\\1'${sep}'\\2",1,$5);$7=gensub(/^users:\(\("([^"]+)",pid=([0-9]+),(.*)\)\)/,"\\1'${sep}'\\2'${sep}'\\3",1,$7);$7=gensub(/\),\(/,",","g",$7);$8=gensub(/^ino.*/,"0",1,$8);;$8=gensub(/^uid:/,"",1,$8);OFS="'${sep}'"}{print $1,$5,$8,$7}' | sed -r "s/^/ipv6${sep}/"
+        ) | sort --field-separator "${sep}" "$@"
+    ) | column -t -s"${sep}"
 }
 alias mv='mv -v'
 alias rm='rm -v'
