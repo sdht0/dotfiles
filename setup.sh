@@ -26,4 +26,4 @@ echo -e ". ~/.bashrc\n. $dotfiles/zshrc" > ~/.zshrc
 link_file "tmux.conf"
 link_file "gitconfig"
 link_file "vimrc"
-
+link_file "xinitrc"

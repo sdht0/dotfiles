@@ -128,18 +128,10 @@ alias psg='ps aux | grep -v grep | grep -i -e VSZ -e '
 alias psgc='ps aux | grep -v grep | grep -i -e '
 alias pkl='kill -9'
 alias spkl='sudo kill -9'
-alias portso='netstat -tulnp | grep LISTEN | sort -k6'
-alias portsa='netstat -tulanp'
 ports() {
-    option="${1:-b}"
-    pos="${2:-5}"
-    if [[ "$option" == "b" ]];then
-        ports u "$pos"
-        echo
-        ports t "$pos"
-        return 0
-    fi
-    echo -e "Proto Recv-Q Send-Q LocalAddress Port ForeignAddress PID ProgramName\n$(netstat -lnp${option} | tail -n +3 | sed -r -e "s/LISTEN(.*)/\1 LISTEN/" -e "s|:([0-9]+) | \1 |" -e "s|/| |" | sort -n -k${pos})" | column -t
+    [[ "$1" == "" ]] && { 1="-k1,1r"; 2="-k3,3n"; }
+    sep=";"
+    echo -e "Proto${sep}Address${sep}Port${sep}Process${sep}UID\n$(sudo ss -lntupe | grep -vE '^Netid' | awk '{$5=gensub(/(.+):(.+)/,"\\1'${sep}'\\2",1,$5);$7=gensub(/^users:\(\((.+)\)\)/,"\\1",1,$7);$7=gensub(/\),\(/,"/","g",$7);$8=gensub(/^ino.*/,"0",1,$8);;$8=gensub(/^uid:/,"",1,$8);OFS="'${sep}'"}{print $1,$5,$7,$8}' | sort --field-separator "${sep}" "$@")" | column -t -s"${sep}"
 }
 alias mv='mv -v'
 alias rm='rm -v'
