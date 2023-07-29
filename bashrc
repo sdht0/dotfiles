@@ -457,7 +457,7 @@ ls() {
     else
         [[ "${long:-}" == "true" ]] && args+=("-l")
         [[ "${all:-}" == "true" ]] && args+=("--all")
-        /usr/bin/ls -XF --color=auto --group-directories-first "${args[@]}" "$@"
+        /bin/ls -XF --color=auto --group-directories-first "${args[@]}" "$@"
     fi
 }
 alias la='ls _all'
