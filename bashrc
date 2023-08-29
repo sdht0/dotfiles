@@ -1,6 +1,6 @@
 
 # Replace with a tmux session if it is an interactive session and tmux is installed and is not already running
-if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$NOTMUX" ]] && [[ ! $TTY = *tty* ]] ;then
+if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$NOTMUX" ]] && [[ ! $TTY = *tty* ]] && [[ "$XDG_SESSION_TYPE" != "tty" ]] ;then
     ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
     if [[ -z "$ID" ]] ;then # if not available create a new one
         exec tmux new-session 2>/dev/null
@@ -300,7 +300,7 @@ xgen() {
 }
 
 printColors() {
-    echo $(for code ({0..255}) print -P -- "%F{$code}$code %f")
+    echo $(for code in {0..255};do print -P -- "%F{$code}$code %f" ;done)
     for C in {0..255}; do tput setab $C; echo -n "$C "; done; tput sgr0; echo
 }
 
