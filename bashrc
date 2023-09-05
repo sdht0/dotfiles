@@ -1,6 +1,6 @@
 
 # Replace with a tmux session if it is an interactive session and tmux is installed and is not already running
-if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$NOTMUX" ]] && [[ ! $TTY = *tty* ]] && [[ "$XDG_SESSION_TYPE" != "tty" ]] ;then
+if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$NOTMUX" ]] && [[ ! $TTY = *tty* ]] ;then
     ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
     if [[ -z "$ID" ]] ;then # if not available create a new one
         exec tmux new-session 2>/dev/null
@@ -18,7 +18,7 @@ PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 
-[[ $- = *i* ]] && stty -ixon
+#[[ $- = *i* ]] && stty -ixon
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
 
     [[ -f /etc/bashrc ]] && . /etc/bashrc
