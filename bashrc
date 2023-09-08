@@ -449,11 +449,11 @@ ls() {
 
     args=()
 
-    if command -v exa &> /dev/null;then
+    if command -v eza &> /dev/null;then
         [[ "${long:-}" == "true" ]] && args+=(-lg --icons)
         [[ "${all:-}" == "true" ]] && args+=("-aa")
         [[ "${dir:-}" == "true" ]] && args+=("--only-dirs")
-        exa --group-directories-first --color=auto --sort=extension "${args[@]}" "$@"
+        eza --group-directories-first --color=auto --sort=extension "${args[@]}" "$@"
     else
         [[ "${long:-}" == "true" ]] && args+=("-l")
         [[ "${all:-}" == "true" ]] && args+=("--all")
