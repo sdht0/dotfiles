@@ -439,9 +439,10 @@ ctg() {
 
 ls() {
     unset long all dir
-    [[ "$1" == "_long" ]] && long="true" && shift
-    [[ "$1" == "_all" ]] && all="true" && shift
-    [[ "$1" == "_dir" ]] && dir="true" && shift
+    [[ "$1" == "_long" ]] && local long="true" && shift
+    [[ "$1" == "_all" ]] && local all="true" && shift
+    [[ "$1" == "_dir" ]] && local dir="true" && shift
+    [[ "$1" == "_sudo" ]] && local pre="sudo " && shift
 
     args=()
 
@@ -449,15 +450,16 @@ ls() {
         [[ "${long:-}" == "true" ]] && args+=(-lg --icons)
         [[ "${all:-}" == "true" ]] && args+=("-aa")
         [[ "${dir:-}" == "true" ]] && args+=("--only-dirs")
-        eza --group-directories-first --color=auto --sort=extension "${args[@]}" "$@"
+        eval ${pre:-} eza --group-directories-first --color=auto --sort=extension "${args[@]}" "$@"
     else
         [[ "${long:-}" == "true" ]] && args+=("-l")
         [[ "${all:-}" == "true" ]] && args+=("--all")
-        /bin/ls -XF --color=auto --group-directories-first "${args[@]}" "$@"
+        eval ${pre:-} /bin/ls -XF --color=auto --group-directories-first "${args[@]}" "$@"
     fi
 }
 alias la='ls _all'
 alias ll='ls _long _all'
+alias sll='ls _long _all _sudo'
 alias ld='ll _dir'
 
 xs() {
