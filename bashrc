@@ -127,10 +127,10 @@ alias psgc='ps aux | grep -v grep | grep -i -e '
 alias pkl='kill -9'
 alias spkl='sudo kill -9'
 ports() {
-    [[ "$1" == "" ]] && { 1="-k6,6"; 2="-k3,3n"; 3="-k4,4"; 4="-k1,1"; }
+    [[ "$1" == "" ]] && { 1="-k6,6n"; 2="-k3,3n"; 3="-k4,4"; 4="-k1,1"; }
     sep=";"
     (
-        echo -e "Proto${sep}Address${sep}Port${sep}v${sep}UID${sep}Process${sep}PID${sep}Other"
+        echo -e "Proto${sep}Address${sep}Port${sep}v${sep}UID${sep}PID${sep}Process${sep}Other"
         (
             sudo ss --no-header -l4tunpe | sed -r "s/^/v4 /"
             sudo ss --no-header -l6tunpe | sed -r "s/^/v6 /"
