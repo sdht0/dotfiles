@@ -221,15 +221,18 @@ alias pcmsl='pacman -Qs'
 alias pcmr='sudo pacman -Rcs'
 alias pcmri='sudo pacman -Rc'
 alias pcmc='sudo pacman -Sc --noconfirm'
-alias pcmm='pacman -Qm'
-alias pcml='pacman -Ql'
+alias pcmm='pacman -Qm; echo; pacman -Qdt'
+alias pcml='pacman -Fl'
+alias pcmll='pacman -Ql'
+alias pcmii='pacman -Si'
+alias pcmiil='pacman -Qii'
 alias pcmo='pacman -Qo'
+alias pcmor='pacman -F'
 pcmwo() {
     wch="$(which $1 2>/dev/null)"
     echo $wch
     [[ "$wch" =~ ^/.* ]] && pcmo "$wch"
 }
-alias pcmii='pacman -Qi'
 
 alias pru='pikaur -Syu --needed --mflags=--skippgpcheck'
 alias prua='pru --devel'
@@ -324,11 +327,11 @@ function um {
     (cd $MARKPATH && rm -v $1)
 }
 function mks {
-    /usr/bin/ls -n "$MARKPATH" | grep -v total | tr -s ' ' | cut -d ' ' -f 9- | sed 's/->/:/' | column -t -s ':'
+    ls -n "$MARKPATH" | grep -v total | tr -s ' ' | cut -d ' ' -f 9- | sed 's/->/:/' | column -t -s ':'
 }
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
     function _completemarkszsh {
-        reply=($(/usr/bin/ls $MARKPATH))
+        reply=($(ls $MARKPATH))
     }
     compctl -K _completemarkszsh j
     compctl -K _completemarkszsh um
@@ -454,7 +457,7 @@ l() {
     else
         [[ "${long:-}" == "true" ]] && args+=("-l")
         [[ "${all:-}" == "true" ]] && args+=("--all")
-        eval ${pre:-} /bin/ls -XF --color=auto --group-directories-first "${args[@]}" "$@"
+        eval ${pre:-} ls -XF --color=auto --group-directories-first "${args[@]}" "$@"
     fi
 }
 alias la='l _all'
