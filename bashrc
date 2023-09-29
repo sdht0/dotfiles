@@ -13,7 +13,7 @@ export EDITOR='vim'
 export VISUAL=$EDITOR
 export HISTFILESIZE=100000
 export HISTSIZE=${HISTFILESIZE}
-export HISTFILE=~/.bash_history
+export HISTFILE=~/.dotfiles.safe/.bash_history
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
