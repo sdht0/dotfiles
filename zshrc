@@ -1,4 +1,4 @@
-HISTFILE=~/.bash_history
+HISTFILE=~/.dotfiles.safe/.bash_history
 HISTSIZE=100000
 SAVEHIST=$HISTSIZE
 
