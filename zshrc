@@ -13,49 +13,6 @@ prompt walters
 export TERM=screen-256color
 unset LANGUAGE
 
-if [[ $- = *i* ]];then
-
-powerline=~/.dotfiles/powerlevel10k/powerlevel10k.zsh-theme
-if [[ -r "$powerline" ]] && [[ ! $TTY = *tty* ]];then
-    source "$powerline"
-    
-    config_file=~/.dotfiles/p10k.zsh
-    if [[ -r "$config_file" ]]; then
-        . "$config_file"
-    else
-        POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-        POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
-
-        POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context anaconda dir dir_writable status)
-        POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(vcs time)
-
-        POWERLEVEL9K_TIME_BACKGROUND='blue'
-
-        POWERLEVEL9K_CONTEXT_DEFAULT_BACKGROUND='black'
-        POWERLEVEL9K_CONTEXT_DEFAULT_FOREGROUND='cyan'
-
-        POWERLEVEL9K_VCS_DEFAULT_BACKGROUND='blue'
-
-        POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='cyan'
-        POWERLEVEL9K_DIR_HOME_BACKGROUND='cyan'
-        POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='cyan'
-
-        POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%F{cyan}\u256D\u2500%f"
-        POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{cyan}╰❱❱❱%f "
-
-        #POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="" #"╰╭"
-        #POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="❱❱❱ "
-        #POWERLEVEL9K_MULTILINE_SECOD_PROMPT_PREFIX="%(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
-    fi
-else
-    [[ $UID -eq 0 ]] && color=red || color=green
-    NEWLINE=$'\n'
-    PROMPT="${NEWLINE}%{$fg_bold[yellow]%}%~ %(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
-    RPROMPT=""
-fi
-
-fi
-
 bindkey -e
 bindkey \^U backward-kill-line
 bindkey "^[[1~" beginning-of-line
@@ -97,26 +54,65 @@ setopt nobeep \
 
 if [[ $- = *i* ]];then
 
-better_history=~/.dotfiles/zsh-peco-history/zsh-peco-history.zsh
-if [[ -r "$better_history" ]];then
-    source "$better_history"
-fi
+    powerline=~/.dotfiles/modules/powerlevel10k/powerlevel10k.zsh-theme
+    if [[ -r "$powerline" ]] && [[ ! $TTY = *tty* ]];then
+        source "$powerline"
+        
+        config_file=~/.dotfiles/p10k.zsh
+        if [[ -r "$config_file" ]]; then
+            . "$config_file"
+        else
+            POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+            POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 
-interactive_cd=~/.dotfiles/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
-if [[ -r "$interactive_cd" ]] && which fzf &>/dev/null ;then
-    export FZF_DEFAULT_OPTS="--cycle"
-    source "$interactive_cd"
-fi
+            POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context anaconda dir dir_writable status)
+            POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(vcs time)
 
-autosuggestions=~/.dotfiles/zsh-autosuggestions/zsh-autosuggestions.zsh
-if [[ -r "$autosuggestions" ]];then
-    source "$autosuggestions"
-fi
+            POWERLEVEL9K_TIME_BACKGROUND='blue'
 
-syntax_highlighting=~/.dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-if [[ -r "$syntax_highlighting" ]];then
-    source "$syntax_highlighting"
-fi
+            POWERLEVEL9K_CONTEXT_DEFAULT_BACKGROUND='black'
+            POWERLEVEL9K_CONTEXT_DEFAULT_FOREGROUND='cyan'
+
+            POWERLEVEL9K_VCS_DEFAULT_BACKGROUND='blue'
+
+            POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='cyan'
+            POWERLEVEL9K_DIR_HOME_BACKGROUND='cyan'
+            POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='cyan'
+
+            POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%F{cyan}\u256D\u2500%f"
+            POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{cyan}╰❱❱❱%f "
+
+            #POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="" #"╰╭"
+            #POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="❱❱❱ "
+            #POWERLEVEL9K_MULTILINE_SECOD_PROMPT_PREFIX="%(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
+        fi
+    else
+        [[ $UID -eq 0 ]] && color=red || color=green
+        NEWLINE=$'\n'
+        PROMPT="${NEWLINE}%{$fg_bold[yellow]%}%~ %(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
+        RPROMPT=""
+    fi
+
+    better_history=~/.dotfiles/modules/zsh-peco-history/zsh-peco-history.zsh
+    if [[ -r "$better_history" ]];then
+        source "$better_history"
+    fi
+
+    interactive_cd=~/.dotfiles/modules/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
+    if [[ -r "$interactive_cd" ]] && which fzf &>/dev/null ;then
+        export FZF_DEFAULT_OPTS="--cycle"
+        source "$interactive_cd"
+    fi
+
+    autosuggestions=~/.dotfiles/modules/zsh-autosuggestions/zsh-autosuggestions.zsh
+    if [[ -r "$autosuggestions" ]];then
+        source "$autosuggestions"
+    fi
+
+    syntax_highlighting=~/.dotfiles/modules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    if [[ -r "$syntax_highlighting" ]];then
+        source "$syntax_highlighting"
+    fi
 
 fi
 
