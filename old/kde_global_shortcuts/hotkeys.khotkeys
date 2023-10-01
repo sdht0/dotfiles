@@ -3,7 +3,7 @@ DataCount=1
 
 [Data_1]
 Comment=Comment
-DataCount=10
+DataCount=9
 Enabled=true
 Name=sdh
 SystemGroup=0
@@ -16,40 +16,14 @@ ConditionsCount=0
 [Data_1_1]
 Comment=Comment
 Enabled=true
-Name=kate
+Name=slack-auto
 Type=SIMPLE_ACTION_DATA
-
-[Data_1_10]
-Comment=Comment
-Enabled=true
-Name=time
-Type=SIMPLE_ACTION_DATA
-
-[Data_1_10Actions]
-ActionsCount=1
-
-[Data_1_10Actions0]
-CommandURL=bash /home/sdh/.dotfiles/scripts/getcurrenttime.sh
-Type=COMMAND_URL
-
-[Data_1_10Conditions]
-Comment=
-ConditionsCount=0
-
-[Data_1_10Triggers]
-Comment=Simple_action
-TriggersCount=1
-
-[Data_1_10Triggers0]
-Key=Meta+Ctrl+C
-Type=SHORTCUT
-Uuid={38340268-6d61-4781-be83-f84443b1d06f}
 
 [Data_1_1Actions]
 ActionsCount=1
 
 [Data_1_1Actions0]
-CommandURL=/usr/bin/kate
+CommandURL=bash /home/sdh/.dotfiles.safe/set-presence.sh auto
 Type=COMMAND_URL
 
 [Data_1_1Conditions]
@@ -61,21 +35,21 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_1Triggers0]
-Key=Meta+T
+Key=Meta+Z
 Type=SHORTCUT
-Uuid={bda8b6c5-8a9c-46e0-bd80-96a4f0d16cef}
+Uuid={c45d545f-3e88-494f-9bed-62b10806967b}
 
 [Data_1_2]
 Comment=Comment
 Enabled=true
-Name=slack-auto
+Name=slack-away
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_2Actions]
 ActionsCount=1
 
 [Data_1_2Actions0]
-CommandURL=bash /home/sdh/set-presence.sh auto
+CommandURL=bash /home/sdh/.dotfiles.safe/set-presence.sh away
 Type=COMMAND_URL
 
 [Data_1_2Conditions]
@@ -87,21 +61,21 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_2Triggers0]
-Key=Meta+Z
+Key=Meta+A
 Type=SHORTCUT
-Uuid={c45d545f-3e88-494f-9bed-62b10806967b}
+Uuid={98153e99-687d-469f-9007-e917e2b11e7e}
 
 [Data_1_3]
 Comment=Comment
 Enabled=true
-Name=slack-away
+Name=Disable Insert Key
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_3Actions]
 ActionsCount=1
 
 [Data_1_3Actions0]
-CommandURL=bash /home/sdh/set-presence.sh away
+CommandURL=true
 Type=COMMAND_URL
 
 [Data_1_3Conditions]
@@ -113,21 +87,21 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_3Triggers0]
-Key=Meta+A
+Key=Ins
 Type=SHORTCUT
-Uuid={98153e99-687d-469f-9007-e917e2b11e7e}
+Uuid={966fb3c5-e66a-4084-98d4-317a9627c34f}
 
 [Data_1_4]
 Comment=Comment
 Enabled=true
-Name=Disable Insert Key
+Name=csshkey
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_4Actions]
 ActionsCount=1
 
 [Data_1_4Actions0]
-CommandURL=true
+CommandURL=bash /home/sdh/.dotfiles/scripts/copy-ssh-key.sh
 Type=COMMAND_URL
 
 [Data_1_4Conditions]
@@ -139,21 +113,21 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_4Triggers0]
-Key=Ins
+Key=Meta+G
 Type=SHORTCUT
-Uuid={966fb3c5-e66a-4084-98d4-317a9627c34f}
+Uuid={a7c7491c-165a-49fe-ab01-786e050cf03e}
 
 [Data_1_5]
 Comment=Comment
 Enabled=true
-Name=csshkey
+Name=randp
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_5Actions]
 ActionsCount=1
 
 [Data_1_5Actions0]
-CommandURL=bash /home/sdh/.dotfiles/scripts/copy-ssh-key.sh
+CommandURL=bash /home/sdh/.dotfiles/scripts/randp.sh
 Type=COMMAND_URL
 
 [Data_1_5Conditions]
@@ -165,21 +139,21 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_5Triggers0]
-Key=Meta+G
+Key=Meta+B
 Type=SHORTCUT
-Uuid={a7c7491c-165a-49fe-ab01-786e050cf03e}
+Uuid={89faf150-ffbc-4db2-92b2-6c6e496b4959}
 
 [Data_1_6]
 Comment=Comment
-Enabled=true
-Name=randp
+Enabled=false
+Name=Qalculate
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_6Actions]
 ActionsCount=1
 
 [Data_1_6Actions0]
-CommandURL=bash /home/sdh/.dotfiles/scripts/randp.sh
+CommandURL=qalculate-qt
 Type=COMMAND_URL
 
 [Data_1_6Conditions]
@@ -191,21 +165,21 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_6Triggers0]
-Key=Meta+B
+Key=Meta+C
 Type=SHORTCUT
-Uuid={89faf150-ffbc-4db2-92b2-6c6e496b4959}
+Uuid={91186f02-5d6e-48b1-af6b-b06a8f01a2f3}
 
 [Data_1_7]
 Comment=Comment
 Enabled=true
-Name=Qalculate
+Name=email
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_7Actions]
 ActionsCount=1
 
 [Data_1_7Actions0]
-CommandURL=qalculate-qt
+CommandURL=bash /home/sdh/.dotfiles/scripts/generate-email.sh
 Type=COMMAND_URL
 
 [Data_1_7Conditions]
@@ -217,21 +191,21 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_7Triggers0]
-Key=Meta+C
+Key=Meta+V
 Type=SHORTCUT
-Uuid={91186f02-5d6e-48b1-af6b-b06a8f01a2f3}
+Uuid={162deace-c4e3-45c2-98bf-d68ec0087a78}
 
 [Data_1_8]
 Comment=Comment
-Enabled=true
-Name=email
+Enabled=false
+Name=kana
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_8Actions]
 ActionsCount=1
 
 [Data_1_8Actions0]
-CommandURL=bash /home/sdh/.dotfiles/scripts/generate-email.sh
+CommandURL=bash /home/sdh/.dotfiles/scripts/japanese-get-kana.sh
 Type=COMMAND_URL
 
 [Data_1_8Conditions]
@@ -243,21 +217,21 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_8Triggers0]
-Key=Meta+V
+Key=Meta+Ctrl+V
 Type=SHORTCUT
-Uuid={162deace-c4e3-45c2-98bf-d68ec0087a78}
+Uuid={663e79a5-8056-45a3-b478-f8e1e717de22}
 
 [Data_1_9]
 Comment=Comment
 Enabled=true
-Name=kana
+Name=time
 Type=SIMPLE_ACTION_DATA
 
 [Data_1_9Actions]
 ActionsCount=1
 
 [Data_1_9Actions0]
-CommandURL=bash /home/sdh/.dotfiles/scripts/japanese-get-kana.sh
+CommandURL=bash /home/sdh/.dotfiles/scripts/getcurrenttime.sh
 Type=COMMAND_URL
 
 [Data_1_9Conditions]
@@ -269,9 +243,9 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_1_9Triggers0]
-Key=Meta+Ctrl+V
+Key=Meta+Ctrl+C
 Type=SHORTCUT
-Uuid={663e79a5-8056-45a3-b478-f8e1e717de22}
+Uuid={38340268-6d61-4781-be83-f84443b1d06f}
 
 [Main]
 AllowMerge=false
