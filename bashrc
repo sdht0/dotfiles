@@ -149,6 +149,7 @@ alias mount='mount -v'
 alias umount='umount -v'
 alias dmesg='dmesg --human -T'
 alias grep='grep -i --color=auto'
+alias ev="env | sort"
 alias tn='tail -n'
 alias hn='head -n'
 alias tf='tail -F'
@@ -282,7 +283,11 @@ xsshlistener() {
     host=$1
     shift
     str=""
-    for i in "$@";do str="$str -L ${i}:localhost:${i}"; done
+    for i in "$@";do
+        l="$(echo $i | cut -d: -f1)"
+        r="$(echo $i | cut -d: -f2)" # Equal to $l if no colon
+        str="$str -L ${l}:localhost:${r}";
+    done
     cmd="ssh -o ServerAliveInterval=60 -fN $str $host"
     bash -c "$cmd"
 }
