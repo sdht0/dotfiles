@@ -212,6 +212,68 @@ dkrm() { sudo docker kill $@; sudo docker rm $@; }
 alias isolate="sudo docker network disconnect bridge"
 alias join="sudo docker network connect bridge"
 
+# Nixos
+nxb() {
+    fl="/tmp/dry-build.txt"
+    [[ "${1:-}" == "upd" ]] && { nix flake update /etc/nixos; shift; }
+    
+    if [[ "${1:-}" == "dry" ]];then
+        nixos-rebuild --flake /etc/nixos dry-build &> $fl
+        
+        nix store diff-closures $(nix-store --query --deriver /run/current-system) $(cat "$fl" | grep nixos-system)
+        
+        echo
+        echo "Download:"
+        cat "$fl" | awk 'p;/will be fetched/{p=1}' | tr -d ' '
+        
+        echo
+        echo "Local:"
+        cat "$fl" | awk '/fetched/{p=0}p;/will be built/{p=1}' | while read d ;do grep -qi "preferLocalBuild" "$d" && echo "$d" ;done
+        
+        echo
+        echo "Build:"
+        cat "$fl" | awk '/fetched/{p=0}p;/will be built/{p=1}' | while read d ;do grep -qi "preferLocalBuild" "$d" || echo "$d" ;done
+    else
+        sudo true;
+        sudo nixos-rebuild --flake /etc/nixos "${1:-switch}" |& nom
+    fi
+}
+nxd() {
+    qt="$1"
+    case "$qt" in
+        "rf") q="--references" ;;
+        "rq") q="--requisites" ;;
+        "rrc") q="--referrers-closure" ;;
+        *) echo "Error: $qt"; return 1 ;;
+    esac
+
+    p="$2"
+    echo "$p" | grep -q ".drv$" || p="$(nix-store --query --deriver "$p")"
+
+    nix-store --query $q "$p"
+}
+nxds() {
+    nix derivation show "$1^*"
+}
+nxwl() {
+    ll "$(which "$1")"
+}
+nxp() {
+    qt="$1"
+    case "$qt" in
+        "rf") q="--references" ;;
+        "rq") q="--requisites" ;;
+        "rrc") q="--referrers-closure" ;;
+        "dr") q="--deriver" ;;
+        *) echo "Error: $qt"; return 1 ;;
+    esac
+
+    p="$2"
+    echo "$p" | grep -q ".drv$" && { echo "Error: $p is not a path"; return 1; }
+    
+    nix-store --query $q "$p"
+}
+
 # Pacman package management
 alias pcm='pacman'
 alias pcmu='sudo pacman -Syu --needed'
@@ -233,12 +295,10 @@ pcmwo() {
     echo $wch
     [[ "$wch" =~ ^/.* ]] && pcmo "$wch"
 }
-
 alias pru='pikaur -Syu --needed --mflags=--skippgpcheck'
 alias prua='pru --devel'
 alias pri='pikaur -S --needed'
 alias prs='pikaur -Ss'
-
 add_to_repo() {
     _checkargs $# 2 || return 1
     [[ ! -r PKGBUILD ]] && echo "Must be run in a PKGBUILD dir" && return 1
@@ -313,7 +373,7 @@ printColors() {
 }
 
 # Taken from http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
-export MARKPATH=$HOME/.local/share/marks
+export MARKPATH=$HOME/.dotfiles.safe/marks
 mkdir "$MARKPATH" &>/dev/null
 function j {
     cd -P "$MARKPATH/${1:-d}" 2>/dev/null || echo "No such mark: $1"
@@ -908,7 +968,7 @@ xregexrename() {
     _checkargs $# 1 || return 1
 
     for i in *;do
-        x=$(echo $i | sed "$1"); [[ ! -r "$x" ]] && echo "$i -> $x" && [[ "$2" = "m" ]] && mv "$i" "$x"
+        x=$(echo $i | sed -r "$1"); [[ ! -r "$x" ]] && echo "$i -> $x" && [[ "$2" = "m" ]] && mv "$i" "$x"
     done
 }
 
