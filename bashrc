@@ -217,20 +217,22 @@ alias join="sudo docker network connect bridge"
 nxb() {
     fl="/tmp/dry-build.txt"
     [[ "${1:-}" == "upd" ]] && { nix flake update /etc/nixos; shift; }
-    
+
     if [[ "${1:-}" == "dry" ]];then
-        nixos-rebuild --flake /etc/nixos dry-build &> $fl
-        
-        nix store diff-closures $(nix-store --query --deriver /run/current-system) $(cat "$fl" | grep nixos-system)
-        
+        nixos-rebuild --flake /etc/nixos dry-build &> $fl || return
+
+        nix store diff-closures "$(nix-store --query --deriver /run/current-system)" "$(cat "$fl" | grep nixos-system | tr -d ' ')"
+        echo
+        nvd diff "$(nix-store --query --deriver /run/current-system)" "$(cat "$fl" | grep nixos-system | tr -d ' ')"
+
         echo
         echo "Download:"
         cat "$fl" | awk 'p;/will be fetched/{p=1}' | tr -d ' '
-        
+
         echo
         echo "Local:"
         cat "$fl" | awk '/fetched/{p=0}p;/will be built/{p=1}' | while read d ;do grep -qi "preferLocalBuild" "$d" && echo "$d" ;done
-        
+
         echo
         echo "Build:"
         cat "$fl" | awk '/fetched/{p=0}p;/will be built/{p=1}' | while read d ;do grep -qi "preferLocalBuild" "$d" || echo "$d" ;done
