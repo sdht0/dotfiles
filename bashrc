@@ -463,18 +463,18 @@ alias xchromestart="chromium --proxy-server='socks://127.0.0.1:9999' --incognito
 # Systemd service management
 sds() { sudo systemctl status -l --no-pager -n10 $1; }
 sdsf() { sudo systemctl status -l --no-pager -n0 $1; echo; sudo journalctl -f -u $1 -S "$2"; }
-sdst() { dt=$(date +'%a %Y-%m-%d %T %Z'); sudo systemctl start $1; sdsf $1 "$dt"; }
-sdsp() { dt=$(date +'%a %Y-%m-%d %T %Z'); sudo systemctl stop $1; sdsf $1 "$dt"; }
-sdr() { dt=$(date +'%a %Y-%m-%d %T %Z'); sudo systemctl restart $1; sdsf $1 "$dt"; }
+sdst() { dt=$(date +'%Y-%m-%d %T'); sudo systemctl start $1; sdsf $1 "$dt"; }
+sdsp() { dt=$(date +'%Y-%m-%d %T'); sudo systemctl stop $1; sdsf $1 "$dt"; }
+sdr() { dt=$(date +'%Y-%m-%d %T'); sudo systemctl restart $1; sdsf $1 "$dt"; }
 sde() { sudo systemctl enable $1; ls -l /etc/systemd/system/multi-user.target.wants; }
 sdd() { sudo systemctl disable $1; ls -l /etc/systemd/system/multi-user.target.wants; }
 
 # User service management
 sus() { systemctl --user status -l --no-pager -n10 $1; }
 susf() { systemctl --user status -l --no-pager -n0 $1; echo; journalctl --user -f -u $1 -S "$2"; }
-sust() { dt=$(date +'%a %Y-%m-%d %T %Z'); systemctl --user start $1; susf $1 "$dt"; }
-susp() { dt=$(date +'%a %Y-%m-%d %T %Z'); systemctl --user stop $1; susf $1 "$dt"; }
-sur() { dt=$(date +'%a %Y-%m-%d %T %Z'); systemctl --user restart $1; susf $1 "$dt"; }
+sust() { dt=$(date +'%Y-%m-%d %T'); systemctl --user start $1; susf $1 "$dt"; }
+susp() { dt=$(date +'%Y-%m-%d %T'); systemctl --user stop $1; susf $1 "$dt"; }
+sur() { dt=$(date +'%Y-%m-%d %T'); systemctl --user restart $1; susf $1 "$dt"; }
 sue() { systemctl --user enable $1; ls -l /home/$USER/.config/systemd/user/*; }
 sud() { systemctl --user disable $1; ls -l /home/$USER/.config/systemd/user/*; }
 
