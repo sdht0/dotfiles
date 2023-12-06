@@ -220,8 +220,8 @@ nxb() {
     if [[ "${1:-}" == "dry" ]];then
         nixos-rebuild --flake /etc/nixos dry-build &> $fl || return
 
-        nix store diff-closures "$(nix-store --query --deriver /run/current-system)" "$(cat "$fl" | grep nixos-system | tr -d ' ')"
-        echo
+        #nix store diff-closures "$(nix-store --query --deriver /run/current-system)" "$(cat "$fl" | grep nixos-system | tr -d ' ')"
+        #echo
         nvd diff "$(nix-store --query --deriver /run/current-system)" "$(cat "$fl" | grep nixos-system | tr -d ' ')"
 
         echo
