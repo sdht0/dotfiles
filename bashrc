@@ -221,11 +221,8 @@ nxb() {
     if [[ "${1:-}" == "dry" ]];then
         nixos-rebuild --flake /etc/nixos dry-build &> $fl || return
 
-        #nix store diff-closures "$(nix-store --query --deriver /run/current-system)" "$(cat "$fl" | grep nixos-system | tr -d ' ')"
+        #nix store diff-closures "$(nix path-info --derivation "/run/current-system")" "$(cat "$fl" | grep nixos-system | tr -d ' ')"
         #echo
-        nvd diff "$(nix-store --query --deriver /run/current-system)" "$(cat "$fl" | grep nixos-system | tr -d ' ')"
-
-        echo
         echo "Download:"
         cat "$fl" | awk 'p;/will be fetched/{p=1}' | tr -d ' '
 
@@ -236,7 +233,12 @@ nxb() {
         echo
         echo "Build:"
         cat "$fl" | awk '/fetched/{p=0}p;/will be built/{p=1}' | while read d ;do grep -qi "preferLocalBuild" "$d" || echo "$d" ;done
+
+        echo
+        nvd diff "$(nix path-info --derivation "/run/current-system")" "$(nix path-info --derivation "/etc/nixos#nixosConfigurations.$(hostname).config.system.build.toplevel")"
     else
+        nvd diff "$(nix path-info --derivation "/run/current-system")" "$(nix path-info --derivation "/etc/nixos#nixosConfigurations.$(hostname).config.system.build.toplevel")"
+        echo
         sudo true;
         sudo nixos-rebuild --flake /etc/nixos "${1:-switch}" |& nom
     fi
