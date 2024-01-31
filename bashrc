@@ -219,28 +219,28 @@ nxb() {
     [[ "${1:-}" == "upd" ]] && { nix flake update /etc/nixos; shift; }
 
     if [[ "${1:-}" == "dry" ]];then
-        nixos-rebuild --flake /etc/nixos dry-build &> $fl || return
+#         nixos-rebuild --flake /etc/nixos dry-build &> $fl || return
 
         #nix store diff-closures "$(nix path-info --derivation "/run/current-system")" "$(cat "$fl" | grep nixos-system | tr -d ' ')"
         #echo
-        echo "Download:"
-        cat "$fl" | awk 'p;/will be fetched/{p=1}' | tr -d ' '
-
-        echo
-        echo "Local:"
-        cat "$fl" | awk '/fetched/{p=0}p;/will be built/{p=1}' | while read d ;do grep -qi "preferLocalBuild" "$d" && echo "$d" ;done
-
-        echo
-        echo "Build:"
-        cat "$fl" | awk '/fetched/{p=0}p;/will be built/{p=1}' | while read d ;do grep -qi "preferLocalBuild" "$d" || echo "$d" ;done
-
-        echo
+#         echo "Download:"
+#         cat "$fl" | awk 'p;/will be fetched/{p=1}' | tr -d ' '
+# 
+#         echo
+#         echo "Local:"
+#         cat "$fl" | awk '/fetched/{p=0}p;/will be built/{p=1}' | while read d ;do grep -qi "preferLocalBuild" "$d" && echo "$d" ;done
+# 
+#         echo
+#         echo "Build:"
+#         cat "$fl" | awk '/fetched/{p=0}p;/will be built/{p=1}' | while read d ;do grep -qi "preferLocalBuild" "$d" || echo "$d" ;done
+# 
+#         echo
         nvd diff "$(nix path-info --derivation "/run/current-system")" "$(nix path-info --derivation "/etc/nixos#nixosConfigurations.$(hostname).config.system.build.toplevel")"
     else
         nvd diff "$(nix path-info --derivation "/run/current-system")" "$(nix path-info --derivation "/etc/nixos#nixosConfigurations.$(hostname).config.system.build.toplevel")"
         echo
         sudo true;
-        sudo nixos-rebuild --flake /etc/nixos "${1:-switch}" |& nom
+        sudo nixos-rebuild --flake /etc/nixos "${1:-boot}" |& nom
     fi
 }
 nxd() {
@@ -334,7 +334,12 @@ alias yumr='sudo yum remove'
 alias yuml='sudo yum --showduplicates list'
 alias yumf='sudo yum --showduplicates info'
 
-alias osv='cat /etc/*-release /etc/debian_version 2>/dev/null | sort | uniq | xargs -L1'
+osv() {
+    for i in /etc/*-release /etc/debian_version ;do
+        [[ -f "$i" ]] && echo "> $i" && cat "$i"
+    done
+}
+alias osva='cat /etc/*-release /etc/debian_version 2>/dev/null | sort | uniq | xargs -L1'
 tfm() {
     n=${1:-30}
     sudo journalctl -n${n} -f
