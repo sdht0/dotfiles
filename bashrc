@@ -243,10 +243,12 @@ nxb() {
     fi
 }
 nxd() {
+    _checkargs $# 2 || return 1
     qt="$1"
     case "$qt" in
         "rf") q="--references" ;;
         "rq") q="--requisites" ;;
+        "rr") q="--referrers" ;;
         "rrc") q="--referrers-closure" ;;
         *) echo "Error: $qt"; return 1 ;;
     esac
@@ -257,10 +259,13 @@ nxd() {
     nix-store --query $q "$p"
 }
 nxds() {
-    nix derivation show "$1^*"
+    _checkargs $# 1 || return 1
+    p="$1"
+    echo "$p" | grep -q ".drv$" || p="$(nix-store --query --deriver "$p")"
+    nix derivation show "$p^*"
 }
 nxwl() {
-    ll "$(which "$1")"
+    exa -l "$(which "$1")"
 }
 nxp() {
     qt="$1"
@@ -347,7 +352,7 @@ alias magic2='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/ss
 alias magic='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py`'
 
 xsshlistener() {
-    [[ $# -lt 2 ]] && echo "Inputs missing!" && return 1
+    _checkargs $# 2 || return 1
     host=$1
     shift
     str=""
