@@ -1,10 +1,6 @@
 [user]
     email = dev@sdht.in
     name = Siddhartha
-[url "https://anongit.kde.org/"]
-    insteadOf = kde:
-[url "git@git.kde.org:"]
-    pushInsteadOf = kde:
 [help]
     autocorrect = 1
 [alias]
@@ -34,3 +30,12 @@
 	rebase = true
 [init]
 	defaultBranch = main
+
+[diff]
+    tool = difftastic
+[difftool]
+    prompt = false
+[difftool "difftastic"]
+    cmd = difft "$LOCAL" "$REMOTE"
+[pager]
+    difftool = true

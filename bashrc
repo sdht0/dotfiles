@@ -124,7 +124,7 @@ ydl() {
 alias ydla='ydl ad'
 alias df='df -Th'
 alias lsg='ls -CFalh --color=auto | grep --color=auto -i'
-alias psg='ps aux | grep -v grep | grep -i -e VSZ -e '
+alias psg='ps aux | grep -v grep | grep -i -e "^USER " -e '
 alias psgc='ps aux | grep -v grep | grep -i -e '
 alias pkl='kill -9'
 alias spkl='sudo kill -9'
@@ -198,7 +198,8 @@ alias gcf='git config --list'
 alias grh='git reset HEAD'
 alias grc='git rebase --continue'
 alias gra='git rebase --abort'
-alias gd="git diff"
+alias gd="git difftool"
+alias gdo="git diff"
 alias gk="gitk --all"
 alias gg="git gui"
 
@@ -214,9 +215,11 @@ alias isolate="sudo docker network disconnect bridge"
 alias join="sudo docker network connect bridge"
 
 # Nixos
-nxb() {
+nxos() {
     fl="/tmp/dry-build.txt"
     [[ "${1:-}" == "upd" ]] && { nix flake update /etc/nixos; shift; }
+
+    nvd diff "$(nix path-info --derivation "/run/current-system")" "$(nix path-info --derivation "/etc/nixos#nixosConfigurations.$(hostname).config.system.build.toplevel")" || return 1
 
     if [[ "${1:-}" == "dry" ]];then
 #         nixos-rebuild --flake /etc/nixos dry-build &> $fl || return
@@ -235,21 +238,22 @@ nxb() {
 #         cat "$fl" | awk '/fetched/{p=0}p;/will be built/{p=1}' | while read d ;do grep -qi "preferLocalBuild" "$d" || echo "$d" ;done
 # 
 #         echo
-        nvd diff "$(nix path-info --derivation "/run/current-system")" "$(nix path-info --derivation "/etc/nixos#nixosConfigurations.$(hostname).config.system.build.toplevel")"
+        :
     else
-        nvd diff "$(nix path-info --derivation "/run/current-system")" "$(nix path-info --derivation "/etc/nixos#nixosConfigurations.$(hostname).config.system.build.toplevel")"
         echo
-        sudo true;
-        sudo nixos-rebuild --flake /etc/nixos "${1:-boot}" |& nom
+        sudo true || return 2;
+        sudo nice -10 nixos-rebuild --flake /etc/nixos "${1:-boot}" |& nom
     fi
 }
 nxd() {
+    _checkargs $# 1 || return 1
     qt="$1"
     case "$qt" in
         "rf") q="--references" ;;
-        "rq") q="--requisites" ;;
+        "rfc") q="--requisites" ;;
+        "rr") q="--referrers" ;;
         "rrc") q="--referrers-closure" ;;
-        *) echo "Error: $qt"; return 1 ;;
+        *) q="--references" ;;
     esac
 
     p="$2"
@@ -257,26 +261,58 @@ nxd() {
 
     nix-store --query $q "$p"
 }
-nxds() {
-    nix derivation show "$1^*"
-}
-nxwl() {
-    ll "$(which "$1")"
-}
 nxp() {
+    _checkargs $# 1 || return 1
     qt="$1"
     case "$qt" in
-        "rf") q="--references" ;;
-        "rq") q="--requisites" ;;
-        "rrc") q="--referrers-closure" ;;
-        "dr") q="--deriver" ;;
-        *) echo "Error: $qt"; return 1 ;;
+        "rf") q="--references"; shift ;;
+        "rfc") q="--requisites"; shift ;;
+        "rr") q="--referrers"; shift ;;
+        "rrc") q="--referrers-closure"; shift ;;
+        "dr") q="--deriver"; shift ;;
+        *) q="--references" ;;
     esac
 
-    p="$2"
+    p="$1"
     echo "$p" | grep -q ".drv$" && { echo "Error: $p is not a path"; return 1; }
-    
+
     nix-store --query $q "$p"
+}
+nxds() {
+    _checkargs $# 1 || return 1
+    p="$1"
+    echo "$p" | grep -q ".drv$" || p="$(nix-store --query --deriver "$p")"
+    nix derivation show "$p^*"
+}
+nxwl() {
+    exa -l "$(which "$1")"
+}
+nxr() {
+    _checkargs $# 1 || return 1
+    p=$1
+    shift
+    nix run "nixpkgs#$p" "$@"
+}
+nxwd() {
+    _checkargs $# 2 || return 1
+
+    p1="$1"
+    echo "$p1" | grep -q ".drv$" || p1="$(nix-store --query --deriver "$p1")"
+
+    p2="$2"
+    echo "$p2" | grep -q ".drv$" || p2="$(nix-store --query --deriver "$p2")"
+
+    nix why-depends "$p1" "$p2"
+}
+nxdiff() {
+    _checkargs $# 2 || return 1
+
+    difft <(nxds $1) <(nxds $2)
+}
+nxsdiff() {
+    _checkargs $# 2 || return 1
+
+    difft --override='*:json' --skip-unchanged --ignore-comments --context 0 <(nxds $1 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys) <(nxds $2 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys)
 }
 
 # Pacman package management
@@ -348,7 +384,7 @@ alias magic2='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/ss
 alias magic='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py`'
 
 xsshlistener() {
-    [[ $# -lt 2 ]] && echo "Inputs missing!" && return 1
+    _checkargs $# 2 || return 1
     host=$1
     shift
     str=""
