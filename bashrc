@@ -213,10 +213,17 @@ dkrm() { sudo docker kill $@; sudo docker rm $@; }
 alias isolate="sudo docker network disconnect bridge"
 alias join="sudo docker network connect bridge"
 
+alias pm='podman'
+alias pmr='podman run'
+alias pmi='podman images'
+alias pmia='podman images -a'
+alias pmc='podman ps'
+alias pmca='podman ps -a'
+
 # Nixos
 nxos() {
     fl="/tmp/dry-build.txt"
-    [[ "${1:-}" == "upd" ]] && { nix flake update /etc/nixos; shift; }
+    [[ "${1:-}" == "upd" ]] && { nix flake update --flake /etc/nixos; shift; }
 
     nvd diff "$(nix path-info --derivation "/run/current-system")" "$(nix path-info --derivation "/etc/nixos#nixosConfigurations.$(hostname).config.system.build.toplevel")" || return 1
 
@@ -241,7 +248,7 @@ nxos() {
     else
         echo
         sudo true || return 2;
-        sudo nice -10 nixos-rebuild --flake /etc/nixos "${1:-boot}" |& nom
+        sudo nice -10 nixos-rebuild --keep-going --flake /etc/nixos "${1:-boot}" |& nom
     fi
 }
 nxd() {
