@@ -425,18 +425,18 @@ printColors() {
 }
 
 # Taken from http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
-export MARKPATH=$HOME/.dotfiles.safe/marks
+MARKPATH=$HOME/.dotfiles.safe/marks
 mkdir "$MARKPATH" &>/dev/null
 function j {
     cd -P "$MARKPATH/${1:-d}" 2>/dev/null || echo "No such mark: $1"
 }
 function m {
     _checkargs $# 1 || return 1
-    mkdir -p "$MARKPATH"; ln -vs "$(pwd)" "$MARKPATH/$1" 2>/dev/null || echo "Could not mark"
+    mkdir -p "$MARKPATH"; ln -vs "$(pwd)" "$MARKPATH/$1"
 }
 function mf {
     _checkargs $# 1 || return 1
-    mkdir -p "$MARKPATH"; ln -snvf "$(pwd)" "$MARKPATH/$1"
+    mkdir -p "$MARKPATH"; ln -vsnf "$(pwd)" "$MARKPATH/$1"
 }
 function um {
     _checkargs $# 1 || return 1
