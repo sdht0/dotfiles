@@ -13,11 +13,11 @@ link_file() {
 
 echo "Setting up .bashrc"
 [[ -r ~/.bashrc ]] && echo "Backing up .bashrc" && mkdir -p ${bkdir} && mv ~/.bashrc ${bkdir}/.bashrc
-echo -e ". $dotfiles/bashrc\n[[ -f $dotfiles.safe/bashrc ]] && . $dotfiles.safe/bashrc" > ~/.bashrc
+echo -e ". $dotfiles/bashrc\n[[ -f $dotfiles.safe/bashrc ]] && . $dotfiles.safe/bashrc || true" > ~/.bashrc
 
 echo "Setting up .zshrc"
 [[ -r ~/.zshrc ]] && echo "Backing up .zshrc" && mkdir -p ${bkdir} && mv ~/.zshrc ${bkdir}/.zshrc
-echo -e ". ~/.bashrc\n. $dotfiles/zshrc\n[[ -f $dotfiles.safe/bashrc ]] && . $dotfiles.safe/bashrc" > ~/.zshrc
+echo -e ". ~/.bashrc\n. $dotfiles/zshrc\n[[ -f $dotfiles.safe/bashrc ]] && . $dotfiles.safe/bashrc || true" > ~/.zshrc
 
 # echo "Setting up .emacs"
 # [[ -r ~/.emacs.d/init.el ]] && echo "Backing up init.el" mkdir -p ${bkdir} && && mv ~/.emacs.d/init.el ${bkdir}/.emacs.d/init.el.bk
