@@ -1,11 +1,11 @@
 
 # Replace with a tmux session if it is an interactive session and tmux is installed and is not already running
-if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$NOTMUX" ]] && [[ ! $TTY = *tty* ]] ;then
+if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$NOTMUX" ]] ;then
     ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
     if [[ -z "$ID" ]] ;then # if not available create a new one
-        exec tmux new-session 2>/dev/null
+        exec tmux new-session
     else
-        exec tmux attach-session -t "$ID" 2>/dev/null # if available attach to it
+        exec tmux attach-session -t "$ID" # if available attach to it
     fi
 fi
 
@@ -198,8 +198,7 @@ alias gcf='git config --list'
 alias grh='git reset HEAD'
 alias grc='git rebase --continue'
 alias gra='git rebase --abort'
-alias gd="git difftool"
-alias gdo="git diff"
+alias gd="git diff"
 alias gk="gitk --all"
 alias gg="git gui"
 
@@ -573,8 +572,8 @@ l() {
         eval ${pre:-} eza --group-directories-first --color=auto --sort=extension "${args[@]}" "$@"
     else
         [[ "${long:-}" == "true" ]] && args+=("-l")
-        [[ "${all:-}" == "true" ]] && args+=("--all")
-        eval ${pre:-} ls -XF --color=auto --group-directories-first "${args[@]}" "$@"
+        [[ "${all:-}" == "true" ]] && args+=("-A")
+        eval ${pre:-} ls -F --color=auto "${args[@]}" "$@"
     fi
 }
 alias la='l _all'

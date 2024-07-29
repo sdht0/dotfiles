@@ -55,7 +55,7 @@ setopt nobeep \
 if [[ $- = *i* ]];then
 
     powerline=~/.dotfiles/modules/powerlevel10k/powerlevel10k.zsh-theme
-    if [[ -r "$powerline" ]] && [[ ! $TTY = *tty* ]];then
+    if [[ -r "$powerline" ]];then
         source "$powerline"
         
         config_file=~/.dotfiles/p10k.zsh

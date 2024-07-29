@@ -1,5 +1,5 @@
 [user]
-    email = dev@sdht.in
+    email = siddhartha.sahu@materialize.com
     name = Siddhartha Sahu
 [help]
     autocorrect = 1
@@ -31,11 +31,3 @@
 [init]
 	defaultBranch = main
 
-[diff]
-    tool = difftastic
-[difftool]
-    prompt = false
-[difftool "difftastic"]
-    cmd = difft "$LOCAL" "$REMOTE"
-[pager]
-    difftool = true
