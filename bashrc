@@ -223,9 +223,9 @@ alias pmca='podman ps -a'
 # Nixos
 nxos() {
     fl="/tmp/dry-build.txt"
-    [[ "${1:-}" == "upd" ]] && { nix flake update --flake /etc/nixos; shift; }
+    [[ "${1:-}" == "upd" ]] && { nix flake update --flake ~/.config/nix-darwin; shift; }
 
-    nvd diff "$(nix path-info --derivation "/run/current-system")" "$(nix path-info --derivation "/etc/nixos#nixosConfigurations.$(hostname).config.system.build.toplevel")" || return 1
+    nvd diff "$(nix path-info --derivation "/run/current-system")" "$(nix path-info --derivation ~/".config/nix-darwin#darwinConfigurations.$(scutil --get LocalHostName).config.system.build.toplevel")" || return 1
 
     if [[ "${1:-}" == "dry" ]];then
 #         nixos-rebuild --flake /etc/nixos dry-build &> $fl || return
@@ -248,7 +248,7 @@ nxos() {
     else
         echo
         sudo true || return 2;
-        sudo nice -10 nixos-rebuild --keep-going --flake /etc/nixos "${1:-boot}" |& nom
+        darwin-rebuild --keep-going --flake ~/.config/nix-darwin "${1:-switch}"
     fi
 }
 nxd() {
