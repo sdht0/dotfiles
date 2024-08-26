@@ -39,3 +39,5 @@
     cmd = difft "$LOCAL" "$REMOTE"
 [pager]
     difftool = true
+[merge]
+	conflictstyle = diff3
