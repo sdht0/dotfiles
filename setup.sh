@@ -1,13 +1,13 @@
 #!/bin/bash
 
-dotfiles=~/.dotfiles
+dotfiles=~/.local/dotfiles
 bkdir=~/.cache/dotfiles-"$(date +"%Y%m%d-%H%M%S")"
 
 link_file() {
     [[ -z "$1" ]] && return -1
     dest="${2:-.$1}"
     echo "Setting up $dest"
-    [[ -e ~/"$dest" ]] && echo "Backing up $dest" && mkdir -p ${bkdir} && mv ~/"$dest" ${bkdir}/"$dest"
+    [[ -L ~/"$dest" ]] && echo "Backing up $dest" && mkdir -p ${bkdir} && mv ~/"$dest" ${bkdir}/"$dest"
     ln -s "$dotfiles/$1" ~/$dest
 }
 
