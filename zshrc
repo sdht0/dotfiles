@@ -1,4 +1,4 @@
-HISTFILE=~/.local/dotfiles.safe/bash_history
+HISTFILE=${DOTFILES}.safe/bash_history
 HISTSIZE=100000
 SAVEHIST=$HISTSIZE
 
@@ -54,11 +54,11 @@ setopt nobeep \
 
 if [[ $- = *i* ]];then
 
-    powerline=~/.dotfiles/modules/powerlevel10k/powerlevel10k.zsh-theme
+    powerline=$DOTFILES/modules/powerlevel10k/powerlevel10k.zsh-theme
     if [[ -r "$powerline" ]] && [[ ! $TTY = *tty* ]];then
         source "$powerline"
         
-        config_file=~/.dotfiles/p10k.zsh
+        config_file=$DOTFILES/p10k.zsh
         if [[ -r "$config_file" ]]; then
             . "$config_file"
         else
@@ -94,23 +94,23 @@ if [[ $- = *i* ]];then
         RPROMPT=""
     fi
 
-    better_history=~/.dotfiles/modules/zsh-peco-history/zsh-peco-history.zsh
+    better_history=$DOTFILES/modules/zsh-peco-history/zsh-peco-history.zsh
     if [[ -r "$better_history" ]];then
         source "$better_history"
     fi
 
-    interactive_cd=~/.dotfiles/modules/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
+    interactive_cd=$DOTFILES/modules/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
     if [[ -r "$interactive_cd" ]] && which fzf &>/dev/null ;then
         export FZF_DEFAULT_OPTS="--cycle"
         source "$interactive_cd"
     fi
 
-    autosuggestions=~/.dotfiles/modules/zsh-autosuggestions/zsh-autosuggestions.zsh
+    autosuggestions=$DOTFILES/modules/zsh-autosuggestions/zsh-autosuggestions.zsh
     if [[ -r "$autosuggestions" ]];then
         source "$autosuggestions"
     fi
 
-    syntax_highlighting=~/.dotfiles/modules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    syntax_highlighting=$DOTFILES/modules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     if [[ -r "$syntax_highlighting" ]];then
         source "$syntax_highlighting"
     fi
