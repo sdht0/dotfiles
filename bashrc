@@ -1,3 +1,4 @@
+export DOTFILES=~/.config/dotfiles
 
 # Replace with a tmux session if it is an interactive session and tmux is installed and is not already running
 if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$NOTMUX" ]] && [[ ! $TTY = *tty* ]] ;then
@@ -13,7 +14,7 @@ export EDITOR='vim'
 export VISUAL=$EDITOR
 export HISTFILESIZE=100000
 export HISTSIZE=${HISTFILESIZE}
-export HISTFILE=~/.local/dotfiles.safe/bash_history
+export HISTFILE=${DOTFILES}.safe/bash_history
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
@@ -386,8 +387,8 @@ tfm() {
     n=${1:-30}
     sudo journalctl -n${n} -f
 }
-alias magic2='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py`'
-alias magic='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py`'
+alias magic2='cd;$DOTFILES/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py`'
+alias magic='cd;$DOTFILES/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py`'
 
 xsshlistener() {
     _checkargs $# 2 || return 1
@@ -425,7 +426,7 @@ printColors() {
 }
 
 # Taken from http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
-MARKPATH=$HOME/.dotfiles.safe/marks
+MARKPATH=${DOTFILES}.safe/marks
 mkdir "$MARKPATH" &>/dev/null
 function j {
     cd -P "$MARKPATH/${1:-d}" 2>/dev/null || echo "No such mark: $1"
@@ -628,7 +629,7 @@ alias jp="japanesec"
 japanese() {
     _checkargs $# 1 || return 1
 
-    python ~/.dotfiles/scripts/japanese-get-kana.py "$@"
+    python $DOTFILES/scripts/japanese-get-kana.py "$@"
 }
 
 japanesec() {
@@ -641,7 +642,7 @@ japanesec() {
 }
 
 rand() {
-    python ~/.dotfiles/scripts/password.py "$@"
+    python $DOTFILES/scripts/password.py "$@"
 }
 
 randc() {
@@ -887,12 +888,12 @@ xget() {
     if [ $# -lt 1 ]; then
         for i in $(cat ~/sshhhh | grep ')' | grep -v '*' | grep -v 'mnet' | cut -f1 -d')' | xargs);do
             printf "$i "
-            code=$(~/sshhhh "$i" | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py)
+            code=$(~/sshhhh "$i" | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py)
             printf $code
             echo
         done
     else
-        code=$(~/sshhhh "$1" | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py)
+        code=$(~/sshhhh "$1" | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py)
         printf $code | xclip -selection clipboard
         echo "Copied $code to clipboard"
     fi

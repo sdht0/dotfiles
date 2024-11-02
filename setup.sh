@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dotfiles=~/.local/dotfiles
+dotfiles=~/.config/dotfiles
 bkdir=~/.cache/dotfiles-"$(date +"%Y%m%d-%H%M%S")"
 
 link_file() {
