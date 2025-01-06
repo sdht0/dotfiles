@@ -198,8 +198,7 @@ alias gcf='git config --list'
 alias grh='git reset HEAD'
 alias grc='git rebase --continue'
 alias gra='git rebase --abort'
-alias gd="git difftool"
-alias gdo="git diff"
+alias gd="git diff"
 alias gk="gitk --all"
 alias gg="git gui"
 
