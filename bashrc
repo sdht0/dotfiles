@@ -121,7 +121,6 @@ ydl() {
     bydl "${opts[@]}" "$@"
 }
 alias ydla='ydl ad'
-alias df='df -Th'
 alias lsg='ls -CFalh --color=auto | grep --color=auto -i'
 alias psg='ps aux | grep -v grep | grep -i -e "^USER " -e '
 alias psgc='ps aux | grep -v grep | grep -i -e '
@@ -147,13 +146,13 @@ alias srmr='sudo rm -vrf'
 alias mount='mount -v'
 alias umount='umount -v'
 alias dmesg='dmesg --human -T'
-alias grep='grep -i --color=auto'
+alias grepi='grep -i --color=auto'
 alias ev="env | sort"
 alias tn='tail -n'
 alias hn='head -n'
 alias tf='tail -F'
-alias df='df -h'
-alias du='du -sh'
+alias dfh='df -Th'
+alias duh='du -sh'
 alias lsblk='lsblk -o NAME,FSTYPE,SIZE,RO,MOUNTPOINT,LABEL,UUID'
 rdl() {
     dir="${1:-.}"
