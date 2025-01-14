@@ -201,6 +201,7 @@ alias gra='git rebase --abort'
 alias gd="git diff"
 alias gk="gitk --all"
 alias gg="git gui"
+alias lg="lazygit"
 
 alias dk='sudo docker'
 alias dkr='sudo docker run'
@@ -766,6 +767,7 @@ xextract() {
             *.tar.bz2) tar xjf "$1";;
             *.tar.gz) tar xzf "$1" ;;
             *.tar.xz) tar Jxf "$1" ;;
+            *.tar.zst) tar --zst -xf "$1" ;;
             *.bz2) bunzip2 "$1";;
             *.rar) rar x "$1";;
             *.gz) gunzip "$1"  ;;
