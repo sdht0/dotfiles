@@ -311,15 +311,15 @@ nxwd() {
 
     nix why-depends "$p1" "$p2"
 }
-nxdiff() {
+nxdfs() {
     _checkargs $# 2 || return 1
 
-    difft <(nxds $1) <(nxds $2)
+    difft --display side-by-side-show-both <(nxds $1) <(nxds $2)
 }
-nxsdiff() {
+nxdf() {
     _checkargs $# 2 || return 1
 
-    difft --override='*:json' --skip-unchanged --ignore-comments --context 0 <(nxds $1 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys) <(nxds $2 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys)
+    difft --override='*:json' --display side-by-side-show-both --skip-unchanged --ignore-comments --context 0 <(nxds $1 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys) <(nxds $2 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys)
 }
 
 # Pacman package management
@@ -427,27 +427,42 @@ printColors() {
 
 # Taken from http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
 MARKPATH=${DOTFILES}.safe/marks
-mkdir "$MARKPATH" &>/dev/null
 function j {
-    cd -P "$MARKPATH/${1:-d}" 2>/dev/null || echo "No such mark: $1"
+    mkdir -p "$MARKPATH"
+    local mark="$MARKPATH/${1:-d}"
+    [[ -L "$mark" ]] || { echo "No such mark: ${1:-d}"; return 1; }
+    local dest="$(readlink $mark)"
+    [[ -e "$dest" ]] || { echo "Destination missing: $1 -> $dest"; return 1; }
+    cd -P "$dest"
 }
 function m {
     _checkargs $# 1 || return 1
-    mkdir -p "$MARKPATH"; ln -vs "$(pwd)" "$MARKPATH/$1"
+    mkdir -p "$MARKPATH"
+    local mark="$MARKPATH/$1"
+    [[ -L "$mark" ]] && { echo "Mark exists: $1 -> $(readlink $mark)"; return 1; }
+    ln -vs "$(pwd)" "$mark"
 }
 function mf {
     _checkargs $# 1 || return 1
-    mkdir -p "$MARKPATH"; ln -vsnf "$(pwd)" "$MARKPATH/$1"
+    mkdir -p "$MARKPATH"
+    local mark="$MARKPATH/$1"
+    [[ -L "$mark" ]] && { echo "Replacing existing mark $1: $(readlink $mark) -> $(pwd)"; }
+    ln -snf "$(pwd)" "$mark"
 }
 function um {
     _checkargs $# 1 || return 1
-    (cd $MARKPATH && rm -v $1)
+    mkdir -p "$MARKPATH"
+    local mark="$MARKPATH/$1"
+    [[ -L "$mark" ]] || { echo "No such mark: $1"; return 1; }
+    (cd $MARKPATH && echo "Removing mark: $1 -> $(readlink $mark)" && \rm "$1" )
 }
 function mks {
+    mkdir -p "$MARKPATH"
     ls -n "$MARKPATH" | grep -v total | tr -s ' ' | cut -d ' ' -f 9- | sed 's/->/:/' | column -t -s ':'
 }
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
     function _completemarkszsh {
+        mkdir -p "$MARKPATH"
         reply=($(ls $MARKPATH))
     }
     compctl -K _completemarkszsh j
@@ -455,6 +470,7 @@ if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
 fi
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
     _completemarksbash() {
+        mkdir -p "$MARKPATH"
         local curw=${COMP_WORDS[COMP_CWORD]}
         local wordlist=$(find $MARKPATH -type l -printf "%f\n")
         COMPREPLY=($(compgen -W '${wordlist[@]}' -- "$curw"))
