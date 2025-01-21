@@ -137,15 +137,14 @@ ports() {
         ) | awk '{$6=gensub(/(.+):(.+)/,"\\1'${sep}'\\2",1,$6); rest=""; for(i=8;i<=NF;i++) { rest=rest " " $i; }; if(rest ~ /uid:/) { $8=gensub(/.*uid:([0-9]+).*/,"\\1",1,rest); } else { $8="0"; }; if(rest ~ /^ users/) { $8=$8 gensub(/^ users:\(\("([^"]+)",pid=([0-9]+),(.*)\)\).*/,"'${sep}'\\2'${sep}'\\1'${sep}'\\3",1,rest); $8=gensub(/\),\(/,",","g",$8); } else { $8=$8 "'${sep}'-'${sep}'-'${sep}'-"; }; if(rest ~ /.service/) { $8=$8 "," gensub(".*/([^\\.]+\\.service).*","\\1",1,rest); }; if(rest ~ /docker.*scope/) { $8=$8 ",docker.scope"; }; OFS="'${sep}'"}{print $2,$6,$1,$8}' | sort --field-separator "${sep}" "$@"
     ) | column -t -s"${sep}"
 }
-alias mv='mv -v'
-alias rm='rm -v'
-alias rmdir='rmdir -v'
+alias mvv='mv -v'
+alias rmv='rm -v'
 alias rmd='rmdir -v'
 alias rmr='rm -vrf'
 alias srmr='sudo rm -vrf'
-alias mount='mount -v'
-alias umount='umount -v'
-alias dmesg='dmesg --human -T'
+alias mountv='mount -v'
+alias umountv='umount -v'
+alias dmsg='dmesg --human -T'
 alias grepi='grep -i --color=auto'
 alias ev="env | sort"
 alias tn='tail -n'
@@ -153,7 +152,7 @@ alias hn='head -n'
 alias tf='tail -F'
 alias dfh='df -Th'
 alias duh='du -sh'
-alias lsblk='lsblk -o NAME,FSTYPE,SIZE,RO,MOUNTPOINT,LABEL,UUID'
+alias lblk='lsblk -o NAME,FSTYPE,SIZE,RO,MOUNTPOINT,LABEL,UUID'
 rdl() {
     dir="${1:-.}"
     readlink -f $dir
@@ -439,14 +438,14 @@ function m {
     mkdir -p "$MARKPATH"
     local mark="$MARKPATH/$1"
     [[ -L "$mark" ]] && { echo "Mark exists: $1 -> $(readlink $mark)"; return 1; }
-    ln -vs "$(pwd)" "$mark"
+    echo "Marked: $1 -> $(pwd)" && ln -s "$(pwd)" "$mark"
 }
 function mf {
     _checkargs $# 1 || return 1
     mkdir -p "$MARKPATH"
     local mark="$MARKPATH/$1"
-    [[ -L "$mark" ]] && { echo "Replacing existing mark $1: $(readlink $mark) -> $(pwd)"; }
-    ln -snf "$(pwd)" "$mark"
+    [[ -L "$mark" ]] && { echo "Replacing existing mark $1: $(readlink $mark) -> $(pwd)"; rm "$mark"; }
+    m "$1"
 }
 function um {
     _checkargs $# 1 || return 1
