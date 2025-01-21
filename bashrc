@@ -444,7 +444,7 @@ function mf {
     _checkargs $# 1 || return 1
     mkdir -p "$MARKPATH"
     local mark="$MARKPATH/$1"
-    [[ -L "$mark" ]] && { echo "Replacing existing mark $1: $(readlink $mark) -> $(pwd)"; rm "$mark"; }
+    [[ -L "$mark" ]] && { echo "Replacing $1: $(readlink $mark) -> $(pwd)"; rm "$mark"; }
     m "$1"
 }
 function um {
