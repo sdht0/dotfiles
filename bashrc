@@ -14,7 +14,7 @@ export EDITOR='vim'
 export VISUAL=$EDITOR
 export HISTFILESIZE=100000
 export HISTSIZE=${HISTFILESIZE}
-export HISTFILE=${DOTFILES}.safe/bash_history
+[[ -d ${DOTFILES}.safe ]] && export HISTFILE=${DOTFILES}.safe/bash_history || export HISTFILE=~/.bash_history
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
@@ -225,7 +225,11 @@ nxos() {
     fl="/tmp/dry-build.txt"
     [[ "${1:-}" == "upd" ]] && { nix flake update --flake ~/.config/nix-darwin; shift; }
 
-    nvd diff "$(nix path-info --derivation "/run/current-system")" "$(nix path-info --derivation ~/".config/nix-darwin#darwinConfigurations.$(scutil --get LocalHostName).config.system.build.toplevel")" || return 1
+    if command -v nvd &>/dev/null ;then
+        local left="$(nix path-info --derivation "/run/current-system")"
+        local right="$(nix path-info --derivation ~/".config/nix-darwin#darwinConfigurations.$(hostname -s).config.system.build.toplevel")"
+        nvd diff "$left" "$right"  || return 1
+    fi
 
     if [[ "${1:-}" == "dry" ]];then
 #         nixos-rebuild --flake /etc/nixos dry-build &> $fl || return
