@@ -1,3 +1,4 @@
+export DOTFILES=~/.config/dotfiles
 
 # Replace with a tmux session if it is an interactive session and tmux is installed and is not already running
 if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && [[ -t 1 ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$NOTMUX" ]] ;then
@@ -13,7 +14,7 @@ export EDITOR='vim'
 export VISUAL=$EDITOR
 export HISTFILESIZE=100000
 export HISTSIZE=${HISTFILESIZE}
-export HISTFILE=~/.dotfiles.safe/bash_history
+export HISTFILE=${DOTFILES}.safe/bash_history
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
@@ -122,7 +123,6 @@ ydl() {
     bydl "${opts[@]}" "$@"
 }
 alias ydla='ydl ad'
-alias df='df -Th'
 alias lsg='ls -CFalh --color=auto | grep --color=auto -i'
 alias psg='ps aux | grep -v grep | grep -i -e "^USER " -e '
 alias psgc='ps aux | grep -v grep | grep -i -e '
@@ -139,23 +139,22 @@ ports() {
         ) | awk '{$6=gensub(/(.+):(.+)/,"\\1'${sep}'\\2",1,$6); rest=""; for(i=8;i<=NF;i++) { rest=rest " " $i; }; if(rest ~ /uid:/) { $8=gensub(/.*uid:([0-9]+).*/,"\\1",1,rest); } else { $8="0"; }; if(rest ~ /^ users/) { $8=$8 gensub(/^ users:\(\("([^"]+)",pid=([0-9]+),(.*)\)\).*/,"'${sep}'\\2'${sep}'\\1'${sep}'\\3",1,rest); $8=gensub(/\),\(/,",","g",$8); } else { $8=$8 "'${sep}'-'${sep}'-'${sep}'-"; }; if(rest ~ /.service/) { $8=$8 "," gensub(".*/([^\\.]+\\.service).*","\\1",1,rest); }; if(rest ~ /docker.*scope/) { $8=$8 ",docker.scope"; }; OFS="'${sep}'"}{print $2,$6,$1,$8}' | sort --field-separator "${sep}" "$@"
     ) | column -t -s"${sep}"
 }
-alias mv='mv -v'
-alias rm='rm -v'
-alias rmdir='rmdir -v'
+alias mvv='mv -v'
+alias rmv='rm -v'
 alias rmd='rmdir -v'
 alias rmr='rm -vrf'
 alias srmr='sudo rm -vrf'
-alias mount='mount -v'
-alias umount='umount -v'
-alias dmesg='dmesg --human -T'
-alias grep='grep -i --color=auto'
+alias mountv='mount -v'
+alias umountv='umount -v'
+alias dmsg='dmesg --human -T'
+alias grepi='grep -i --color=auto'
 alias ev="env | sort"
 alias tn='tail -n'
 alias hn='head -n'
 alias tf='tail -F'
-alias df='df -h'
-alias du='du -sh'
-alias lsblk='lsblk -o NAME,FSTYPE,SIZE,RO,MOUNTPOINT,LABEL,UUID'
+alias dfh='df -Th'
+alias duh='du -sh'
+alias lblk='lsblk -o NAME,FSTYPE,SIZE,RO,MOUNTPOINT,LABEL,UUID'
 rdl() {
     dir="${1:-.}"
     readlink -f $dir
@@ -201,6 +200,7 @@ alias gra='git rebase --abort'
 alias gd="git diff"
 alias gk="gitk --all"
 alias gg="git gui"
+alias lg="lazygit"
 
 alias dk='sudo docker'
 alias dkr='sudo docker run'
@@ -310,15 +310,15 @@ nxwd() {
 
     nix why-depends "$p1" "$p2"
 }
-nxdiff() {
+nxdfs() {
     _checkargs $# 2 || return 1
 
-    difft <(nxds $1) <(nxds $2)
+    difft --display side-by-side-show-both <(nxds $1) <(nxds $2)
 }
-nxsdiff() {
+nxdf() {
     _checkargs $# 2 || return 1
 
-    difft --override='*:json' --skip-unchanged --ignore-comments --context 0 <(nxds $1 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys) <(nxds $2 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys)
+    difft --override='*:json' --display side-by-side-show-both --skip-unchanged --ignore-comments --context 0 <(nxds $1 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys) <(nxds $2 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys)
 }
 
 # Pacman package management
@@ -386,8 +386,8 @@ tfm() {
     n=${1:-30}
     sudo journalctl -n${n} -f
 }
-alias magic2='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py`'
-alias magic='cd;~/.dotfiles/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py`'
+alias magic2='cd;$DOTFILES/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py`'
+alias magic='cd;$DOTFILES/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc2 | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py`'
 
 xsshlistener() {
     _checkargs $# 2 || return 1
@@ -425,28 +425,43 @@ printColors() {
 }
 
 # Taken from http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
-MARKPATH=$HOME/.dotfiles.safe/marks
-mkdir "$MARKPATH" &>/dev/null
+MARKPATH=${DOTFILES}.safe/marks
 function j {
-    cd -P "$MARKPATH/${1:-d}" 2>/dev/null || echo "No such mark: $1"
+    mkdir -p "$MARKPATH"
+    local mark="$MARKPATH/${1:-d}"
+    [[ -L "$mark" ]] || { echo "No such mark: ${1:-d}"; return 1; }
+    local dest="$(readlink $mark)"
+    [[ -e "$dest" ]] || { echo "Destination missing: $1 -> $dest"; return 1; }
+    cd -P "$dest"
 }
 function m {
     _checkargs $# 1 || return 1
-    mkdir -p "$MARKPATH"; ln -vs "$(pwd)" "$MARKPATH/$1"
+    mkdir -p "$MARKPATH"
+    local mark="$MARKPATH/$1"
+    [[ -L "$mark" ]] && { echo "Mark exists: $1 -> $(readlink $mark)"; return 1; }
+    echo "Marked: $1 -> $(pwd)" && ln -s "$(pwd)" "$mark"
 }
 function mf {
     _checkargs $# 1 || return 1
-    mkdir -p "$MARKPATH"; ln -vsnf "$(pwd)" "$MARKPATH/$1"
+    mkdir -p "$MARKPATH"
+    local mark="$MARKPATH/$1"
+    [[ -L "$mark" ]] && { echo "Replacing $1: $(readlink $mark) -> $(pwd)"; rm "$mark"; }
+    m "$1"
 }
 function um {
     _checkargs $# 1 || return 1
-    (cd $MARKPATH && rm -v $1)
+    mkdir -p "$MARKPATH"
+    local mark="$MARKPATH/$1"
+    [[ -L "$mark" ]] || { echo "No such mark: $1"; return 1; }
+    (cd $MARKPATH && echo "Removing mark: $1 -> $(readlink $mark)" && \rm "$1" )
 }
 function mks {
+    mkdir -p "$MARKPATH"
     ls -n "$MARKPATH" | grep -v total | tr -s ' ' | cut -d ' ' -f 9- | sed 's/->/:/' | column -t -s ':'
 }
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
     function _completemarkszsh {
+        mkdir -p "$MARKPATH"
         reply=($(ls $MARKPATH))
     }
     compctl -K _completemarkszsh j
@@ -454,6 +469,7 @@ if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
 fi
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
     _completemarksbash() {
+        mkdir -p "$MARKPATH"
         local curw=${COMP_WORDS[COMP_CWORD]}
         local wordlist=$(find $MARKPATH -type l -printf "%f\n")
         COMPREPLY=($(compgen -W '${wordlist[@]}' -- "$curw"))
@@ -623,7 +639,7 @@ alias jp="japanesec"
 japanese() {
     _checkargs $# 1 || return 1
 
-    python ~/.dotfiles/scripts/japanese-get-kana.py "$@"
+    python $DOTFILES/scripts/japanese-get-kana.py "$@"
 }
 
 japanesec() {
@@ -636,7 +652,7 @@ japanesec() {
 }
 
 rand() {
-    python ~/.dotfiles/scripts/password.py "$@"
+    python $DOTFILES/scripts/password.py "$@"
 }
 
 randc() {
@@ -761,6 +777,7 @@ xextract() {
             *.tar.bz2) tar xjf "$1";;
             *.tar.gz) tar xzf "$1" ;;
             *.tar.xz) tar Jxf "$1" ;;
+            *.tar.zst) tar --zst -xf "$1" ;;
             *.bz2) bunzip2 "$1";;
             *.rar) rar x "$1";;
             *.gz) gunzip "$1"  ;;
@@ -882,12 +899,12 @@ xget() {
     if [ $# -lt 1 ]; then
         for i in $(cat ~/sshhhh | grep ')' | grep -v '*' | grep -v 'mnet' | cut -f1 -d')' | xargs);do
             printf "$i "
-            code=$(~/sshhhh "$i" | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py)
+            code=$(~/sshhhh "$i" | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py)
             printf $code
             echo
         done
     else
-        code=$(~/sshhhh "$1" | base64 --decode | python2 ~/.dotfiles/scripts/gauthenticator.py)
+        code=$(~/sshhhh "$1" | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py)
         printf $code | xclip -selection clipboard
         echo "Copied $code to clipboard"
     fi

@@ -1,5 +1,6 @@
+#!/usr/bin/env xdg-open
 [Desktop Entry]
-Exec=/home/artimaeus/.dotfiles/scripts/ssh-agent/ssh-add.sh
+Exec=/home/artimaeus/.config/dotfiles/scripts/ssh-agent/ssh-add.sh
 Icon=dialog-scripts
 Name=ssh-add.sh
 Type=Application
