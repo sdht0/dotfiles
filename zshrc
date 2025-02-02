@@ -58,8 +58,12 @@ if [[ $- = *i* ]];then
     if [[ -r "$powerline" ]];then
         source "$powerline"
 
-        config_file=$DOTFILES/p10k.zsh
-        if [[ -r "$config_file" ]]; then
+        if [[ -f "$DOTFILES/profile.server" ]];then
+            config_file=$DOTFILES/prompt/server.p10k.zsh
+        else
+            config_file=$DOTFILES/prompt/p10k.zsh
+        fi
+        if [[ -f "$config_file" ]];then
             . "$config_file"
         else
             POWERLEVEL9K_PROMPT_ON_NEWLINE=true

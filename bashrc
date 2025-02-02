@@ -23,7 +23,7 @@ MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 #[[ $- = *i* ]] && stty -ixon
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
 
-    [[ -f /etc/bashrc ]];then
+    if [[ -f /etc/bashrc ]];then
         . /etc/bashrc
     fi
 
