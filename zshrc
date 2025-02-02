@@ -54,14 +54,14 @@ setopt nobeep \
 
 if [[ $- = *i* ]];then
 
-    powerline=$DOTFILES/modules/powerlevel10k/powerlevel10k.zsh-theme
+    local powerline=$DOTFILES/modules/powerlevel10k/powerlevel10k.zsh-theme
     if [[ -r "$powerline" ]];then
         source "$powerline"
 
         if [[ -f "$DOTFILES/profile.server" ]];then
-            config_file=$DOTFILES/prompt/server.p10k.zsh
+            local config_file=$DOTFILES/prompt/server.p10k.zsh
         else
-            config_file=$DOTFILES/prompt/p10k.zsh
+            local config_file=$DOTFILES/prompt/p10k.zsh
         fi
         if [[ -f "$config_file" ]];then
             . "$config_file"
@@ -92,28 +92,28 @@ if [[ $- = *i* ]];then
         fi
     else
         [[ $UID -eq 0 ]] && color=red || color=magenta
-        NEWLINE=$'\n'
+        local NEWLINE=$'\n'
         PROMPT="${NEWLINE}[%{$fg_bold[blue]%}${MYSHELL}%{$reset_color%}:%{$fg_bold[${color}]%}%n@%M%{$reset_color%}][%D{%H:%M:%S}] %{$fg_bold[green]%}%~${NEWLINE}%(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
         RPROMPT=""
     fi
 
-    better_history=$DOTFILES/modules/zsh-peco-history/zsh-peco-history.zsh
+    local better_history=$DOTFILES/modules/zsh-peco-history/zsh-peco-history.zsh
     if [[ -r "$better_history" ]];then
         source "$better_history"
     fi
 
-    interactive_cd=$DOTFILES/modules/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
+    local interactive_cd=$DOTFILES/modules/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
     if [[ -r "$interactive_cd" ]] && which fzf &>/dev/null ;then
         export FZF_DEFAULT_OPTS="--cycle"
         source "$interactive_cd"
     fi
 
-    autosuggestions=$DOTFILES/modules/zsh-autosuggestions/zsh-autosuggestions.zsh
+    local autosuggestions=$DOTFILES/modules/zsh-autosuggestions/zsh-autosuggestions.zsh
     if [[ -r "$autosuggestions" ]];then
         source "$autosuggestions"
     fi
 
-    syntax_highlighting=$DOTFILES/modules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    local syntax_highlighting=$DOTFILES/modules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     if [[ -r "$syntax_highlighting" ]];then
         source "$syntax_highlighting"
     fi
