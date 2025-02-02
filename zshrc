@@ -55,9 +55,9 @@ setopt nobeep \
 if [[ $- = *i* ]];then
 
     powerline=$DOTFILES/modules/powerlevel10k/powerlevel10k.zsh-theme
-    if [[ -r "$powerline" ]] && [[ ! $TTY = *tty* ]];then
+    if [[ -r "$powerline" ]];then
         source "$powerline"
-        
+
         config_file=$DOTFILES/p10k.zsh
         if [[ -r "$config_file" ]]; then
             . "$config_file"
@@ -87,9 +87,9 @@ if [[ $- = *i* ]];then
             #POWERLEVEL9K_MULTILINE_SECOD_PROMPT_PREFIX="%(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
         fi
     else
-        [[ $UID -eq 0 ]] && color=red || color=green
+        [[ $UID -eq 0 ]] && color=red || color=magenta
         NEWLINE=$'\n'
-        PROMPT="${NEWLINE}%{$fg_bold[yellow]%}%~ %(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
+        PROMPT="${NEWLINE}[%{$fg_bold[blue]%}${MYSHELL}%{$reset_color%}:%{$fg_bold[${color}]%}%n@%M%{$reset_color%}][%D{%H:%M:%S}] %{$fg_bold[green]%}%~${NEWLINE}%(?.%{$fg[green]%}.%{$fg[red]%})%#%{$reset_color%} "
         RPROMPT=""
     fi
 
@@ -114,5 +114,8 @@ if [[ $- = *i* ]];then
         source "$syntax_highlighting"
     fi
 
-fi
+    if [[ -f /opt/homebrew/bin/brew ]];then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
 
+fi
