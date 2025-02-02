@@ -1,12 +1,13 @@
 export DOTFILES=~/.config/dotfiles
+[[ "$(uname -o)" == "Darwin" ]] && export IS_DARWIN="1"
 
 # Replace with a tmux session if it is an interactive session and tmux is installed and is not already running
-if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && which tmux > /dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$NOTMUX" ]] && [[ ! $TTY = *tty* ]] ;then
+if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && [[ -t 1 ]] && command -v tmux &>/dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$NOTMUX" ]] ;then
     ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
     if [[ -z "$ID" ]] ;then # if not available create a new one
-        exec tmux new-session 2>/dev/null
+        exec tmux new-session
     else
-        exec tmux attach-session -t "$ID" 2>/dev/null # if available attach to it
+        exec tmux attach-session -t "$ID" # if available attach to it
     fi
 fi
 
@@ -14,13 +15,17 @@ export EDITOR='vim'
 export VISUAL=$EDITOR
 export HISTFILESIZE=100000
 export HISTSIZE=${HISTFILESIZE}
-export HISTFILE=${DOTFILES}.safe/bash_history
+[[ -d ${DOTFILES}.safe ]] && export HISTFILE=${DOTFILES}.safe/bash_history || export HISTFILE=~/.bash_history
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 
 #[[ $- = *i* ]] && stty -ixon
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
+
+    [[ -f /etc/bashrc ]];then
+        . /etc/bashrc
+    fi
 
     bind '"\e[A": history-search-backward'
     bind '"\e[B": history-search-forward'
@@ -56,8 +61,9 @@ if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
     BCyan="\[\033[1;36m\]"        # Cyan
     BWhite="\[\033[1;37m\]"       # White
 
+    [[ $UID -eq 0 ]] && color=${BRed} || color=${BPurple}
     [[ $UID -eq 0 ]] && prompt='#' || prompt='$'
-    export PS1="\n[${BBlue}${MYSHELL}${Color_Off}][\t] ${BYellow}\w\n\$([[ \$? == 0 ]] && echo \"${BGreen}\" || echo \"${BRed}\")${prompt}${Color_Off} "
+    export PS1="\n[${BBlue}${MYSHELL}${Color_Off}:${color}\u@\H${Color_Off}][\t] ${BGreen}\w\n\$([[ \$? == 0 ]] && echo \"${BGreen}\" || echo \"${BRed}\")${prompt}${Color_Off} "
 
 fi
 
@@ -166,7 +172,6 @@ alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; 
 alias xcp='xclip -selection clipboard'
 alias httpserver="python3 -m http.server"
 alias sx="startx"
-
 alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d'/' -f1 | sed -r "s/[ \t]+/ /g" | cut -d" " -f2-4 | awk "{print \$1\": \"\$3}" | sort | uniq'
 mypublicip() {
     printf "curl -s ident.me\ncurl -s icanhazip.com\ncurl -s4 ifconfig.co\ncurl -s6 ifconfig.co" | xargs -I{} sh -c 'x=$({} | tr -d "\"";echo " | {}");echo $x'
@@ -221,33 +226,50 @@ alias pmca='podman ps -a'
 
 # Nixos
 nxos() {
-    fl="/tmp/dry-build.txt"
-    [[ "${1:-}" == "upd" ]] && { nix flake update --flake /etc/nixos; shift; }
+    [[ -n "${IS_DARWIN:-}" ]] && local config=~/.config/nix-darwin || local config=/etc/nixos
 
-    nvd diff "$(nix path-info --derivation "/run/current-system")" "$(nix path-info --derivation "/etc/nixos#nixosConfigurations.$(hostname).config.system.build.toplevel")" || return 1
+    [[ "${1:-}" == "upd" ]] && { nix flake update --flake "$config"; shift; }
 
-    if [[ "${1:-}" == "dry" ]];then
-#         nixos-rebuild --flake /etc/nixos dry-build &> $fl || return
+    if command -v nvd &>/dev/null ;then
 
-        #nix store diff-closures "$(nix path-info --derivation "/run/current-system")" "$(cat "$fl" | grep nixos-system | tr -d ' ')"
-        #echo
-#         echo "Download:"
-#         cat "$fl" | awk 'p;/will be fetched/{p=1}' | tr -d ' '
-# 
-#         echo
-#         echo "Local:"
-#         cat "$fl" | awk '/fetched/{p=0}p;/will be built/{p=1}' | while read d ;do grep -qi "preferLocalBuild" "$d" && echo "$d" ;done
-# 
-#         echo
-#         echo "Build:"
-#         cat "$fl" | awk '/fetched/{p=0}p;/will be built/{p=1}' | while read d ;do grep -qi "preferLocalBuild" "$d" || echo "$d" ;done
-# 
-#         echo
-        :
-    else
+        local left="$(nix path-info --derivation "/run/current-system")"
+        local right="$(nix path-info --derivation "$config#darwinConfigurations.$(hostname -s).config.system.build.toplevel")"
+        nvd diff "$left" "$right"  || return 1
         echo
-        sudo true || return 2;
-        sudo nice -10 nixos-rebuild --keep-going --flake /etc/nixos "${1:-boot}" |& nom
+
+    fi
+
+    if [[ -n "${IS_DARWIN:-}" ]];then
+        darwin-rebuild --keep-going --flake "$config" "${1:-switch}"
+    else
+        if [[ "${1:-}" == "dry" ]];then
+            local fl="/tmp/dry-build.txt"
+
+            nixos-rebuild --flake "$config" dry-build &> $fl || return
+
+            nix store diff-closures "$(nix path-info --derivation "/run/current-system")" "$(cat "$fl" | grep nixos-system | tr -d ' ')"
+            echo
+            echo "Download:"
+            cat "$fl" | awk 'p;/will be fetched/{p=1}' | tr -d ' '
+
+            echo
+            echo "Local:"
+            cat "$fl" | awk '/fetched/{p=0}p;/will be built/{p=1}' | while read d ;do grep -qi "preferLocalBuild" "$d" && echo "$d" ;done
+
+            echo
+            echo "Build:"
+            cat "$fl" | awk '/fetched/{p=0}p;/will be built/{p=1}' | while read d ;do grep -qi "preferLocalBuild" "$d" || echo "$d" ;done
+
+            echo
+            :
+        else
+            sudo true || return 2
+            if command -v nom &>/dev/null ;then
+                sudo nice -10 nixos-rebuild --keep-going --flake "$config" "${1:-boot}" |& nom
+            else
+                sudo nice -10 nixos-rebuild --keep-going --flake "$config" "${1:-boot}"
+            fi
+        fi
     fi
 }
 nxd() {
@@ -585,15 +607,20 @@ l() {
 
     args=()
 
-    if command -v eza &> /dev/null;then
+    if command -v eza &>/dev/null ;then
         [[ "${long:-}" == "true" ]] && args+=(-lg --icons)
         [[ "${all:-}" == "true" ]] && args+=("-aa")
         [[ "${dir:-}" == "true" ]] && args+=("--only-dirs")
         eval ${pre:-} eza --group-directories-first --color=auto --sort=extension "${args[@]}" "$@"
     else
         [[ "${long:-}" == "true" ]] && args+=("-l")
-        [[ "${all:-}" == "true" ]] && args+=("--all")
-        eval ${pre:-} ls -XF --color=auto --group-directories-first "${args[@]}" "$@"
+        if [[ -n "${IS_DARWIN:-}" ]];then
+            [[ "${all:-}" == "true" ]] && args+=("-A")
+            eval ${pre:-} ls -F --color=auto "${args[@]}" "$@"
+        else
+            [[ "${all:-}" == "true" ]] && args+=("--all")
+            eval ${pre:-} ls -XF --color=auto --group-directories-first "${args[@]}" "$@"
+        fi
     fi
 }
 alias la='l _all'

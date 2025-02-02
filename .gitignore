@@ -4,3 +4,4 @@ src/
 *.tar
 *.tar.gz
 node_exporter/
+profile.*
