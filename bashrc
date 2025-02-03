@@ -15,7 +15,7 @@ export EDITOR='vim'
 export VISUAL=$EDITOR
 export HISTFILESIZE=100000
 export HISTSIZE=${HISTFILESIZE}
-[[ -d ${DOTFILES}.safe ]] && export HISTFILE=${DOTFILES}.safe/bash_history || export HISTFILE=~/.bash_history
+[[ -f ${DOTFILES}.safe/bash_history ]] && export HISTFILE=${DOTFILES}.safe/bash_history || export HISTFILE=~/.bash_history
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
@@ -226,14 +226,16 @@ alias pmca='podman ps -a'
 
 # Nixos
 nxos() {
-    [[ -n "${IS_DARWIN:-}" ]] && local config=~/.config/nix-darwin || local config=/etc/nixos
+    [[ -n "${IS_DARWIN:-}" ]] \
+        && { local config=~/.config/nix-darwin; local picker="darwin"; } \
+        || { local config=/etc/nixos; local picker="nixos"; }
 
     [[ "${1:-}" == "upd" ]] && { nix flake update --flake "$config"; shift; }
 
     if command -v nvd &>/dev/null ;then
 
         local left="$(nix path-info --derivation "/run/current-system")"
-        local right="$(nix path-info --derivation "$config#darwinConfigurations.$(hostname -s).config.system.build.toplevel")"
+        local right="$(nix path-info --derivation "${config}#${picker}Configurations.$(hostname -s).config.system.build.toplevel")"
         nvd diff "$left" "$right"  || return 1
         echo
 
@@ -340,6 +342,11 @@ nxdf() {
     _checkargs $# 2 || return 1
 
     difft --override='*:json' --display side-by-side-show-both --skip-unchanged --ignore-comments --context 0 <(nxds $1 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys) <(nxds $2 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys)
+}
+nxdev() {
+    _checkargs $# 1 || return 1
+
+    nix develop "/etc/nixos#$1"
 }
 
 # Pacman package management

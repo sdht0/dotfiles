@@ -55,7 +55,7 @@ setopt nobeep \
 if [[ $- = *i* ]];then
 
     local powerline=$DOTFILES/modules/powerlevel10k/powerlevel10k.zsh-theme
-    if command -v starship &>/dev/null ;then
+    if true && command -v starship &>/dev/null ;then
         [[ -f "$DOTFILES/profile.server" ]] && local config_file=$DOTFILES/prompt/server.starship.toml || local config_file=$DOTFILES/prompt/starship.toml
         export STARSHIP_CONFIG="$config_file"
         eval "$(starship init zsh)"
