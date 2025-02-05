@@ -93,19 +93,22 @@ follow_symlinks = true
 
 format = """
 [](color_orange)\
-$os$sudo$username\
+$os\
+$sudo\
+$username\
 [](bg:color_aqua fg:color_orange)\
 $directory\
-[](fg:color_aqua bg:none)\
-$line_break$character"""
-
-right_format = """
+[](fg:color_aqua bg:color_blue)\
+$nix_shell\
+[](fg:color_blue bg:none)\
+\
+$fill\
+\
 [](fg:color_bg1 bg:none)\
 $status\
 [](fg:color_bg3 bg:color_bg1)\
 $cmd_duration\
 [](fg:color_blue bg:color_bg3)\
-$nix_shell\
 $rust\
 $cmake\
 $golang\
@@ -122,7 +125,12 @@ $git_branch\
 $git_status\
 [](fg:color_orange bg:color_aqua)\
 $time\
-[](color_orange)"""
+[](color_orange)\
+\
+$line_break\
+\
+$character\
+"""
 
 # Sets which color palette from palettes to use.
 palette = 'gruvbox_dark'
@@ -213,6 +221,10 @@ vimcmd_replace_one_symbol = '[](bold fg:color_purple)'
 vimcmd_replace_symbol = '[](bold fg:color_purple)'
 vimcmd_visual_symbol = '[](bold fg:color_yellow)'
 format = '$symbol '
+
+[fill]
+disabled = false
+symbol = ' '
 
 ### Right
 

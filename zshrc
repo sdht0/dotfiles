@@ -55,16 +55,23 @@ setopt nobeep \
 if [[ $- = *i* ]];then
 
     local powerline=$DOTFILES/modules/powerlevel10k/powerlevel10k.zsh-theme
-    if true && command -v starship &>/dev/null ;then
-        [[ -f "$DOTFILES/profile.server" ]] && local config_file=$DOTFILES/prompt/server.starship.toml || local config_file=$DOTFILES/prompt/starship.toml
-        export STARSHIP_CONFIG="$config_file"
+
+    if [[ -f "$DOTFILES/profile.server" ]];then
+        local s_config_file=$DOTFILES/prompt/server.starship.toml
+        local p_config_file=$DOTFILES/prompt/server.p10k.zsh
+    else
+        local s_config_file=$DOTFILES/prompt/starship.toml
+        local p_config_file=$DOTFILES/prompt/p10k.zsh
+    fi
+
+    if command -v starship &>/dev/null && [[ -f "$s_config_file" ]] ;then
+        export STARSHIP_CONFIG="$s_config_file"
         eval "$(starship init zsh)"
     elif [[ -r "$powerline" ]];then
         source "$powerline"
 
-        [[ -f "$DOTFILES/profile.server" ]] && local config_file=$DOTFILES/prompt/server.p10k.zsh || local config_file=$DOTFILES/prompt/p10k.zsh
-        if [[ -f "$config_file" ]];then
-            . "$config_file"
+        if [[ -f "$p_config_file" ]];then
+            . "$p_config_file"
         else
             POWERLEVEL9K_PROMPT_ON_NEWLINE=true
             POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
