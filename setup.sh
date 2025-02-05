@@ -20,7 +20,7 @@ echo "Setting up .zshrc"
 echo -e ". ~/.bashrc\n. $dotfiles/zshrc\n[[ -f $dotfiles.safe/zshrc ]] && . $dotfiles.safe/zshrc || true" > ~/.zshrc
 
 if [[ -f "$DOTFILES/profile.server" ]];then
-    link_file "server.tmux.conf"
+    link_file "server.tmux.conf" ".tmux.conf"
 else
     link_file "tmux.conf"
 fi
