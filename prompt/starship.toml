@@ -92,8 +92,9 @@ follow_symlinks = true
 # $shell
 
 format = """
-[](color_orange)\
+[](color_yellow)\
 $os\
+[](bg:color_orange fg:color_yellow)\
 $sudo\
 $username\
 [](bg:color_aqua fg:color_orange)\
@@ -151,7 +152,7 @@ color_yellow = '#d79921'
 
 [os]
 disabled = false
-style = "fg:color_fg0 bg:color_orange"
+style = "fg:color_fg0 bg:color_yellow"
 format = "[$symbol ]($style)"
 
 [os.symbols]
@@ -180,7 +181,7 @@ Windows = ""
 
 [sudo]
 disabled = false
-symbol = "🧙"
+symbol = " 🧙"
 style = "bg:color_orange fg:color_fg0"
 format = "[$symbol]($style)"
 
@@ -189,7 +190,7 @@ disabled = false
 show_always = true
 style_user = "fg:color_fg0 bg:color_orange"
 style_root = "fg:color_red bg:color_orange"
-format = "[$user ]($style)"
+format = "[ $user ]($style)"
 
 [directory]
 disabled = false
@@ -241,7 +242,7 @@ format = "([ $duration  ]($style))"
 [nix_shell]
 symbol = ""
 style = "bg:color_blue"
-format = '[[ $symbol $state ](fg:color_fg0 bg:color_blue)]($style)'
+format = '[[ $symbol $name ](fg:color_fg0 bg:color_blue)]($style)'
 
 [nodejs]
 symbol = ""
