@@ -167,6 +167,7 @@ alias vi='vim'
 alias se='sudoedit'
 alias sv='sudo vim -u ~/.vimrc'
 alias e='vim'
+alias k='kwrite'
 alias ee='emacsclient -c'
 alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; date +%$F:"|'"'"'${F//%n/ }'"'"'|${l#* }";done|sed "s/\ *|\ */|/g" |column -s "|" -t'
 alias xcp='xclip -selection clipboard'
@@ -202,9 +203,10 @@ alias grh='git reset HEAD'
 alias grc='git rebase --continue'
 alias gra='git rebase --abort'
 alias gd="git diff"
+alias gds="git diff --staged"
 alias gk="gitk --all"
 alias gg="git gui"
-alias lg="lazygit"
+alias gu="gitui"
 
 alias dk='sudo docker'
 alias dkr='sudo docker run'
