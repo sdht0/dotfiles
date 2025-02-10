@@ -94,20 +94,20 @@ follow_symlinks = true
 format = """
 [](color_yellow)\
 $os\
-[](bg:color_orange fg:color_yellow)\
+[](bg:color_orange fg:color_yellow)\
 $sudo\
 $username\
 [](bg:color_aqua fg:color_orange)\
 $directory\
 [](fg:color_aqua bg:color_blue)\
 $nix_shell\
-[](fg:color_blue bg:none)\
+[](fg:color_blue bg:color_bg1)\
+$status\
+[](fg:color_bg1 bg:none)\
 \
 $fill\
 \
-[](fg:color_bg1 bg:none)\
-$status\
-[](fg:color_bg3 bg:color_bg1)\
+[](fg:color_bg3 bg:none)\
 $cmd_duration\
 [](fg:color_blue bg:color_bg3)\
 $rust\
@@ -153,35 +153,58 @@ color_yellow = '#d79921'
 [os]
 disabled = false
 style = "fg:color_fg0 bg:color_yellow"
-format = "[$symbol ]($style)"
+format = "[$symbol]($style)"
 
 [os.symbols]
-Alpine = ""
-Amazon = ""
-Android = ""
-Arch = "󰣇"
-Artix = "󰣇"
-CentOS = ""
-Debian = "󰣚"
-EndeavourOS = ""
-Fedora = "󰣛"
-Gentoo = "󰣨"
-Linux = ""
-Macos = "󰀵"
-Manjaro = ""
-Mint = ""
-NixOS =  ""
-Pop = ""
-Raspbian = ""
-RedHatEnterprise = "󱄛"
-Redhat = "󱄛"
-SUSE = ""
-Ubuntu = ""
-Windows = ""
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CachyOS = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+Nobara = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
 
 [sudo]
 disabled = false
-symbol = " 🧙"
+symbol = " ⭘"
 style = "bg:color_orange fg:color_fg0"
 format = "[$symbol]($style)"
 
