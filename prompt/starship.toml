@@ -92,25 +92,29 @@ follow_symlinks = true
 # $shell
 
 format = """
-[](color_yellow)\
-$os\
-[](bg:color_orange fg:color_yellow)\
-$sudo\
-$username\
-[](bg:color_aqua fg:color_orange)\
-$directory\
-[](fg:color_aqua bg:color_blue)\
-$nix_shell\
-[](fg:color_blue bg:color_bg1)\
-$status\
-[](fg:color_bg1 bg:none)\
+([](fg:color_yellow bg:none)\
+[$os](fg:color_white bg:prev_fg))\
 \
-$fill\
+([](fg:prev_bg bg:color_orange)\
+[ ($sudo )$username ](fg:color_white bg:prev_bg))\
 \
-[](fg:color_bg3 bg:none)\
-$cmd_duration\
-[](fg:color_blue bg:color_bg3)\
-$rust\
+([](fg:prev_bg bg:color_blue)\
+[ $nix_shell ](fg:color_white bg:prev_bg))\
+\
+([](fg:prev_bg bg:color_aqua)\
+[ $directory ](fg:color_white bg:prev_bg))\
+\
+([](fg:prev_bg bg:color_black)\
+[ $status ](fg:color_red bg:prev_bg))\
+
+([](fg:prev_bg bg:none)\
+$fill)\
+\
+([](fg:color_black bg:none)
+[ $cmd_duration ](fg:color_white bg:color_black))\
+\
+([](fg:color_blue bg:prev_bg)\
+[ $rust\
 $cmake\
 $golang\
 $nodejs\
@@ -119,14 +123,14 @@ $java\
 $kotlin\
 $haskell\
 $python\
-$docker_context\
-$conda\
-[](fg:color_aqua bg:color_blue)\
-$git_branch\
-$git_status\
-[](fg:color_orange bg:color_aqua)\
-$time\
-[](color_orange)\
+$docker_context ](fg:color_white bg:color_blue))\
+\
+([](fg:color_aqua bg:prev_bg)\
+[ $git_branch( $git_status) ](fg:color_white bg:color_aqua))\
+\
+[](fg:color_orange bg:prev_bg)\
+[ $time](fg:color_white bg:color_orange)\
+[](fg:prev_bg bg:none)\
 \
 $line_break\
 \
@@ -137,9 +141,8 @@ $character\
 palette = 'gruvbox_dark'
 
 [palettes.gruvbox_dark]
-color_fg0 = '#fbf1c7'
-color_bg1 = '#3c3836'
-color_bg3 = '#665c54'
+color_white = '#fbf1c7'
+color_black = '#3c3836'
 color_blue = '#458588'
 color_aqua = '#689d6a'
 color_green = '#98971a'
@@ -152,8 +155,7 @@ color_yellow = '#d79921'
 
 [os]
 disabled = false
-style = "fg:color_fg0 bg:color_yellow"
-format = "[$symbol]($style)"
+format = "$symbol"
 
 [os.symbols]
 Alpaquita = " "
@@ -204,16 +206,17 @@ Windows = "󰍲 "
 
 [sudo]
 disabled = false
-symbol = " ⭘"
-style = "bg:color_orange fg:color_fg0"
-format = "[$symbol]($style)"
+symbol = '⭘'
+format = "$symbol"
 
 [username]
 disabled = false
 show_always = true
-style_user = "fg:color_fg0 bg:color_orange"
-style_root = "fg:color_red bg:color_orange"
-format = "[ $user ]($style)"
+format = "$user"
+
+[nix_shell]
+symbol = ""
+format = '$symbol $name'
 
 [directory]
 disabled = false
@@ -223,15 +226,13 @@ truncation_symbol = '…/'
 use_os_path_sep = true
 home_symbol = '~'
 
-read_only = ' '
-read_only_style = "fg:color_fg0 bg:color_aqua"
+read_only = ' '
 
-before_repo_root_style = "fg:color_fg0 bg:color_aqua"
-repo_root_style = "bold fg:color_fg0 bg:color_aqua"
-style = "fg:color_fg0 bg:color_aqua"
+before_repo_root_style="bold"
+repo_root_style="bold"
 
-repo_root_format = "[$read_only]($read_only_style)[ $before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path ]($style)"
-format = "[$read_only]($read_only_style)[ $path ]($style)"
+repo_root_format = "$read_only$before_root_path[$repo_root](bold fg:prev_fg bg:prev_bg)$path"
+format = "$read_only$path"
 
 [line_break]
 disabled = false
@@ -255,80 +256,57 @@ symbol = ' '
 [status]
 disabled = false
 map_symbol = false
-style = "fg:color_red bg:color_bg1"
-format = "[ $symbol$status ]($style)"
+format = "$symbol$status"
 
 [cmd_duration]
-style = "bg:color_bg3"
-format = "([ $duration  ]($style))"
-
-[nix_shell]
-symbol = ""
-style = "bg:color_blue"
-format = '[[ $symbol $name ](fg:color_fg0 bg:color_blue)]($style)'
+format = "($duration )"
 
 [nodejs]
 symbol = ""
-style = "fg:color_fg0 bg:color_blue"
-format = '[ $symbol ]($style)'
+format = '$symbol'
 
 [cmake]
 symbol = ""
-style = "fg:color_fg0 bg:color_blue"
-format = '[ $symbol ]($style)'
+format = '$symbol'
 
 [rust]
 symbol = ""
-style = "fg:color_fg0 bg:color_blue"
-format = '[ $symbol ]($style)'
+format = '$symbol'
 
 [golang]
 symbol = ""
-style = "fg:color_fg0 bg:color_blue"
-format = '[ $symbol ]($style)'
+format = '$symbol'
 
 [php]
 symbol = ""
-style = "fg:color_fg0 bg:color_blue"
-format = '[ $symbol ]($style)'
+format = '$symbol'
 
 [java]
 symbol = ""
-style = "fg:color_fg0 bg:color_blue"
-format = '[ $symbol ]($style)'
+format = '$symbol'
 
 [kotlin]
 symbol = ""
-style = "fg:color_fg0 bg:color_blue"
-format = '[ $symbol ]($style)'
+format = '$symbol'
 
 [haskell]
 symbol = ""
-style = "fg:color_fg0 bg:color_blue"
-format = '[ $symbol ]($style)'
+format = '$symbol'
 
 [python]
 symbol = ""
-style = "fg:color_fg0 bg:color_blue"
-format = '[ $symbol ]($style)'
+format = '$symbol'
 
 [docker_context]
 symbol = ""
-style = "fg:color_fg0 bg:color_blue"
-format = '[ $symbol ]($style)'
-
-[conda]
-style = "bg:color_bg3"
-format = '[[ $symbol( $environment) ](fg:#83a598 bg:color_bg3)]($style)'
+format = '$symbol'
 
 [git_branch]
 symbol = ""
-style = "fg:color_fg0 bg:color_aqua"
-format = '[ $symbol $branch ]($style)'
+format = '$symbol $branch'
 
 [git_status]
-style = "fg:color_fg0 bg:color_aqua"
-format = '[($all_status$ahead_behind )]($style)'
+format = '$all_status$ahead_behind'
 
 [time]
 disabled = false
@@ -336,5 +314,4 @@ use_12hr = false
 utc_time_offset = 'local'
 time_range = '-'
 time_format = "%T|%d"
-style = "fg:color_fg0 bg:color_orange"
-format = '[ $time  ]($style)'
+format = '$time  '
