@@ -12,30 +12,29 @@ add_newline = true
 # Follows symlinks to check if they're directories; used in modules such as git.
 follow_symlinks = true
 
-format = """
-([](fg:color_yellow bg:none)\
-[$os](fg:color_white bg:prev_fg))\
+format = """\
+[ $os](fg:color_white bg:color_bg)\
 \
-([](fg:prev_bg bg:color_orange)\
-[ ($sudo )$username ](fg:color_white bg:prev_bg))\
+([](dimmed fg:color_white_dim bg:color_bg)\
+[ ($sudo )$username@$hostname ](fg:color_brown bg:color_bg))\
 \
-([](fg:prev_bg bg:color_blue)\
-[ $nix_shell ](fg:color_white bg:prev_bg))\
+([](dimmed fg:color_white_dim bg:color_bg)\
+[ $nix_shell ](fg:color_white bg:color_bg))\
 \
-([](fg:prev_bg bg:color_aqua)\
-[ $directory ](fg:color_white bg:prev_bg))\
+([](dimmed fg:color_white_dim bg:color_bg)\
+[ $directory ](fg:color_blue bg:color_bg))\
 \
-([](fg:prev_bg bg:color_black)\
-[ $status ](fg:color_red bg:prev_bg))\
+([](dimmed fg:color_white_dim bg:color_bg)\
+[ $status ](fg:color_red bg:color_bg))\
 \
-[](fg:prev_bg bg:none)\
+[](fg:color_bg bg:none)\
 $fill\
+[](fg:color_bg bg:none)\
 \
-([](fg:color_black bg:none)\
-[( $cmd_duration )](fg:color_white bg:color_black))\
+([ $cmd_duration ](fg:color_white bg:color_bg)\
+[](fg:color_white_dim bg:color_bg))\
 \
-([](fg:color_blue bg:prev_bg)\
-[ $aws\
+([ $aws\
 $azure\
 $buf\
 $bun\
@@ -90,14 +89,13 @@ $shlvl\
 $swift\
 $terraform\
 $vagrant\
-$zig ](fg:color_white bg:color_blue))\
+$zig ](fg:color_white bg:color_bg)\
+[](dimmed fg:color_white_dim bg:color_bg))\
 \
-([](fg:color_aqua bg:prev_bg)\
-[ $git_branch( $git_status) ](fg:color_white bg:color_aqua))\
+([ $git_branch( $git_status) ](fg:color_green bg:color_bg)\
+[](dimmed fg:color_white_dim bg:color_bg))\
 \
-[](fg:color_orange bg:prev_bg)\
-[ $time](fg:color_white bg:color_orange)\
-[](fg:prev_bg bg:none)\
+[ $time ](fg:color_green_light bg:color_bg)\
 \
 $line_break\
 $character\
@@ -393,7 +391,7 @@ format = '$symbol'
 symbol = "⨁"
 format = '$symbol'
 [raku]
-symbol = "🐦"
+symbol = "🦋"
 format = '$symbol'
 [red]
 symbol = '🔺'
@@ -420,7 +418,7 @@ format = '$symbol'
 symbol = ""
 format = '$symbol'
 [terraform]
-symbol = "⛰"
+symbol = "💠"
 format = '$symbol'
 [vagrant]
 symbol = "⍱"
