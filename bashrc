@@ -16,7 +16,8 @@ export VISUAL=$EDITOR
 export HISTFILESIZE=100000
 export HISTSIZE=${HISTFILESIZE}
 [[ -f ${DOTFILES}.safe/bash_history ]] && export HISTFILE=${DOTFILES}.safe/bash_history || export HISTFILE=~/.bash_history
-PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+export SAVEHIST=$HISTSIZE
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND"            # Write history immediately
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
 
@@ -345,10 +346,20 @@ nxdf() {
 
     difft --override='*:json' --display side-by-side-show-both --skip-unchanged --ignore-comments --context 0 <(nxds $1 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys) <(nxds $2 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys)
 }
-nxdev() {
+nxv() {
     _checkargs $# 1 || return 1
 
-    nix develop "/etc/nixos#$1"
+    nix develop "/etc/nixos#$1" --command zsh
+}
+nxs() {
+    _checkargs $# 1 || return 1
+
+    nix-shell --command zsh -p $@
+}
+nxsp() {
+    _checkargs $# 1 || return 1
+
+    nix-shell --pure --command zsh -p $@
 }
 
 # Pacman package management

@@ -1,14 +1,6 @@
-HISTFILE=${DOTFILES}.safe/bash_history
-HISTSIZE=100000
-SAVEHIST=$HISTSIZE
-
-autoload -U colors && colors
-autoload -U compinit
-compinit -i
-zstyle ':completion:*' rehash yes
-autoload -U promptinit
-promptinit
-prompt walters
+autoload -Uz colors && colors
+autoload -Uz compinit && compinit -i && zstyle ':completion:*' rehash yes
+autoload -Uz promptinit && promptinit && prompt walters
 
 export TERM=screen-256color
 unset LANGUAGE
@@ -28,29 +20,33 @@ bindkey '\e[A' up-line-or-beginning-search
 bindkey '\eOB' down-line-or-beginning-search
 bindkey '\e[B' down-line-or-beginning-search
 
-setopt nobeep \
-    notify \
-    nobgnice \
-    interactivecomments \
-    autocd \
-    autopushd \
-    pushdignoredups \
-    pushdtohome \
-    chaselinks \
-    histverify \
-    histappend \
-    sharehistory \
-    hist_reduce_blanks \
-    hist_ignore_space \
-    hist_ignore_all_dups \
-    hist_save_no_dups \
-    braceccl \
-    dotglob \
-    extendedglob \
-    numericglobsort \
-    nolisttypes \
-    promptsubst \
-    completealiases
+setopt nobeep                   # Disable the terminal beep sound
+setopt notify                   # Notify when background jobs complete
+setopt nobgnice                 # Do not automatically lower the priority of background jobs
+setopt interactivecomments      # Allow comments anywhere on interactive command lines
+
+setopt autocd                   # Just type directory name to cd
+setopt autopushd                # Push the old directory onto the stack
+setopt pushdignoredups          # Don't store duplicates in the stack
+setopt pushdtohome              # pushd -> push & cd $HOME
+
+setopt nochaselinks             # If you cd into a symbolic link, Zsh will NOT change to the real physical directory
+setopt histverify               # When using history expansion (like !!, !$, etc.), don't execute immediately
+
+setopt sharehistory             # Share command history between all Zsh instances.
+setopt histappend               # Appends new history entries to the history file rather than overwriting it
+setopt hist_reduce_blanks       # Remove unnecessary blanks
+setopt hist_ignore_space        # Don't save commands to history if they start with a space
+setopt hist_ignore_all_dups     # Don't record duplicates in history
+setopt hist_save_no_dups        # Don't write duplicate entries
+
+setopt braceccl                 # Enables brace character class lists
+setopt dotglob                  # Makes globs (like *) match files starting with a dot (.)
+setopt extendedglob             # Enables advanced globbing features
+setopt numericglobsort          # Makes numeric filenames sort numerically rather than alphabetically
+setopt nolisttypes              # Disables displaying the type of files (like @ for symlinks) in completion listings
+setopt promptsubst              # Enables command substitution in prompts
+setopt completealiases          # Makes aliases have their own completion definitions
 
 if [[ $- = *i* ]];then
 
