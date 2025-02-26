@@ -1,8 +1,6 @@
 [user]
     email = dev@sdht.in
     name = Siddhartha Sahu
-[help]
-    autocorrect = 1
 [alias]
     ls = log --color --graph --pretty=format:'%C(red)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%an <%ae>%Creset' --abbrev-commit
     lsa = log --color --graph --pretty=format:'%C(red)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%an <%ae>%Creset' --abbrev-commit --all
@@ -19,16 +17,44 @@
     smtpuser = sh.siddhartha@gmail.com
     smtppass =
     chainreplyto = false
+[help]
+    autocorrect = prompt 			# Confirm before running autocorrected command
 [push]
 	default = simple
+	autoSetupRemote = true
+	followTags = true
 [color]
 	ui = auto
 [credential]
 	helper = cache
 [pull]
 	rebase = true
+	ff = only
 [init]
 	defaultBranch = main
-
 [merge]
-	conflictstyle = diff3
+	conflictstyle = zdiff3
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+[rerere]
+	enabled = true
+	autoupdate = true
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
+[log]
+     date = iso-local
