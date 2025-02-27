@@ -17,44 +17,42 @@
     smtpuser = sh.siddhartha@gmail.com
     smtppass =
     chainreplyto = false
-[help]
-    autocorrect = prompt 			# Confirm before running autocorrected command
-[push]
-	default = simple
-	autoSetupRemote = true
-	followTags = true
-[color]
-	ui = auto
-[credential]
-	helper = cache
-[pull]
-	rebase = true
-	ff = only
 [init]
-	defaultBranch = main
+    defaultBranch = main
+[help]
+    autocorrect = prompt            # Confirm before running autocorrected command
+[push]
+    default = simple
+    autoSetupRemote = true
+    followTags = true               # Push all local tags to the server, every time you push anything
+[color]
+    ui = auto
+[credential]
+    helper = cache
+[pull]
+    rebase = true
+    ff = only
 [merge]
-	conflictstyle = zdiff3
-[column]
-	ui = auto
+    conflictstyle = zdiff3
 [branch]
-	sort = -committerdate
+    sort = -committerdate           # Sorts the branch list by the most recent commit date
 [tag]
-	sort = version:refname
-[diff]
-	algorithm = histogram
-	colorMoved = plain
-	mnemonicPrefix = true
-	renames = true
-[fetch]
-	prune = true
-	pruneTags = true
-	all = true
-[rerere]
-	enabled = true
-	autoupdate = true
+    sort = version:refname          # Treat dotted version numbers as a series of integer values for sorting tags
+[diff]                              # More semantic diffs
+    algorithm = histogram
+    colorMoved = plain
+    mnemonicPrefix = true
+    renames = true
+[fetch]                             # Prune stuff that’s gone
+    prune = true
+    pruneTags = true
+    all = true
+[rerere]                            # Reuse recorded resolutions
+    enabled = true
+    autoupdate = true
 [rebase]
-	autoSquash = true
-	autoStash = true
-	updateRefs = true
+    autoSquash = true
+    autoStash = true
+    updateRefs = true
 [log]
-     date = iso-local
+    date = iso-local
