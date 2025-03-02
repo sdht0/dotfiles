@@ -240,6 +240,7 @@ nxos() {
         local left="$(nix path-info --derivation "/run/current-system")"
         local right="$(nix path-info --derivation "${config}#${picker}Configurations.$(hostname -s).config.system.build.toplevel")"
         nvd diff "$left" "$right"  || return 1
+        [[ "$left" == "$right" ]] && echo "No change in configuration" && return 0
         echo
 
     fi
