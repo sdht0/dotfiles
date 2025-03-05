@@ -238,7 +238,7 @@ nxos() {
     logdir=/var/log/nixos
     logfile="$logdir/$(date +'%Y.%m.%d-%H:%M:%S').log"
     sudo mkdir -p "$logdir"
-    touch "$logfile"
+    sudo touch "$logfile"
     echo "Logging to $logfile"
 
     if command -v nvd &>/dev/null ;then
