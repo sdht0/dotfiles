@@ -1,5 +1,5 @@
-readonly DOTFILES=~/.config/dotfiles; export DOTFILES
-[[ "$(uname -o)" == "Darwin" ]] && readonly IS_DARWIN="1" && export IS_DARWIN
+declare -xr DOTFILES=~/.config/dotfiles
+[[ "$(uname -o)" == "Darwin" ]] && declare -xr IS_DARWIN="1"
 
 # Replace with a tmux session if it is an interactive session and tmux is installed and is not already running
 if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && [[ -t 1 ]] && command -v tmux &>/dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$NOTMUX" ]] ;then
@@ -13,10 +13,10 @@ fi
 
 export EDITOR='vim'
 export VISUAL=$EDITOR
-export HISTFILESIZE=100000
-export HISTSIZE=${HISTFILESIZE}
-[[ -f ${DOTFILES}.safe/bash_history ]] && export HISTFILE=${DOTFILES}.safe/bash_history || export HISTFILE=~/.bash_history
-export SAVEHIST=$HISTSIZE
+declare -xr HISTFILESIZE=100000
+declare -xr HISTSIZE=${HISTFILESIZE}
+[[ -f ${DOTFILES}.safe/bash_history ]] && declare -xr HISTFILE=${DOTFILES}.safe/bash_history || declare -xr HISTFILE=~/.bash_history
+declare -xr SAVEHIST=$HISTSIZE
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"            # Write history immediately
 
 MYSHELL=$(ps -p $$ -ocomm= 2>/dev/null)
@@ -86,11 +86,12 @@ sudof() {
         echo "Error: Missing input arguments!"
         return 1
     fi
-    local fn_name=$1
+    local fn_name="$1"
     shift
-    local FUNC=$(declare -f $fn_name)
+    local FUNC
+    FUNC="$(declare -f "$fn_name")"
     [[ -z "$FUNC" ]] && { echo "Error: Function '$fn_name' not found"; return; }
-    sudo bash -c "$FUNC; $fn_name $@"
+    sudo bash -c "$FUNC; $fn_name $*"
 }
 
 alias ..='cd ..'
@@ -162,7 +163,7 @@ alias duh='du -sh'
 alias lblk='lsblk -o NAME,FSTYPE,SIZE,RO,MOUNTPOINT,LABEL,UUID'
 rdl() {
     local dir="${1:-.}"
-    readlink -f $dir
+    readlink -f "$dir"
 }
 alias vi='vim'
 alias se='sudoedit'
@@ -215,8 +216,8 @@ alias dki='sudo docker images'
 alias dkia='sudo docker images -a'
 alias dkc='sudo docker ps'
 alias dkca='sudo docker ps -a'
-dkrc() { sudo docker start $1 && sudo docker attach $1;}
-dkrm() { sudo docker kill $@; sudo docker rm $@; }
+dkrc() { sudo docker start "$1" && sudo docker attach "$1";}
+dkrm() { sudo docker kill "$@"; sudo docker rm "$@"; }
 alias isolate="sudo docker network disconnect bridge"
 alias join="sudo docker network connect bridge"
 
@@ -348,12 +349,14 @@ nxwd() {
 nxdfs() {
     _checkargs $# 2 || return 1
 
-    difft --display side-by-side-show-both <(nxds $1) <(nxds $2)
+    difft --display side-by-side-show-both <(nxds "$1") <(nxds "$2")
 }
 nxdf() {
     _checkargs $# 2 || return 1
 
-    difft --override='*:json' --display side-by-side-show-both --skip-unchanged --ignore-comments --context 0 <(nxds $1 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys) <(nxds $2 | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys)
+    difft --override='*:json' --display side-by-side-show-both --skip-unchanged --ignore-comments --context 0 \
+        <(nxds "$1" | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys) \
+        <(nxds "$2" | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys)
 }
 nxv() {
     _checkargs $# 1 || return 1
@@ -388,8 +391,8 @@ alias pcmiil='pacman -Qii'
 alias pcmo='pacman -Qo'
 alias pcmor='pacman -F'
 pcmwo() {
-    local wch="$(which $1 2>/dev/null)"
-    echo $wch
+    local wch="$(which "$1" 2>/dev/null)"
+    echo "$wch"
     [[ "$wch" =~ ^/.* ]] && pcmo "$wch"
 }
 alias pru='pikaur -Syu --needed --mflags=--skippgpcheck'
@@ -401,14 +404,14 @@ add_to_repo() {
     [[ ! -r PKGBUILD ]] && echo "Must be run in a PKGBUILD dir" && return 1
     local root=$1
     local repo_db=$2
-    source PKGBUILD
+    source "./PKGBUILD"
     local pkgver="$pkgver-$pkgrel"
     [[ "$MYSHELL" = 'bash' ]] && shopt -s failglob
-    for i in *$pkgver*tar*;do
+    for i in *"$pkgver"*tar*;do
         local x=$(echo $i | sed -r "s/(.*)-$pkgver.*/\1/")
-        sudo rm -v $root/$x* 2> /dev/null
-        sudo cp -v $i $root/$i
-        sudo repo-add $root/$repo_db $i
+        sudo rm -v "$root/$x"* 2> /dev/null
+        sudo cp -v "$i" "$root/$i"
+        sudo repo-add "$root/$repo_db" "$i"
     done
 }
 
@@ -480,7 +483,7 @@ function j {
     mkdir -p "$MARKPATH"
     local mark="$MARKPATH/${1:-d}"
     [[ -L "$mark" ]] || { echo "No such mark: ${1:-d}"; return 1; }
-    local dest="$(readlink $mark)"
+    local dest="$(readlink "$mark")"
     [[ -e "$dest" ]] || { echo "Destination missing: $1 -> $dest"; return 1; }
     cd -P "$dest"
 }
@@ -488,14 +491,14 @@ function m {
     _checkargs $# 1 || return 1
     mkdir -p "$MARKPATH"
     local mark="$MARKPATH/$1"
-    [[ -L "$mark" ]] && { echo "Mark exists: $1 -> $(readlink $mark)"; return 1; }
+    [[ -L "$mark" ]] && { echo "Mark exists: $1 -> $(readlink "$mark")"; return 1; }
     echo "Marked: $1 -> $(pwd)" && ln -s "$(pwd)" "$mark"
 }
 function mf {
     _checkargs $# 1 || return 1
     mkdir -p "$MARKPATH"
     local mark="$MARKPATH/$1"
-    [[ -L "$mark" ]] && { echo "Replacing $1: $(readlink $mark) -> $(pwd)"; rm "$mark"; }
+    [[ -L "$mark" ]] && { echo "Replacing $1: $(readlink "$mark") -> $(pwd)"; rm "$mark"; }
     m "$1"
 }
 function um {
@@ -503,7 +506,7 @@ function um {
     mkdir -p "$MARKPATH"
     local mark="$MARKPATH/$1"
     [[ -L "$mark" ]] || { echo "No such mark: $1"; return 1; }
-    (cd $MARKPATH && echo "Removing mark: $1 -> $(readlink $mark)" && \rm "$1" )
+    (cd "$mark"PATH && echo "Removing mark: $1 -> $(readlink "$mark")" && \rm "$1" )
 }
 function mks {
     mkdir -p "$MARKPATH"
@@ -512,7 +515,7 @@ function mks {
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
     function _completemarkszsh {
         mkdir -p "$MARKPATH"
-        reply=($(ls $MARKPATH))
+        reply=($(ls "$mark"PATH))
     }
     compctl -K _completemarkszsh j
     compctl -K _completemarkszsh um
@@ -521,7 +524,7 @@ if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
     _completemarksbash() {
         mkdir -p "$MARKPATH"
         local curw=${COMP_WORDS[COMP_CWORD]}
-        local wordlist=$(find $MARKPATH -type l -printf "%f\n")
+        local wordlist="$(find "$mark"PATH -type l -printf "%f\n")"
         COMPREPLY=($(compgen -W '${wordlist[@]}' -- "$curw"))
         return 0
     }
@@ -538,7 +541,7 @@ xmultispawn() {
     local max="$1"; shift
     [[ $max -le 0 ]] && echo "max should be >= 1" && return
     local name="$1"; shift
-    { [[ -z "$name" ]] || tmux list-windows | awk '{print $2}' | tr 'A-Z' 'a-z' | tr -dc 'a-z\n' | grep "^$name$" >/dev/null 2>&1; } && name=$(< /dev/urandom tr -dc "a-z" | head -c3) || true
+    { [[ -z "$name" ]] || tmux list-windows | awk '{print $2}' | tr '[:upper:]' '[:lower:]' | tr -dc 'a-z\n' | grep "^$name$" >/dev/null 2>&1; } && name=$(< /dev/urandom tr -dc "[:lower:]" | head -c3) || true
 
     local layout
     case "$option" in
@@ -563,18 +566,18 @@ xmultispawn() {
         local paneperwindow=$((total/totalwindows)); [[ $adjust -gt 0 ]] && paneperwindow=$((paneperwindow+1)) && adjust=$((adjust-1))
 
         echo "Spawning window $i"
-        tmux neww -dn ${name}-${i} "$1"; shift
+        tmux neww -dn "${name}-${i}" "$1"; shift
         sleep 0.3
 
         paneperwindow=$((paneperwindow-1))
         [[ $paneperwindow -lt 1 ]] && continue
         local c=h
         for j in $(eval echo "{1..$paneperwindow}");do
-            tmux splitw -$c -t ${name}-${i}.$j -d "$1"; shift
+            tmux splitw -$c -t "${name}-${i}.$j" -d "$1"; shift
             [[ "$c" = "h" ]] && c=v || c=h
         done
-        tmux select-layout -t ${name}-${i} $layout
-        tmux set-window-option -t ${name}-${i} synchronize-panes on
+        tmux select-layout -t "${name}-${i}" $layout
+        tmux set-window-option -t "${name}-${i}" synchronize-panes on
     done
 }
 
@@ -582,38 +585,38 @@ alias ccm='sudo ccm64'
 alias xchromestart="chromium --proxy-server='socks://127.0.0.1:9999' --incognito"
 
 # Systemd service management
-sds() { sudo systemctl status -l --no-pager -n10 $1; }
-sdsf() { sudo systemctl status -l --no-pager -n0 $1; echo; sudo journalctl -f -u $1 -S "$2"; }
-sdst() { dt=$(date +'%Y-%m-%d %T'); sudo systemctl start $1; sdsf $1 "$dt"; }
-sdsp() { dt=$(date +'%Y-%m-%d %T'); sudo systemctl stop $1; sdsf $1 "$dt"; }
-sdr() { dt=$(date +'%Y-%m-%d %T'); sudo systemctl restart $1; sdsf $1 "$dt"; }
-sde() { sudo systemctl enable $1; ls -l /etc/systemd/system/multi-user.target.wants; }
-sdd() { sudo systemctl disable $1; ls -l /etc/systemd/system/multi-user.target.wants; }
+sds() { sudo systemctl status -l --no-pager -n10 "$1"; }
+sdsf() { sudo systemctl status -l --no-pager -n0 "$1"; echo; sudo journalctl -f -u "$1" -S "$2"; }
+sdst() { dt=$(date +'%Y-%m-%d %T'); sudo systemctl start "$1"; sdsf "$1" "$dt"; }
+sdsp() { dt=$(date +'%Y-%m-%d %T'); sudo systemctl stop "$1"; sdsf "$1" "$dt"; }
+sdr() { dt=$(date +'%Y-%m-%d %T'); sudo systemctl restart "$1"; sdsf "$1" "$dt"; }
+sde() { sudo systemctl enable "$1"; ls -l /etc/systemd/system/multi-user.target.wants; }
+sdd() { sudo systemctl disable "$1"; ls -l /etc/systemd/system/multi-user.target.wants; }
 
 # User service management
-sus() { systemctl --user status -l --no-pager -n10 $1; }
-susf() { systemctl --user status -l --no-pager -n0 $1; echo; journalctl --user -f -u $1 -S "$2"; }
-sust() { local dt=$(date +'%Y-%m-%d %T'); systemctl --user start $1; susf $1 "$dt"; }
-susp() { local dt=$(date +'%Y-%m-%d %T'); systemctl --user stop $1; susf $1 "$dt"; }
-sur() { local dt=$(date +'%Y-%m-%d %T'); systemctl --user restart $1; susf $1 "$dt"; }
-sue() { systemctl --user enable $1; ls -l /home/$USER/.config/systemd/user/*; }
-sud() { systemctl --user disable $1; ls -l /home/$USER/.config/systemd/user/*; }
+sus() { systemctl --user status -l --no-pager -n10 "$1"; }
+susf() { systemctl --user status -l --no-pager -n0 "$1"; echo; journalctl --user -f -u "$1" -S "$2"; }
+sust() { local dt=$(date +'%Y-%m-%d %T'); systemctl --user start "$1"; susf "$1" "$dt"; }
+susp() { local dt=$(date +'%Y-%m-%d %T'); systemctl --user stop "$1"; susf "$1" "$dt"; }
+sur() { local dt=$(date +'%Y-%m-%d %T'); systemctl --user restart "$1"; susf "$1" "$dt"; }
+sue() { systemctl --user enable "$1"; ls -l /home/"$USER"/.config/systemd/user/*; }
+sud() { systemctl --user disable "$1"; ls -l /home/"$USER"/.config/systemd/user/*; }
 
 # Init scripts service management
-ups() { sudo service $1 status ; }
-upst() { sudo service $1 start ; }
-upsp() { sudo service $1 stop ; }
-upr() { sudo service $1 restart ; }
-uprl() { sudo service $1 reload ; }
-upe() { sudo chkconfig --add $1 && sudo chkconfig $1 on && sudo chkconfig --list $1 ; }
-upd() { sudo chkconfig $1 off && sudo chkconfig --list $1 ; }
+ups() { sudo service "$1" status ; }
+upst() { sudo service "$1" start ; }
+upsp() { sudo service "$1" stop ; }
+upr() { sudo service "$1" restart ; }
+uprl() { sudo service "$1" reload ; }
+upe() { sudo chkconfig --add "$1" && sudo chkconfig "$1" on && sudo chkconfig --list "$1" ; }
+upd() { sudo chkconfig "$1" off && sudo chkconfig --list "$1" ; }
 
 hold_fort() {
     while true;do
         date
         xdotool getmouselocation --shell
         echo
-        xdotool mousemove_relative -- $(( $RANDOM % 30 - 15)) $(( $RANDOM % 30 - 15));xdotool getmouselocation --shell
+        xdotool mousemove_relative -- $(( RANDOM % 30 - 15)) $(( RANDOM % 30 - 15));xdotool getmouselocation --shell
         echo
         sleep 55
     done
@@ -635,21 +638,21 @@ l() {
     [[ "$1" == "_dir" ]] && local dir="true" && shift
     [[ "$1" == "_sudo" ]] && local pre="sudo " && shift
 
-    args=()
+    local args=()
 
     if command -v eza &>/dev/null ;then
         [[ "${long:-}" == "true" ]] && args+=(-lg --icons)
         [[ "${all:-}" == "true" ]] && args+=("-aa")
         [[ "${dir:-}" == "true" ]] && args+=("--only-dirs")
-        eval ${pre:-} eza --group-directories-first --color=auto --sort=extension "${args[@]}" "$@"
+        eval "${pre:-}" eza --group-directories-first --color=auto --sort=extension "${args[@]}" "$@"
     else
         [[ "${long:-}" == "true" ]] && args+=("-l")
         if [[ -n "${IS_DARWIN:-}" ]];then
             [[ "${all:-}" == "true" ]] && args+=("-A")
-            eval ${pre:-} ls -F --color=auto "${args[@]}" "$@"
+            eval "${pre:-}" ls -F --color=auto "${args[@]}" "$@"
         else
             [[ "${all:-}" == "true" ]] && args+=("--all")
-            eval ${pre:-} ls -XF --color=auto --group-directories-first "${args[@]}" "$@"
+            eval "${pre:-}" ls -XF --color=auto --group-directories-first "${args[@]}" "$@"
         fi
     fi
 }
@@ -663,12 +666,13 @@ xs() {
 
     [[ "$1" == "___strict___" ]] && strict="true" && shift
 
+    local args
     if command -v rg &> /dev/null;then
         [[ "${strict:-}" == "true" ]] && args="-s" || args="-i"
-        rg ${args:-} "$@"
+        rg "${args:-}" "$@"
     else
         [[ "${strict:-}" != "true" ]] && args="-i"
-        grep -ER ${args:-} "$@" .
+        grep -ER "${args:-}" "$@" .
     fi
 }
 xss() {
@@ -707,8 +711,8 @@ japanesec() {
     _checkargs $# 1 || return 1
 
     local p=$(japanese "$@")
-    echo $p
-    echo -n $p | xcp
+    echo "$p"
+    echo -n "$p" | xcp
     echo "Copied to clipboard"
 }
 
@@ -730,8 +734,8 @@ randp() {
 
 up() {
     if [ -z "$*" ]; then 1='1';fi
-    local pd=`pwd`
-    cd $(eval printf '../'%.0s {1..$1}) && echo "${pd} -> $(pwd)";
+    local pd="$(pwd)"
+    cd "$(eval printf '../%.0s' "{1..$1}")" && echo "${pd} -> $(pwd)";
 }
 
 fawk() {
@@ -741,7 +745,7 @@ fawk() {
     local first="awk $sep '{print "
     local last="}'"
     local cmd="${first}\$${1}${last}"
-    eval $cmd
+    eval "$cmd"
 }
 
 pkla() {
@@ -756,7 +760,7 @@ gitkf() {
       shift;
     done | perl -ne 'if( s{^(?:[ACDMRTUXB]|R\d+)\s+}{} ) { s{\s+}{\n}g; print; }' | sort -u
   }
-  gitk $(gitk_follow $*)
+  gitk "$(gitk_follow "$@")"
 }
 
 man() {
@@ -948,25 +952,25 @@ xmakecustomarchiso() {
     chmod +x archlinux-install-scripts/* && \
     echo "Creating new iso '$isoname' to $outputdir..." && \
     genisoimage -r -V "$isolabel" -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o /tmp/sdh-customiso/"$isoname" . && \
-    mv /tmp/sdh-customiso/"$isoname" $outputdir
+    mv /tmp/sdh-customiso/"$isoname" "$outputdir"
     echo "Cleaning up..."
     sudo umount /tmp/sdh-customiso/mnt
     #rm -rf /tmp/sdh-customiso
-    cd $outputdir
+    cd "$outputdir" || return 1
     echo "Done."
 }
 
 xget() {
     if [ $# -lt 1 ]; then
         for i in $(cat ~/sshhhh | grep ')' | grep -v '*' | grep -v 'mnet' | cut -f1 -d')' | xargs);do
-            printf "$i "
+            echo "$i "
             local code=$(~/sshhhh "$i" | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py)
-            printf $code
+            echo "$code"
             echo
         done
     else
         local code=$(~/sshhhh "$1" | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py)
-        printf $code | xclip -selection clipboard
+        echo "$code" | xclip -selection clipboard
         echo "Copied $code to clipboard"
     fi
 }
@@ -990,7 +994,7 @@ xintegration() {
 xplaylist() {
     _checkargs $# 1 || return 1
 
-    cd $1
+    cd "$1" || return 1
 
     if [ "$2" == "" ];then
         local ext="mp4"
@@ -1021,16 +1025,16 @@ xpatternrename() {
         echo "Please give two patterns!"
         return 1
     fi
-    for i in *;do x=$(echo $i | sed "s|$1|$2|"); if [ ! -r "$x" ];then echo "$i->$x"; mv "$i" "$x";fi;done
+    for i in *;do x="$(echo "$i" | sed "s|$1|$2|")"; if [ ! -r "$x" ];then echo "$i->$x"; mv "$i" "$x";fi;done
 }
 
 xgpp() {
     _checkargs $# 1 || return 1
 
     if [ $# -eq 2 ]; then
-        g++ $1 && ./a.out < $2
+        g++ "$1" && ./a.out < "$2"
     else
-        g++ $1 && ./a.out
+        g++ "$1" && ./a.out
     fi
 
     rm -f a.out
@@ -1040,48 +1044,48 @@ xgcc() {
     _checkargs $# 1 || return 1
 
     if [ $# -eq 2 ]; then
-        gcc $1 && ./a.out < $2 && rm a.out
+        gcc "$1" && ./a.out < "$2" && rm a.out
     else
-        gcc $1 && ./a.out  && rm a.out
+        gcc "$1" && ./a.out  && rm a.out
     fi
 }
 
 xccreatefolder() {
     _checkargs $# 1 || return 1
 
-    mkdir -p $1 && ( echo '#include<stdio.h>
+    mkdir -p "$1" && ( echo '#include<stdio.h>
 int main() {
 
     return 0;
-}' > $1/$1.c ; touch $1/in$1.txt )
+}' > "$1/$1.c" ; touch "$1/in$1.txt" )
 }
 
 xcppcreatefolder() {
     _checkargs $# 1 || return 1
 
-    mkdir -p $1 && ( echo '#include<iostream>
+    mkdir -p "$1" && ( echo '#include<iostream>
 using namespace std;
 int main() {
 
     return 0;
-}' > $1/$1.cpp ; touch $1/in$1.txt )
+}' > "$1/$1.cpp" ; touch "$1/in$1.txt" )
 }
 
 xregexrename() {
     _checkargs $# 1 || return 1
 
     for i in *;do
-        local x=$(echo $i | sed -r "$1"); [[ ! -r "$x" ]] && echo "$i -> $x" && [[ "$2" = "m" ]] && mv "$i" "$x"
+        local x=$(echo "$i" | sed -r "$1"); [[ ! -r "$x" ]] && echo "$i -> $x" && [[ "$2" = "m" ]] && mv "$i" "$x"
     done
 }
 
 xrenametotitlecase() {
     local pd="$(pwd)"
-    if [ ! -z "$1" ];then
+    if [ -n "$1" ];then
         local pd="$1"
     fi
     pushd "$pd" > /dev/null && \
-    for i in *;do local x=$(echo $i | tr "[A-Z]" "[a-z]" | sed "s/\( \| \?-\| \?(\| \?\[\|^\)\(.\)/\1\u\2/g");[ ! -r "$x" ] && mv "$i" "$x";done && \
+    for i in *;do local x=$(echo "$i" | tr '[:upper:]' '[:lower:]' | sed "s/\( \| \?-\| \?(\| \?\[\|^\)\(.\)/\1\u\2/g");[ ! -r "$x" ] && mv "$i" "$x";done && \
     popd > /dev/null
 }
 
@@ -1089,17 +1093,17 @@ xrenametolowercase() {
     local depth=0
     local maxdepth=1
     rename() {
-        if [ ! -z "$1" ];then
+        if [ -n "$1" ];then
             echo "Inside directory: $1"
-            pushd $1 > /dev/null
+            pushd "$1" > /dev/null || true
             for i in *;do
                     if [ -d "$i" ];then
-                        if [ "$i" = "System Volume Information" -o "$i" = "\$RECYCLE.BIN" ];then
+                        if [[ "$i" = "System Volume Information" || "$i" = "\$RECYCLE.BIN" ]];then
                             echo "Skipping $i"
                             continue
                         fi
                         local dr=$i
-                        local x=$(echo $i|tr '[A-Z]' '[a-z]'|tr ' ' '-')
+                        local x=$(echo "$i"  |tr '[:upper:]' '[:lower:]' |tr ' ' '-')
                         if [ ! -d "$x" ];then
                             echo "Dir - $i: ### Renaming to $x ###"
                             local dr=$x
@@ -1109,7 +1113,7 @@ xrenametolowercase() {
                         else
                             echo "Dir - $i: OK"
                         fi
-                        if test $depth -lt $maxdepth;then
+                        if test $depth -lt "$maxdepth";then
                             echo $((depth++))
                             rename "$1/$dr"
                             echo $((depth--))
@@ -1118,7 +1122,7 @@ xrenametolowercase() {
             done
             for i in *;do
                 if [ -f "$i" ];then
-                    local x=$(echo $i|tr '[A-Z]' '[a-z]'|tr ' ' '-')
+                    local x=$(echo "$i"  |tr '[:upper:]' '[:lower:]' |tr ' ' '-')
                     if [ ! -f "$x" ];then
                         echo "File - $i: ### Renaming to $x ###"
                         mv "$i" "$x"
@@ -1130,16 +1134,16 @@ xrenametolowercase() {
                 fi
             done
             echo "Leaving directory: $1"
-            popd > /dev/null
+            popd > /dev/null || true
         fi
     }
     local pd=$(pwd)
-    if [ ! -z "$1" ];then
+    if [ -n "$1" ];then
         local pd=$1
     fi
-    if [ ! -z "$2" ] && [ "$2" = "-d" ]
+    if [ -n "$2" ] && [ "$2" = "-d" ]
         then
-        if [ ! -z "$3" ];then
+        if [ -n "$3" ];then
             local maxdepth=$3
         fi
     fi
