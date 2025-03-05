@@ -1,9 +1,9 @@
-export DOTFILES=~/.config/dotfiles
-[[ "$(uname -o)" == "Darwin" ]] && export IS_DARWIN="1"
+readonly DOTFILES=~/.config/dotfiles; export DOTFILES
+[[ "$(uname -o)" == "Darwin" ]] && readonly IS_DARWIN="1" && export IS_DARWIN
 
 # Replace with a tmux session if it is an interactive session and tmux is installed and is not already running
 if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && [[ -t 1 ]] && command -v tmux &>/dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$NOTMUX" ]] ;then
-    ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
+    ID="$(tmux ls | grep -vm1 attached | cut -d: -f1)" # get the id of a deattached session
     if [[ -z "$ID" ]] ;then # if not available create a new one
         exec tmux new-session
     else
@@ -229,9 +229,11 @@ alias pmca='podman ps -a'
 
 # Nixos
 nxos() {
+    local config
+    local picker
     [[ -n "${IS_DARWIN:-}" ]] \
-        && { local config=~/.config/nix-darwin; local picker="darwin"; } \
-        || { local config=/etc/nixos; local picker="nixos"; }
+        && { config=~/.config/nix-darwin; picker="darwin"; } \
+        || { config=/etc/nixos; picker="nixos"; }
 
     [[ "${1:-}" == "upd" ]] && { nix flake update --flake "$config"; shift; }
 
@@ -287,22 +289,23 @@ nxos() {
 nxd() {
     _checkargs $# 1 || return 1
     local qt="$1"
+    local q
     case "$qt" in
-        "rf") local q="--references" ;;
-        "rfc") local q="--requisites" ;;
-        "rr") local q="--referrers" ;;
-        "rrc") local q="--referrers-closure" ;;
+        "rf") q="--references" ;;
+        "rfc") q="--requisites" ;;
+        "rr") q="--referrers" ;;
+        "rrc") q="--referrers-closure" ;;
         *) q="--references" ;;
     esac
-
     local p="$2"
-    echo "$p" | grep -q ".drv$" || local p="$(nix-store --query --deriver "$p")"
+    echo "$p" | grep -q ".drv$" || p="$(nix-store --query --deriver "$p")"
 
     nix-store --query $q "$p"
 }
 nxp() {
     _checkargs $# 1 || return 1
     local qt="$1"
+    local q
     case "$qt" in
         "rf") q="--references"; shift ;;
         "rfc") q="--requisites"; shift ;;
@@ -311,7 +314,6 @@ nxp() {
         "dr") q="--deriver"; shift ;;
         *) q="--references" ;;
     esac
-
     local p="$1"
     echo "$p" | grep -q ".drv$" && { echo "Error: $p is not a path"; return 1; }
 
@@ -445,7 +447,7 @@ xsshlistener() {
     for i in "$@";do
         local l="$(echo $i | cut -d: -f1)"
         local r="$(echo $i | cut -d: -f2)" # Equal to $l if no colon
-        local str="$str -L ${l}:localhost:${r}";
+        str="$str -L ${l}:localhost:${r}";
     done
     local cmd="ssh -o ServerAliveInterval=60 -fN $str $host"
     bash -c "$cmd"
@@ -538,12 +540,13 @@ xmultispawn() {
     local name="$1"; shift
     { [[ -z "$name" ]] || tmux list-windows | awk '{print $2}' | tr 'A-Z' 'a-z' | tr -dc 'a-z\n' | grep "^$name$" >/dev/null 2>&1; } && name=$(< /dev/urandom tr -dc "a-z" | head -c3) || true
 
+    local layout
     case "$option" in
-        v) local layout=even-vertical
+        v) layout=even-vertical
         ;;
-        h) local layout=even-horizontal
+        h) layout=even-horizontal
         ;;
-        hv) local layout=tiled
+        hv) layout=tiled
         ;;
         *) echo 'Usage: xmultispawn h/v/hv max_pane_per_window windowname "ssh c8-logging-"{1..3}' && return;;
     esac
@@ -990,9 +993,9 @@ xplaylist() {
     cd $1
 
     if [ "$2" == "" ];then
-    local ext="mp4"
+        local ext="mp4"
     else
-    local ext=$2
+        local ext=$2
     fi
 
     for i in *; do
@@ -1073,7 +1076,7 @@ xregexrename() {
 }
 
 xrenametotitlecase() {
-    local pd=$(pwd)
+    local pd="$(pwd)"
     if [ ! -z "$1" ];then
         local pd="$1"
     fi
