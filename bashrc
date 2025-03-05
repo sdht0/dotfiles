@@ -69,12 +69,12 @@ if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
 fi
 
 _checkargs() {
-	[[ $# -lt 2 ]] && echo "Incorrect check usage" && return 2
+    [[ $# -lt 2 ]] && echo "Incorrect check usage" && return 2
     if [[ $1 -lt $2 ]]; then
         echo "Atleast $2 argument(s) expected!"
         return 1
     fi
-	return 0
+    return 0
 }
 
 # Enable `sudo alias`
@@ -86,9 +86,9 @@ sudof() {
         echo "Error: Missing input arguments!"
         return 1
     fi
-    fn_name=$1
+    local fn_name=$1
     shift
-    FUNC=$(declare -f $fn_name)
+    local FUNC=$(declare -f $fn_name)
     [[ -z "$FUNC" ]] && { echo "Error: Function '$fn_name' not found"; return; }
     sudo bash -c "$FUNC; $fn_name $@"
 }
@@ -114,8 +114,8 @@ alias zssd="sudo zfs destroy"
 alias bydl="yt-dlp -o '%(title)s [%(upload_date>%Y.%m.%d)s][%(channel)s][%(id)s].%(ext)s' --no-mtime --embed-metadata --no-embed-info-json --extractor-args 'youtube:lang=en'"
 ydl() {
     _checkargs $# 1 || return 1
-    opts=()
-    res="480"
+    local opts=()
+    local res="480"
     if [[ "$1" == "ad" ]];then
         opts+=(-f 'bestaudio' -x --audio-format opus --audio-quality 0 --embed-metadata --no-embed-info-json --embed-thumbnail)
         shift
@@ -135,7 +135,7 @@ alias pkl='kill -9'
 alias spkl='sudo kill -9'
 ports() {
     [[ "$1" == "" ]] && { 1="-k6,6n"; 2="-k3,3n"; 3="-k4,4"; 4="-k1,1"; }
-    sep=";"
+    local sep=";"
     (
         echo -e "Proto${sep}Address${sep}Port${sep}v${sep}UID${sep}PID${sep}Process${sep}Other"
         (
@@ -161,7 +161,7 @@ alias dfh='df -Th'
 alias duh='du -sh'
 alias lblk='lsblk -o NAME,FSTYPE,SIZE,RO,MOUNTPOINT,LABEL,UUID'
 rdl() {
-    dir="${1:-.}"
+    local dir="${1:-.}"
     readlink -f $dir
 }
 alias vi='vim'
@@ -235,8 +235,8 @@ nxos() {
 
     [[ "${1:-}" == "upd" ]] && { nix flake update --flake "$config"; shift; }
 
-    logdir=/var/log/nixos
-    logfile="$logdir/$(date +'%Y.%m.%d-%H:%M:%S').log"
+    local logdir=/var/log/nixos
+    local logfile="$logdir/$(date +'%Y.%m.%d-%H:%M:%S').log"
     sudo mkdir -p "$logdir"
     sudo touch "$logfile"
     echo "Logging to $logfile"
@@ -286,23 +286,23 @@ nxos() {
 }
 nxd() {
     _checkargs $# 1 || return 1
-    qt="$1"
+    local qt="$1"
     case "$qt" in
-        "rf") q="--references" ;;
-        "rfc") q="--requisites" ;;
-        "rr") q="--referrers" ;;
-        "rrc") q="--referrers-closure" ;;
+        "rf") local q="--references" ;;
+        "rfc") local q="--requisites" ;;
+        "rr") local q="--referrers" ;;
+        "rrc") local q="--referrers-closure" ;;
         *) q="--references" ;;
     esac
 
-    p="$2"
-    echo "$p" | grep -q ".drv$" || p="$(nix-store --query --deriver "$p")"
+    local p="$2"
+    echo "$p" | grep -q ".drv$" || local p="$(nix-store --query --deriver "$p")"
 
     nix-store --query $q "$p"
 }
 nxp() {
     _checkargs $# 1 || return 1
-    qt="$1"
+    local qt="$1"
     case "$qt" in
         "rf") q="--references"; shift ;;
         "rfc") q="--requisites"; shift ;;
@@ -312,14 +312,14 @@ nxp() {
         *) q="--references" ;;
     esac
 
-    p="$1"
+    local p="$1"
     echo "$p" | grep -q ".drv$" && { echo "Error: $p is not a path"; return 1; }
 
     nix-store --query $q "$p"
 }
 nxds() {
     _checkargs $# 1 || return 1
-    p="$1"
+    local p="$1"
     echo "$p" | grep -q ".drv$" || p="$(nix-store --query --deriver "$p")"
     nix derivation show "$p^*"
 }
@@ -328,17 +328,17 @@ nxwl() {
 }
 nxr() {
     _checkargs $# 1 || return 1
-    p=$1
+    local p=$1
     shift
     nix run "nixpkgs#$p" "$@"
 }
 nxwd() {
     _checkargs $# 2 || return 1
 
-    p1="$1"
+    local p1="$1"
     echo "$p1" | grep -q ".drv$" || p1="$(nix-store --query --deriver "$p1")"
 
-    p2="$2"
+    local p2="$2"
     echo "$p2" | grep -q ".drv$" || p2="$(nix-store --query --deriver "$p2")"
 
     nix why-depends "$p1" "$p2"
@@ -386,7 +386,7 @@ alias pcmiil='pacman -Qii'
 alias pcmo='pacman -Qo'
 alias pcmor='pacman -F'
 pcmwo() {
-    wch="$(which $1 2>/dev/null)"
+    local wch="$(which $1 2>/dev/null)"
     echo $wch
     [[ "$wch" =~ ^/.* ]] && pcmo "$wch"
 }
@@ -397,13 +397,13 @@ alias prs='pikaur -Ss'
 add_to_repo() {
     _checkargs $# 2 || return 1
     [[ ! -r PKGBUILD ]] && echo "Must be run in a PKGBUILD dir" && return 1
-    root=$1
-    repo_db=$2
+    local root=$1
+    local repo_db=$2
     source PKGBUILD
-    pkgver="$pkgver-$pkgrel"
+    local pkgver="$pkgver-$pkgrel"
     [[ "$MYSHELL" = 'bash' ]] && shopt -s failglob
     for i in *$pkgver*tar*;do
-        x=$(echo $i | sed -r "s/(.*)-$pkgver.*/\1/")
+        local x=$(echo $i | sed -r "s/(.*)-$pkgver.*/\1/")
         sudo rm -v $root/$x* 2> /dev/null
         sudo cp -v $i $root/$i
         sudo repo-add $root/$repo_db $i
@@ -431,7 +431,7 @@ osv() {
 }
 alias osva='cat /etc/*-release /etc/debian_version 2>/dev/null | sort | uniq | xargs -L1'
 tfm() {
-    n=${1:-30}
+    local n=${1:-30}
     sudo journalctl -n${n} -f
 }
 alias magic2='cd;$DOTFILES/scripts/startOpenVPN.sh ~/directi/client.ovpn `~/sshhhh mnetu | base64 --decode` `~/sshhhh mnetp | base64 --decode` `~/sshhhh mnetc | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py`'
@@ -439,31 +439,31 @@ alias magic='cd;$DOTFILES/scripts/startOpenVPN.sh ~/directi/mnet-client.ovpn `~/
 
 xsshlistener() {
     _checkargs $# 2 || return 1
-    host=$1
+    local host=$1
     shift
-    str=""
+    local str=""
     for i in "$@";do
-        l="$(echo $i | cut -d: -f1)"
-        r="$(echo $i | cut -d: -f2)" # Equal to $l if no colon
-        str="$str -L ${l}:localhost:${r}";
+        local l="$(echo $i | cut -d: -f1)"
+        local r="$(echo $i | cut -d: -f2)" # Equal to $l if no colon
+        local str="$str -L ${l}:localhost:${r}";
     done
-    cmd="ssh -o ServerAliveInterval=60 -fN $str $host"
+    local cmd="ssh -o ServerAliveInterval=60 -fN $str $host"
     bash -c "$cmd"
 }
 
 xgen2() {
     _checkargs $# 1 || return 1
-    x="$(printf "%d\n" \'${1: -1})"
-    y=${#1}
+    local x="$(printf "%d\n" \'${1: -1})"
+    local y=${#1}
     echo "$1$((x+5))$((y+5))"
 }
 
 xgen() {
     _checkargs $# 1 || return 1
-    f="$(printf "%d\n" \'${1:0:1})"
-    l="$(printf "%d\n" \'${1: -1})"
-    y=${#1}
-    t=$((f+l-96*2))
+    local f="$(printf "%d\n" \'${1:0:1})"
+    local l="$(printf "%d\n" \'${1: -1})"
+    local y=${#1}
+    local t=$((f+l-96*2))
     echo "$1$((t+t%y))"
 }
 
@@ -532,32 +532,32 @@ xsendkeys() {
 }
 
 xmultispawn() {
-    option=$1; shift
-    max="$1"; shift
+    local option=$1; shift
+    local max="$1"; shift
     [[ $max -le 0 ]] && echo "max should be >= 1" && return
-    name="$1"; shift
+    local name="$1"; shift
     { [[ -z "$name" ]] || tmux list-windows | awk '{print $2}' | tr 'A-Z' 'a-z' | tr -dc 'a-z\n' | grep "^$name$" >/dev/null 2>&1; } && name=$(< /dev/urandom tr -dc "a-z" | head -c3) || true
 
     case "$option" in
-        v) layout=even-vertical
+        v) local layout=even-vertical
         ;;
-        h) layout=even-horizontal
+        h) local layout=even-horizontal
         ;;
-        hv) layout=tiled
+        hv) local layout=tiled
         ;;
         *) echo 'Usage: xmultispawn h/v/hv max_pane_per_window windowname "ssh c8-logging-"{1..3}' && return;;
     esac
 
-    total=$#
+    local total=$#
     echo "Total = $total"
     [[ $total -eq 0 ]] && return
 
-    totalwindows=$(echo "($total+$max-1)/$max" | bc)
+    local totalwindows=$(echo "($total+$max-1)/$max" | bc)
     echo "Total windows = $totalwindows"
-    adjust=$((total%totalwindows))
+    local adjust=$((total%totalwindows))
 
     for i in $(eval echo "{1..$totalwindows}");do
-        paneperwindow=$((total/totalwindows)); [[ $adjust -gt 0 ]] && paneperwindow=$((paneperwindow+1)) && adjust=$((adjust-1))
+        local paneperwindow=$((total/totalwindows)); [[ $adjust -gt 0 ]] && paneperwindow=$((paneperwindow+1)) && adjust=$((adjust-1))
 
         echo "Spawning window $i"
         tmux neww -dn ${name}-${i} "$1"; shift
@@ -565,7 +565,7 @@ xmultispawn() {
 
         paneperwindow=$((paneperwindow-1))
         [[ $paneperwindow -lt 1 ]] && continue
-        c=h
+        local c=h
         for j in $(eval echo "{1..$paneperwindow}");do
             tmux splitw -$c -t ${name}-${i}.$j -d "$1"; shift
             [[ "$c" = "h" ]] && c=v || c=h
@@ -590,9 +590,9 @@ sdd() { sudo systemctl disable $1; ls -l /etc/systemd/system/multi-user.target.w
 # User service management
 sus() { systemctl --user status -l --no-pager -n10 $1; }
 susf() { systemctl --user status -l --no-pager -n0 $1; echo; journalctl --user -f -u $1 -S "$2"; }
-sust() { dt=$(date +'%Y-%m-%d %T'); systemctl --user start $1; susf $1 "$dt"; }
-susp() { dt=$(date +'%Y-%m-%d %T'); systemctl --user stop $1; susf $1 "$dt"; }
-sur() { dt=$(date +'%Y-%m-%d %T'); systemctl --user restart $1; susf $1 "$dt"; }
+sust() { local dt=$(date +'%Y-%m-%d %T'); systemctl --user start $1; susf $1 "$dt"; }
+susp() { local dt=$(date +'%Y-%m-%d %T'); systemctl --user stop $1; susf $1 "$dt"; }
+sur() { local dt=$(date +'%Y-%m-%d %T'); systemctl --user restart $1; susf $1 "$dt"; }
 sue() { systemctl --user enable $1; ls -l /home/$USER/.config/systemd/user/*; }
 sud() { systemctl --user disable $1; ls -l /home/$USER/.config/systemd/user/*; }
 
@@ -617,7 +617,7 @@ hold_fort() {
 }
 
 mkcd() {
-    dir="$*"
+    local dir="$*"
     mkdir -vp "$dir" && cd "$dir"
 }
 
@@ -703,7 +703,7 @@ japanese() {
 japanesec() {
     _checkargs $# 1 || return 1
 
-    p=$(japanese "$@")
+    local p=$(japanese "$@")
     echo $p
     echo -n $p | xcp
     echo "Copied to clipboard"
@@ -727,7 +727,7 @@ randp() {
 
 up() {
     if [ -z "$*" ]; then 1='1';fi
-    pd=`pwd`
+    local pd=`pwd`
     cd $(eval printf '../'%.0s {1..$1}) && echo "${pd} -> $(pwd)";
 }
 
@@ -772,8 +772,8 @@ changehostname() {
         echo "Usage: changehostname centos|ubuntu hostname"
         return 1
     fi
-    os="$1"
-    nhostname="$2"
+    local os="$1"
+    local nhostname="$2"
 
     case "$os" in
     centos)
@@ -799,7 +799,7 @@ xdeletefromgit() {
     fi
 
     # remove all paths passed as arguments from the history of the repo
-    files=$@
+    local files=$@
     git filter-branch --index-filter "git rm -rf --cached --ignore-unmatch $files" HEAD
 
     # remove the temporary history git-filter-branch otherwise leaves behind for a long time
@@ -854,14 +854,14 @@ xextract() {
 
 xgitc() {
     if [ "$1" = "" ]; then
-        mstatus="updates: $(date +'%Y-%m-%d %H:%M:%S')"
+        local mstatus="updates: $(date +'%Y-%m-%d %H:%M:%S')"
         printf "You've not set any message: '$mstatus' is being used [Y|n]: "
         read inp
         if [ "$inp" = "n" ]; then
             return 1
         fi
     else
-        mstatus="$1"
+        local mstatus="$1"
     fi
     git add -A .
     git commit -a -m "$mstatus"
@@ -911,8 +911,8 @@ xuploadpicasa() {
         echo "Usage: xuploadpicasa albumname [nocreate]"
         return 1
     fi
-    f="resized"
-    n=$1
+    local f="resized"
+    local n=$1
     mkdir -p "$f"
     for i in *;do
         echo $i
@@ -927,9 +927,9 @@ xuploadpicasa() {
 xmakecustomarchiso() {
     _checkargs $# 1 || return 1
 
-    isoname=sdh-$(basename "$1")
-    isolabel=$(isoinfo -d -i "$1" | grep "Volume id" | sed "s/Volume id: //")
-    outputdir=$(pwd)
+    local isoname=sdh-$(basename "$1")
+    local isolabel=$(isoinfo -d -i "$1" | grep "Volume id" | sed "s/Volume id: //")
+    local outputdir=$(pwd)
     sudo umount /tmp/sdh-customiso/mnt > /dev/null 2>&1
     rm -rf /tmp/sdh-customiso
     echo "Creating dirs..." && \
@@ -957,37 +957,15 @@ xget() {
     if [ $# -lt 1 ]; then
         for i in $(cat ~/sshhhh | grep ')' | grep -v '*' | grep -v 'mnet' | cut -f1 -d')' | xargs);do
             printf "$i "
-            code=$(~/sshhhh "$i" | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py)
+            local code=$(~/sshhhh "$i" | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py)
             printf $code
             echo
         done
     else
-        code=$(~/sshhhh "$1" | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py)
+        local code=$(~/sshhhh "$1" | base64 --decode | python2 $DOTFILES/scripts/gauthenticator.py)
         printf $code | xclip -selection clipboard
         echo "Copied $code to clipboard"
     fi
-}
-
-xlistfiles() {
-    case "$1" in
-        hdd1) 1='/run/media/sdh/sdh-hdd1'
-            flname=files-hdd1
-            ;;
-        hdd2) 1='/run/media/sdh/sdh-hdd2'
-            flname=files-hdd2
-            ;;
-        hdd3) 1='/run/media/sdh/sdh-hdd3'
-            flname=files-hdd2
-            ;;
-        hdd4) 1='/run/media/sdh/sdh-hdd4'
-            flname=files-hdd2
-            ;;
-        *)  echo "Wrong input"
-            return -1
-            ;;
-    esac
-
-    find "$1" -type d \( -name ".git" -o -name ".hg" -o -name "Dev" -o -name "\$RECYCLE.BIN" -o -name "System Volume Information" -o -name "version-controlled-soft" -o -name "manuals" -o -name "eclipse" \) -prune -o -print | sort > ~/Downloads/${flname}.txt
 }
 
 xintegration() {
@@ -1012,9 +990,9 @@ xplaylist() {
     cd $1
 
     if [ "$2" == "" ];then
-    ext="mp4"
+    local ext="mp4"
     else
-    ext=$2
+    local ext=$2
     fi
 
     for i in *; do
@@ -1029,7 +1007,7 @@ xplaylist() {
 }
 
 xkdechanges() {
-    dayz=${1:-7}
+    local dayz=${1:-7}
 	for i in *;do
 		[[ -d "$i/.git" ]] && { [[ -n "$(git --git-dir="$i/.git" --work-tree="$i" log --since="$dayz day ago" --pretty=oneline | grep -v SVN_SILENT)" ]] && cd $i && echo $i && { gitk --since="$dayz day ago" || true; } && cd .. ; }
 	done
@@ -1090,23 +1068,23 @@ xregexrename() {
     _checkargs $# 1 || return 1
 
     for i in *;do
-        x=$(echo $i | sed -r "$1"); [[ ! -r "$x" ]] && echo "$i -> $x" && [[ "$2" = "m" ]] && mv "$i" "$x"
+        local x=$(echo $i | sed -r "$1"); [[ ! -r "$x" ]] && echo "$i -> $x" && [[ "$2" = "m" ]] && mv "$i" "$x"
     done
 }
 
 xrenametotitlecase() {
-    pd=$(pwd)
+    local pd=$(pwd)
     if [ ! -z "$1" ];then
-        pd="$1"
+        local pd="$1"
     fi
     pushd "$pd" > /dev/null && \
-    for i in *;do x=$(echo $i | tr "[A-Z]" "[a-z]" | sed "s/\( \| \?-\| \?(\| \?\[\|^\)\(.\)/\1\u\2/g");[ ! -r "$x" ] && mv "$i" "$x";done && \
+    for i in *;do local x=$(echo $i | tr "[A-Z]" "[a-z]" | sed "s/\( \| \?-\| \?(\| \?\[\|^\)\(.\)/\1\u\2/g");[ ! -r "$x" ] && mv "$i" "$x";done && \
     popd > /dev/null
 }
 
 xrenametolowercase() {
-    depth=0
-    maxdepth=1
+    local depth=0
+    local maxdepth=1
     rename() {
         if [ ! -z "$1" ];then
             echo "Inside directory: $1"
@@ -1117,11 +1095,11 @@ xrenametolowercase() {
                             echo "Skipping $i"
                             continue
                         fi
-                        dr=$i
-                        x=$(echo $i|tr '[A-Z]' '[a-z]'|tr ' ' '-')
+                        local dr=$i
+                        local x=$(echo $i|tr '[A-Z]' '[a-z]'|tr ' ' '-')
                         if [ ! -d "$x" ];then
                             echo "Dir - $i: ### Renaming to $x ###"
-                            dr=$x
+                            local dr=$x
                             mv "$i" "$x"
                         elif [ "$x" != "$i" ];then
                             echo "Dir - $i: *** Not renamed: dir $x already exists ***"
@@ -1137,7 +1115,7 @@ xrenametolowercase() {
             done
             for i in *;do
                 if [ -f "$i" ];then
-                    x=$(echo $i|tr '[A-Z]' '[a-z]'|tr ' ' '-')
+                    local x=$(echo $i|tr '[A-Z]' '[a-z]'|tr ' ' '-')
                     if [ ! -f "$x" ];then
                         echo "File - $i: ### Renaming to $x ###"
                         mv "$i" "$x"
@@ -1152,14 +1130,14 @@ xrenametolowercase() {
             popd > /dev/null
         fi
     }
-    pd=$(pwd)
+    local pd=$(pwd)
     if [ ! -z "$1" ];then
-    pd=$1
+        local pd=$1
     fi
     if [ ! -z "$2" ] && [ "$2" = "-d" ]
         then
         if [ ! -z "$3" ];then
-            maxdepth=$3
+            local maxdepth=$3
         fi
     fi
     rename "$pd"
