@@ -235,11 +235,17 @@ nxos() {
 
     [[ "${1:-}" == "upd" ]] && { nix flake update --flake "$config"; shift; }
 
+    logdir=/var/log/nixos
+    logfile="$logdir/$(date +'%Y.%m.%d-%H:%M:%S').log"
+    sudo mkdir -p "$logdir"
+    touch "$logfile"
+    echo "Logging to $logfile"
+
     if command -v nvd &>/dev/null ;then
 
         local left="$(nix path-info --derivation "/run/current-system")"
         local right="$(nix path-info --derivation "${config}#${picker}Configurations.$(hostname -s).config.system.build.toplevel")"
-        nvd diff "$left" "$right"  || return 1
+        nvd --color=always diff "$left" "$right" |& sudo tee -a "$logfile"  || return 1
         [[ "$left" == "$right" ]] && echo "No change in configuration" && return 0
         echo
 
@@ -271,9 +277,9 @@ nxos() {
         else
             sudo true || return 2
             if command -v nom &>/dev/null ;then
-                sudo nice -10 nixos-rebuild --keep-going --flake "$config" "${1:-boot}" |& nom
+                sudo nice -10 nixos-rebuild --log-format raw --keep-going --flake "$config" "${1:-boot}" |& sudo tee -a "$logfile" |& nom
             else
-                sudo nice -10 nixos-rebuild --keep-going --flake "$config" "${1:-boot}"
+                sudo nice -10 nixos-rebuild --log-format raw --keep-going --flake "$config" "${1:-boot}" |& sudo tee -a "$logfile"
             fi
         fi
     fi
