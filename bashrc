@@ -515,7 +515,7 @@ function mks {
 if [[ $- = *i* ]] && [[ "$MYSHELL" = 'zsh' ]];then
     function _completemarkszsh {
         mkdir -p "$MARKPATH"
-        reply=($(ls "$mark"PATH))
+        reply=($(ls "$MARKPATH"))
     }
     compctl -K _completemarkszsh j
     compctl -K _completemarkszsh um
@@ -524,7 +524,7 @@ if [[ $- = *i* ]] && [[ "$MYSHELL" = 'bash' ]];then
     _completemarksbash() {
         mkdir -p "$MARKPATH"
         local curw=${COMP_WORDS[COMP_CWORD]}
-        local wordlist="$(find "$mark"PATH -type l -printf "%f\n")"
+        local wordlist="$(find "$MARKPATH" -type l -printf "%f\n")"
         COMPREPLY=($(compgen -W '${wordlist[@]}' -- "$curw"))
         return 0
     }
