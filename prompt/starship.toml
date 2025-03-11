@@ -35,62 +35,62 @@ $fill\
 [( $cmd_duration )](fg:color_white bg:color_black))\
 \
 ([](fg:color_blue bg:prev_bg)\
-[ $aws\
-$azure\
-$buf\
-$bun\
-$c\
-$cmake\
-$cobol\
-$conda\
-$crystal\
-$daml\
-$dart\
-$deno\
-$docker_context\
-$elixir\
-$elm\
-$erlang\
-$fennel\
-$gcloud\
-$golang\
-$gradle\
-$guix_shell\
-$haskell\
-$haxe\
-$helm\
-$java\
-$julia\
-$kotlin\
-$kubernetes\
-$lua\
-$meson\
-$mojo\
-$nats\
-$nim\
-$nodejs\
-$ocaml\
-$odin\
-$opa\
-$openstack\
-$package\
-$perl\
-$php\
-$pulumi\
-$purescript\
-$python\
-$quarto\
-$raku\
-$rlang\
-$ruby\
-$rust\
-$scala\
-$spack\
-$shlvl\
-$swift\
-$terraform\
-$vagrant\
-$zig ](fg:color_white bg:color_blue))\
+[ ($aws )\
+($azure )\
+($buf )\
+($bun )\
+($c )\
+($cmake )\
+($cobol )\
+($conda )\
+($crystal )\
+($daml )\
+($dart )\
+($deno )\
+($docker_context )\
+($elixir )\
+($elm )\
+($erlang )\
+($fennel )\
+($gcloud )\
+($golang )\
+($gradle )\
+($guix_shell )\
+($haskell )\
+($haxe )\
+($helm )\
+($java )\
+($julia )\
+($kotlin )\
+($kubernetes )\
+($lua )\
+($meson )\
+($mojo )\
+($nats )\
+($nim )\
+($nodejs )\
+($ocaml )\
+($odin )\
+($opa )\
+($openstack )\
+($package )\
+($perl )\
+($php )\
+($pulumi )\
+($purescript )\
+($python )\
+($quarto )\
+($raku )\
+($rlang )\
+($ruby )\
+($rust )\
+($scala )\
+($spack )\
+($shlvl )\
+($swift )\
+($terraform )\
+($vagrant )\
+($zig ) ](fg:color_white bg:color_blue))\
 \
 ([](fg:color_aqua bg:prev_bg)\
 [ $git_branch( $git_status) ](fg:color_white bg:color_aqua))\
