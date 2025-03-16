@@ -240,15 +240,14 @@ nxos() {
 
     local logdir=/var/log/nixos
     local logfile="$logdir/$(date +'%Y.%m.%d-%H:%M:%S').log"
-    sudo mkdir -p "$logdir"
-    sudo touch "$logfile"
+    touch "$logfile" || { echo "Cannot create log file: $logfile"; return 10; }
     echo "Logging to $logfile"
 
     if command -v nvd &>/dev/null ;then
 
         local left="$(nix path-info --derivation "/run/current-system")"
         local right="$(nix path-info --derivation "${config}#${picker}Configurations.$(hostname -s).config.system.build.toplevel")"
-        nvd --color=always diff "$left" "$right" |& sudo tee -a "$logfile"  || return 1
+        nvd --color=always diff "$left" "$right" |& tee -a "$logfile"  || return 1
         [[ "$left" == "$right" ]] && echo "No change in configuration" && return 0
         echo
 
