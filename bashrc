@@ -505,7 +505,7 @@ function um {
     mkdir -p "$MARKPATH"
     local mark="$MARKPATH/$1"
     [[ -L "$mark" ]] || { echo "No such mark: $1"; return 1; }
-    (cd "$mark"PATH && echo "Removing mark: $1 -> $(readlink "$mark")" && \rm "$1" )
+    (cd "$MARKPATH" && echo "Removing mark: $1 -> $(readlink "$mark")" && \rm "$1" )
 }
 function mks {
     mkdir -p "$MARKPATH"
