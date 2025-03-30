@@ -46,7 +46,7 @@
 [fetch]                             # Prune stuff that’s gone
     prune = true
     pruneTags = true
-    all = true
+    all = false
 [rerere]                            # Reuse recorded resolutions
     enabled = true
     autoupdate = true
