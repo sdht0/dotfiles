@@ -326,7 +326,7 @@ nxds() {
     nix derivation show "$p^*"
 }
 nxwl() {
-    exa -l "$(which "$1")"
+    ls -l "$(which "$1")"
 }
 nxr() {
     _checkargs $# 1 || return 1
@@ -354,8 +354,8 @@ nxdf() {
     _checkargs $# 2 || return 1
 
     difft --override='*:json' --display side-by-side-show-both --skip-unchanged --ignore-comments --context 0 \
-        <(nxds "$1" | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys) \
-        <(nxds "$2" | sed -r 's|/nix/store/[^-]+-||g' | jq --sort-keys)
+        <(nxds "$1" | sed -r 's|/nix/store/[^-]+-||g' | jaq --sort-keys) \
+        <(nxds "$2" | sed -r 's|/nix/store/[^-]+-||g' | jaq --sort-keys)
 }
 nxv() {
     _checkargs $# 1 || return 1
