@@ -584,22 +584,22 @@ alias ccm='sudo ccm64'
 alias xchromestart="chromium --proxy-server='socks://127.0.0.1:9999' --incognito"
 
 # System service management
-sds() { sudo systemctl status -l --no-pager -n10 "$@"; }
-sdsf() { sudo systemctl status -l --no-pager -n0 "$@"; echo; sudo journalctl -f -u "$1" -S "$2"; }
-sdst() { local dt=$(date +'%Y-%m-%d %T'); sudo systemctl start "$@"; sdsf "$1" "$dt"; }
-sdsp() { local dt=$(date +'%Y-%m-%d %T'); sudo systemctl stop "$@"; sdsf "$1" "$dt"; }
-sdr() { local dt=$(date +'%Y-%m-%d %T'); sudo systemctl restart "$@"; sdsf "$1" "$dt"; }
-sde() { sudo systemctl enable "$@"; ls -l /etc/systemd/system/multi-user.target.wants; }
-sdd() { sudo systemctl disable "$@"; ls -l /etc/systemd/system/multi-user.target.wants; }
+sds() { sudo systemctl status -l --no-pager -n10 "$1"; }
+sdsf() { sudo systemctl status -l --no-pager -n0 "$1"; echo; sudo journalctl -f -u "$1" -S "$2"; }
+sdst() { local dt=$(date +'%Y-%m-%d %T'); sudo systemctl start "$1"; sdsf "$1" "$dt"; }
+sdsp() { local dt=$(date +'%Y-%m-%d %T'); sudo systemctl stop "$1"; sdsf "$1" "$dt"; }
+sdr() { local dt=$(date +'%Y-%m-%d %T'); sudo systemctl restart "$1"; sdsf "$1" "$dt"; }
+sde() { sudo systemctl enable "$1"; ls -l /etc/systemd/system/multi-user.target.wants; }
+sdd() { sudo systemctl disable "$1"; ls -l /etc/systemd/system/multi-user.target.wants; }
 
 # User service management
-sus() { systemctl --user status -l --no-pager -n10 "$@"; }
-susf() { systemctl --user status -l --no-pager -n0 "$@"; echo; journalctl --user -f -u "$1" -S "$2"; }
+sus() { systemctl --user status -l --no-pager -n10 "$1"; }
+susf() { systemctl --user status -l --no-pager -n0 "$1"; echo; journalctl --user -f -u "$1" -S "$2"; }
 sust() { local dt=$(date +'%Y-%m-%d %T'); systemctl --user start "$1"; susf "$1" "$dt"; }
 susp() { local dt=$(date +'%Y-%m-%d %T'); systemctl --user stop "$1"; susf "$1" "$dt"; }
 sur() { local dt=$(date +'%Y-%m-%d %T'); systemctl --user restart "$1"; susf "$1" "$dt"; }
-sue() { systemctl --user enable "$@"; ls -l /home/"$USER"/.config/systemd/user/*; }
-sud() { systemctl --user disable "$@"; ls -l /home/"$USER"/.config/systemd/user/*; }
+sue() { systemctl --user enable "$1"; ls -l /home/"$USER"/.config/systemd/user/*; }
+sud() { systemctl --user disable "$1"; ls -l /home/"$USER"/.config/systemd/user/*; }
 
 hold_fort() {
     while true;do
