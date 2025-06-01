@@ -192,6 +192,7 @@ alias gca='git commit -am'
 alias gcm='git commit --amend'
 alias gcma='git commit --amend -a'
 alias gs="git ls -n5;echo;git status"
+alias gss="git status"
 alias gsa="git lsa -n5;echo;git status"
 alias gt='git stash'
 alias gtp='git stash pop'
@@ -370,7 +371,7 @@ nxs() {
 nxsp() {
     _checkargs $# 1 || return 1
 
-    nix-shell --pure --command zsh -p $@
+    nix-shell --pure --command "NOTMUX=1 zsh" -p $@
 }
 
 # Pacman package management
