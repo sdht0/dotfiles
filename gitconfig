@@ -56,3 +56,6 @@
     updateRefs = true
 [log]
     date = iso-local
+
+[include]
+    path = ~/.config/dotfiles.safe/gitconfig/overrides
