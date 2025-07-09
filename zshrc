@@ -91,4 +91,8 @@ if [[ $- = *i* ]];then
         eval "$(/opt/homebrew/bin/brew shellenv)"
     fi
 
+    if [[ -f /opt/homebrew/opt/rustup/bin ]];then
+        path+="/opt/homebrew/opt/rustup/bin" # zsh-specific path appends
+    fi
+
 fi
