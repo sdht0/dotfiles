@@ -243,23 +243,17 @@ nxos() {
 
     [[ "${1:-}" == "upd" ]] && { nix flake update --flake "$config"; shift; }
 
-    local logdir=/var/log/nixos
-    local logfile="$logdir/$(date +'%Y.%m.%d-%H:%M:%S').log"
-    touch "$logfile" || { echo "Cannot create log file: $logfile"; return 10; }
-    echo "Logging to $logfile"
-
     if command -v dix &>/dev/null ;then
-
-        local left="$(nix path-info --derivation "/run/current-system")"
-        local right="$(nix path-info --derivation "${config}#${picker}Configurations.$(hostname -s).config.system.build.toplevel")"
+        local left="$(nix path-info --derivation "/run/current-system")" || return 3
+        local right="$(nix path-info --derivation "${config}#${picker}Configurations.$(hostname -s).config.system.build.toplevel")" || return 3
         dix "$left" "$right" || return 1
         [[ "$left" == "$right" ]] && echo "No change in configuration" && return 0
         echo
-
     fi
 
     if [[ -n "${IS_DARWIN:-}" ]];then
-        darwin-rebuild --keep-going --flake "$config" "${1:-switch}"
+        sudo true || return 2
+        sudo darwin-rebuild --keep-going --flake "$config" "${1:-switch}"
     else
         if [[ "${1:-}" == "dry" ]];then
             local fl="/tmp/dry-build.txt"
@@ -282,6 +276,11 @@ nxos() {
             echo
             :
         else
+            local logdir=/var/log/nixos
+            local logfile="$logdir/$(date +'%Y.%m.%d-%H:%M:%S').log"
+            touch "$logfile" || { echo "Cannot create log file: $logfile"; return 10; }
+            echo "Logging to $logfile"
+
             sudo true || return 2
             if command -v nom &>/dev/null ;then
                 sudo nice -10 nixos-rebuild --log-format raw --keep-going --flake "$config" "${1:-boot}" |& sudo tee -a "$logfile" |& nom
