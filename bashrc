@@ -135,15 +135,19 @@ alias psgc='ps aux | grep -v grep | grep -i -e '
 alias pkl='kill -9'
 alias spkl='sudo kill -9'
 ports() {
-    [[ "$1" == "" ]] && { 1="-k6,6n"; 2="-k3,3n"; 3="-k4,4"; 4="-k1,1"; }
-    local sep=";"
-    (
-        echo -e "Proto${sep}Address${sep}Port${sep}v${sep}UID${sep}PID${sep}Process${sep}Other"
+    if [[ -n "" ]];then
+        lsof -i -nP
+    else
+        [[ "$1" == "" ]] && { 1="-k6,6n"; 2="-k3,3n"; 3="-k4,4"; 4="-k1,1"; }
+        local sep=";"
         (
-            sudo ss --no-header -l4tunpe | sed -r "s/^/v4 /"
-            sudo ss --no-header -l6tunpe | sed -r "s/^/v6 /"
-        ) | awk '{$6=gensub(/(.+):(.+)/,"\\1'${sep}'\\2",1,$6); rest=""; for(i=8;i<=NF;i++) { rest=rest " " $i; }; if(rest ~ /uid:/) { $8=gensub(/.*uid:([0-9]+).*/,"\\1",1,rest); } else { $8="0"; }; if(rest ~ /^ users/) { $8=$8 gensub(/^ users:\(\("([^"]+)",pid=([0-9]+),(.*)\)\).*/,"'${sep}'\\2'${sep}'\\1'${sep}'\\3",1,rest); $8=gensub(/\),\(/,",","g",$8); } else { $8=$8 "'${sep}'-'${sep}'-'${sep}'-"; }; if(rest ~ /.service/) { $8=$8 "," gensub(".*/([^\\.]+\\.service).*","\\1",1,rest); }; if(rest ~ /docker.*scope/) { $8=$8 ",docker.scope"; }; OFS="'${sep}'"}{print $2,$6,$1,$8}' | sort --field-separator "${sep}" "$@"
-    ) | column -t -s"${sep}"
+            echo -e "Proto${sep}Address${sep}Port${sep}v${sep}UID${sep}PID${sep}Process${sep}Other"
+            (
+                sudo ss --no-header -l4tunpe | sed -r "s/^/v4 /"
+                sudo ss --no-header -l6tunpe | sed -r "s/^/v6 /"
+            ) | awk '{$6=gensub(/(.+):(.+)/,"\\1'${sep}'\\2",1,$6); rest=""; for(i=8;i<=NF;i++) { rest=rest " " $i; }; if(rest ~ /uid:/) { $8=gensub(/.*uid:([0-9]+).*/,"\\1",1,rest); } else { $8="0"; }; if(rest ~ /^ users/) { $8=$8 gensub(/^ users:\(\("([^"]+)",pid=([0-9]+),(.*)\)\).*/,"'${sep}'\\2'${sep}'\\1'${sep}'\\3",1,rest); $8=gensub(/\),\(/,",","g",$8); } else { $8=$8 "'${sep}'-'${sep}'-'${sep}'-"; }; if(rest ~ /.service/) { $8=$8 "," gensub(".*/([^\\.]+\\.service).*","\\1",1,rest); }; if(rest ~ /docker.*scope/) { $8=$8 ",docker.scope"; }; OFS="'${sep}'"}{print $2,$6,$1,$8}' | sort --field-separator "${sep}" "$@"
+        ) | column -t -s"${sep}"
+    fi
 }
 alias mvv='mv -v'
 alias rmv='rm -v'
