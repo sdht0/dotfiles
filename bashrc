@@ -175,7 +175,13 @@ alias dateh='date --help|sed -n "/^ *%%/,/^ *%Z/p"|while read l;do F=${l/% */}; 
 alias xcp='xclip -selection clipboard'
 alias httpserver="python3 -m http.server"
 alias sx="startx"
-alias myips='ip -o -f inet addr | grep -v "127.0.0.1" | cut -d'/' -f1 | sed -r "s/[ \t]+/ /g" | cut -d" " -f2-4 | awk "{print \$1\": \"\$3}" | sort | uniq'
+myips() {
+    if [[ -n "${IS_DARWIN:-}" ]];then
+        ifconfig | awk '/^[a-z]/ { iface=$1; sub(":", "", iface) } /inet / && $2 != "127.0.0.1" { print iface ": " $2 }' | sort | uniq
+    else
+        ip -o -f inet addr | grep -v "127.0.0.1" | cut -d'/' -f1 | sed -r "s/[ \t]+/ /g" | cut -d" " -f2-4 | awk '{print $1": "$3}' | sort | uniq
+    fi
+}
 mypublicip() {
     printf "curl -s ident.me\ncurl -s icanhazip.com\ncurl -s4 ifconfig.co\ncurl -s6 ifconfig.co" | xargs -I{} sh -c 'x=$({} | tr -d "\"";echo " | {}");echo $x'
 }
@@ -192,7 +198,7 @@ alias gca='git commit -am'
 alias gcm='git commit --amend'
 alias gcma='git commit --amend -a'
 alias gco='git checkout'
-alias gcr='git checkout --track'
+alias gct='git checkout --track'
 alias gs="git ls -n5;echo;git status"
 alias gss="git status"
 alias gsa="git lsa -n5;echo;git status"
