@@ -79,6 +79,7 @@ if [[ $- = *i* ]];then
 
     local autosuggestions=$DOTFILES/modules/zsh-autosuggestions/zsh-autosuggestions.zsh
     if [[ -r "$autosuggestions" ]];then
+        export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
         source "$autosuggestions"
     fi
 
@@ -92,7 +93,7 @@ if [[ $- = *i* ]];then
     fi
 
     if [[ -f /opt/homebrew/opt/rustup/bin ]];then
-        path+="/opt/homebrew/opt/rustup/bin" # zsh-specific path appends
+        path+="/opt/homebrew/opt/rustup/bin" # zsh-style path appends
     fi
 
 fi
