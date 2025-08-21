@@ -213,10 +213,13 @@ alias gb='git branch'
 alias gba='git branch -a'
 alias gbd='git branch -D'
 alias gpu='git push'
+alias gpuf='git push -f'
 alias gp='git pull'
 alias gpp='git pull --rebase && git push'
+alias gfo='git fetch origin'
 alias gcf='git config --list'
 alias grh='git reset HEAD'
+alias grhh='git reset --hard'
 alias grc='git rebase --continue'
 alias gra='git rebase --abort'
 alias gd="git diff"
@@ -598,7 +601,7 @@ alias ccm='sudo ccm64'
 alias xchromestart="chromium --proxy-server='socks://127.0.0.1:9999' --incognito"
 
 # System service management
-sds() { sudo systemctl status -l --no-pager -n10 "$1"; }
+sds() { sudo systemctl status -l --no-pager -n10 "$@"; }
 sdsf() { sudo systemctl status -l --no-pager -n0 "$1"; echo; sudo journalctl -f -u "$1" -S "$2"; }
 sdst() { local dt=$(date +'%Y-%m-%d %T'); sudo systemctl start "$1"; sdsf "$1" "$dt"; }
 sdsp() { local dt=$(date +'%Y-%m-%d %T'); sudo systemctl stop "$1"; sdsf "$1" "$dt"; }
