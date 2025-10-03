@@ -158,6 +158,7 @@ alias mountv='mount -v'
 alias umountv='umount -v'
 alias dmsg='dmesg --human -T'
 alias grepi='grep -i --color=auto'
+alias fh="free -h"
 alias ev="env | sort"
 alias tn='tail -n'
 alias hn='head -n'
@@ -227,6 +228,7 @@ alias gds="git diff --staged"
 alias gk="gitk --all"
 alias gg="git gui"
 alias gu="gitui"
+gppr() { git fetch origin pull/$1/head:pr$1; }
 
 alias dk='sudo docker'
 alias dkr='sudo docker run'

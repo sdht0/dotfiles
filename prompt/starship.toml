@@ -195,7 +195,7 @@ Void = " "
 Windows = "󰍲 "
 
 [sudo]
-disabled = false
+disabled = true
 symbol = '⭘'
 format = "$symbol"
 

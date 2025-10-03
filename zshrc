@@ -55,7 +55,6 @@ if [[ $- = *i* ]];then
     else
         local config_file=$DOTFILES/prompt/starship.toml
     fi
-
     if command -v starship &>/dev/null && [[ -f "$config_file" ]] ;then
         export STARSHIP_CONFIG="$config_file"
         eval "$(starship init zsh)"
