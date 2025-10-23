@@ -66,14 +66,9 @@ if [[ $- = *i* ]];then
     fi
 
     # interactive history search
-    if command -v mcfly &>/dev/null && command -v mcfly-fzf &>/dev/null && command -v fzf &>/dev/null ;then
-        eval "$(mcfly init zsh)"
-        eval "$(mcfly-fzf init zsh)"
-    else
-        local better_history=$DOTFILES/modules/zsh-peco-history/zsh-peco-history.zsh
-        if [[ -r "$better_history" ]];then
-            source "$better_history"
-        fi
+    local better_history=$DOTFILES/modules/zsh-peco-history/zsh-peco-history.zsh
+    if [[ -r "$better_history" ]];then
+        source "$better_history"
     fi
 
     local interactive_cd=$DOTFILES/modules/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
