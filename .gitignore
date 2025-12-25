@@ -5,3 +5,4 @@ src/
 *.tar.gz
 node_exporter/
 profile.*
+.DS_Store

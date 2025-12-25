@@ -19,7 +19,7 @@ echo "Setting up .zshrc"
 [[ -e ~/.zshrc ]] && echo "Backing up .zshrc" && mkdir -p ${bkdir} && mv ~/.zshrc ${bkdir}/.zshrc
 echo -e ". ~/.bashrc\n. $dotfiles/zshrc\n[[ -f $dotfiles.safe/zshrc ]] && . $dotfiles.safe/zshrc || true" > ~/.zshrc
 
-if [[ -f "$DOTFILES/profile.server" ]];then
+if [[ -f "$dotfiles/profile.server" ]];then
     link_file "server.tmux.conf" ".tmux.conf"
 else
     link_file "tmux.conf"

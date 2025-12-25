@@ -2,7 +2,7 @@ declare -xr DOTFILES=~/.config/dotfiles
 [[ "$(uname -o)" == "Darwin" ]] && declare -xr IS_DARWIN="1"
 
 # Replace with a tmux session if it is an interactive session and tmux is installed and is not already running
-if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && [[ -t 1 ]] && command -v tmux &>/dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$NOTMUX" ]] ;then
+if [[ $UID -ne 0 ]] && [[ $- = *i* ]] && [[ -t 1 ]] && command -v tmux &>/dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$NOTMUX" ]] && [ "$TERM_PROGRAM" != "vscode" ] ;then
     ID="$(tmux ls | grep -vm1 attached | cut -d: -f1)" # get the id of a deattached session
     if [[ -z "$ID" ]] ;then # if not available create a new one
         exec tmux new-session
@@ -210,8 +210,8 @@ alias gsa="git lsa -n5;echo;git status"
 alias gt='git stash'
 alias gtp='git stash pop'
 alias gcl='git clone'
-alias gb='git branch'
-alias gba='git branch -a'
+alias gb='git branch --sort=refname'
+alias gba='git branch -a --sort=refname'
 alias gbd='git branch -D'
 alias gpu='git push'
 alias gpuf='git push -f'
@@ -223,11 +223,10 @@ alias grh='git reset HEAD'
 alias grhh='git reset --hard'
 alias grc='git rebase --continue'
 alias gra='git rebase --abort'
+alias gma='git merge --abort'
 alias gd="git diff"
 alias gds="git diff --staged"
 alias gk="gitk --all"
-alias gg="git gui"
-alias gu="gitui"
 gppr() { git fetch origin pull/$1/head:pr$1; }
 
 alias dk='sudo docker'
